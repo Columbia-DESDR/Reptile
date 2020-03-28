@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+.flex-container {display: flex;justify-content: space-between}
+.change-line {
+	fill: none;
+	stroke: black;
+	stroke-width:3;
+	stroke-dasharray:5, 5;
+}
+.bar { fill: #55c2f2;stroke-width:1;stroke:rgb(0,0,0) }
+.circle { fill: #55c2f2;stroke-width:1;stroke:rgb(0,0,0) }
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    max-width: 80px;
+    /* height: 48px; */
+
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+}
+.highlight {
+  stroke-width:2;
+  stroke:rgb(0,0,0);
+}
+</style>
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!-- Create a div where the graph will take place -->
+<div class="flex-container">
+
+<div id="my_dataviz">
+<p id='status'></p>
+Worst years
+<select id="select_region"></select>
+<select id="select_district"></select>
+<h3 id='title'>NOAA NCEP CPC FEWS Africa DAILY ARC2 daily Estimated Precipitation</h3>
+<!-- <button type="button" onclick="Solution()">Render</button> -->
+<br>
+</div>
+<div id="my_dataviz2"></div>
+
+
+
+<script>
+const url = "http://127.0.0.1:5000/";
+
+function GetData(filename,hiearchy,hierchy_values) {
+
+    var x, text;
+    // Get the value of the input field with id="numb"
+    const data = {
+        'filename' : filename,
+        'hiearchy': hiearchy,
+        'hierchy_values': hierchy_values,
+    };
+    const other_params = {
+        headers : { "content-type" : "application/json; charset=UTF-8" },
+        body : JSON.stringify(data),
+        method : "POST",
+        mode : "cors"
+    };
+
+    return fetch("http://127.0.0.1:5000/api/data", other_params)
+        .then(function(response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Could not reach the API: " + response.statusText);
+            }
+        }).then(function(data) {
+            obj = JSON.parse(data)
+            return obj
+            // result = obj
+            // columns = [];
+            // for (let [key, value] of Object.entries(result)) {
+            //     columns.push({name: key, type: value['name']});
+            // }
+            // // document.getElementById("p1").innerHTML = columns;
+            // let selection = d3.select('#content').selectAll('p').data(columns)
+            // selection.enter().append('p').merge(selection).classed('column', true).text(function(d) { return d.name + " type: " + d.type; });
+            // selection.exit().remove();
+            // document.getElementById("sqlerror").innerHTML = "";
+        })
+    //     .catch(function(error) {
+    //         console.log(error)
+    //     // document.getElementById("sqlerror").innerHTML = "error with sql";
+    // });
+}
+
+function GetHeatMap(filename,hiearchy,hierchy_values,categorical,numerical,aggragation) {
+
+        var x, text;
+        // Get the value of the input field with id="numb"
+        const data = {
+            'filename' : filename,
+            'hiearchy': hiearchy,
+            'hierchy_values': hierchy_values,
+            'categorical': categorical,
+            'numerical': numerical,
+            'aggragation': aggragation,
+            'category': category
+        };
+        const other_params = {
+            headers : { "content-type" : "application/json; charset=UTF-8" },
+            body : JSON.stringify(data),
+            method : "POST",
+            mode : "cors"
+        };
+
+        return fetch("http://127.0.0.1:5000/api/heatmapdata", other_params)
+            .then(function(response) {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Could not reach the API: " + response.statusText);
+                }
+            }).then(function(data) {
+                obj = JSON.parse(data)
+                return obj
+                // result = obj
+                // columns = [];
+                // for (let [key, value] of Object.entries(result)) {
+                //     columns.push({name: key, type: value['name']});
+                // }
+                // // document.getElementById("p1").innerHTML = columns;
+                // let selection = d3.select('#content').selectAll('p').data(columns)
+                // selection.enter().append('p').merge(selection).classed('column', true).text(function(d) { return d.name + " type: " + d.type; });
+                // selection.exit().remove();
+                // document.getElementById("sqlerror").innerHTML = "";
+            })
+        //     .catch(function(error) {
+        //         console.log(error)
+        //     // document.getElementById("sqlerror").innerHTML = "error with sql";
+        // });
+    }
+
+function GetSummary(filename,hiearchy,category) {
+
+        var x, text;
+        // Get the value of the input field with id="numb"
+        const data = {
+            'filename': filename,
+            'hiearchy': hiearchy,
+            'category': category
+        };
+        const other_params = {
+            headers : { "content-type" : "application/json; charset=UTF-8" },
+            body : JSON.stringify(data),
+            method : "POST",
+            mode : "cors"
+        };
+
+        return fetch("http://127.0.0.1:5000/api/summary", other_params)
+            .then(function(response) {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Could not reach the API: " + response.statusText);
+                }
+            }).then(function(data) {
+                // console.log(data)
+                obj = JSON.parse(data)
+                // console.log(obj)
+                return obj
+
+            })
+        //     .catch(function(error) {
+        //         console.log(error)
+        //     // document.getElementById("sqlerror").innerHTML = "error with sql";
+        // });
+    }
+let filename1 = "./db/order_final.csv"
+let filename2 = "./db/intitiate_cleaned.csv"
+GetSummary(filename1, ['Region','District'], 'year').then(FreshDropDown)
+function FreshDropDown(summary){
+    let dropdownChangeRegion = function() {
+        // change the region selection
+        let dropdowndistrict = d3.select("#select_district");
+        let tempobj = summary[d3.select("#select_region").property('value') ]
+        let district_data = tempobj[Object.keys(tempobj)[0]]
+        // console.log(district_data)
+        let district_element = dropdowndistrict.selectAll("option").data(district_data)
+        district_element.exit().remove()
+        district_element.enter().append("option").merge(district_element)
+            .attr("value", function (d) { return d; })
+            .text(function (d) {return d;})
+            .on("click", dropdownChangeDistrict);
+
+        // show the summary of region
+        filename = filename1
+        hiearchy = ['Region','District']
+        hierchy_values = [d3.select("#select_region").property('value')]
+        categorical = ['District','year']
+        numerical = ['rank']
+        aggragation = 'mean'
+        category = 'year'
+        let FilteredDataTwice
+        GetHeatMap(filename,hiearchy,hierchy_values,categorical,numerical,aggragation,category)
+        .then(FilteredDataTwice =>{
+            console.log(FilteredDataTwice)
+            y_column = [...new Set(FilteredDataTwice.map(d => d.year))].sort()
+            x_column = [...new Set(FilteredDataTwice.map(d => d.District))].sort()
+            // Build color scale
+            let myColor = d3.scaleLinear()
+            .range(["#ae0f07","#f2d5d4"])
+            .domain([1,10])
+            let key = [1,2,3,4,5,6,7,8,9,10]
+            let size = 20
+            function heatmap_rect_explain2(d){
+                d3.selectAll(".heatmap_rect")
+                    .classed("highlight",false);
+                d3.select("#comp")
+                    .text("Complain about: district: " + d.District + ", year: " + d.year + ", rank: " + d.rank)
+                let schema = {
+                fields: [
+                    {name: 'explan', type: 'radio', display: 'The rank is wrong', value: "1"},
+                    {name: 'explan', type: 'radio', display: 'The District is wrong', value: "2"},
+                    {name: 'explan', type: 'radio', display: 'Further investigate', value: "3"},
+                    {name: 'submit_button', type: 'button', display: 'Choose the Explanation', onclick: "Solution()"}
+                ]
+                };
+                let form = d3.select("#exp");
+                FormRender(form, schema)
+                //  render without schema to clear
+                form = d3.select("#sol");
+                FormRender(form)
+                return d3.select(this).classed("highlight",true);
+            }
+            function heatmap_tooptip_mouseover2(d){tooltipdiv.style("opacity", .9);
+                return tooltipdiv.html("District: " + d.District +
+                "<br/>" +  "year: " +d.year +
+                "<br/>" +  "rank: " +d.rank)}
+            spec = {
+                    data: FilteredDataTwice,
+                    encoding:{
+                        x: {range:x_column,field:"District"},
+                        y: {range:y_column,field:"year"},
+                        rect: {color: myColor, field: "rank",click: heatmap_rect_explain2}
+                    },
+                    legend:{
+                        size:size,
+                        key:key
+                    },
+                    tooltip:{
+                        mouseover: heatmap_tooptip_mouseover2}
+                };
+            Render_heatmap(spec)
+        })
+        
+    };
+   let dropdownChangeDistrict = function() {
+        filename = filename1
+        hiearchy = ['Region','District']
+        hierchy_values = [d3.select("#select_region").property('value') ,d3.select("#select_district").property('value') ]
+        categorical = ['Village','year']
+        numerical = ['rank']
+        aggragation = 'mean'
+        category = 'year'
+        let FilteredDataTwice
+        GetHeatMap(filename,hiearchy,hierchy_values,categorical,numerical,aggragation,category)
+        .then(FilteredDataTwice =>{
+            y_column = [...new Set(FilteredDataTwice.map(d => d.year))].sort()
+            x_column = [...new Set(FilteredDataTwice.map(d => d.Village))].sort()
+            // Build color scale
+            let myColor = d3.scaleLinear()
+            .range(["#ae0f07","#f2d5d4"])
+            .domain([1,10])
+            let key = [1,2,3,4,5,6,7,8,9,10]
+            let size = 20
+            function heatmap_tooptip_mouseover(d){tooltipdiv.style("opacity", .9);
+                return tooltipdiv.html("Village: " + d.Village +
+                "<br/>" +  "year: " +d.year +
+                "<br/>" +  "rank: " +d.rank)}
+            spec = {
+                    data: FilteredDataTwice,
+                    encoding:{
+                        x: {range:x_column,field:"Village"},
+                        y: {range:y_column,field:"year"},
+                        rect: {color: myColor, field: "rank",click: heatmap_rect_explain}
+                    },
+                    legend:{
+                        size:size,
+                        key:key
+                    },
+                    tooltip:{
+                        mouseover: heatmap_tooptip_mouseover}
+                };
+            Render_heatmap(spec)
+        })
+    }
+    // region drop down
+    let dropdownregion = d3.select("#select_region");
+    region_data = Object.keys(summary)
+    region_element = dropdownregion.selectAll("option").data(region_data)
+    region_element.enter().append("option")
+                .attr("value", function (d) { return d; })
+                .text(function (d) {
+                      return d;
+                })
+                .on("click", dropdownChangeRegion);
+    region_element.exit().remove()
+}
+
+function heatmap_rect_explain(d){
+                d3.selectAll(".heatmap_rect")
+                    .classed("highlight",false);
+                d3.select("#comp")
+                    .text("Complain about: village: " + d.Village + ", year: " + d.year + ", rank: " + d.rank)
+                let schema = {
+                fields: [
+                    {name: 'explan', type: 'radio', display: 'The rank is wrong', value: "1"},
+                    {name: 'explan', type: 'radio', display: 'The village is wrong', value: "2"},
+                    {name: 'explan', type: 'radio', display: 'Further investigate', value: "3"},
+                    {name: 'submit_button', type: 'button', display: 'Choose the Explanation', onclick: "Solution()"}
+                ]
+                };
+                let form = d3.select("#exp");
+                FormRender(form, schema)
+                //  render without schema to clear
+                form = d3.select("#sol");
+                FormRender(form)
+                return d3.select(this).classed("highlight",true);
+            }
+
+
+// GetSummary(filename2, ['Region','District']).then(FreshDropDown2)
+function FreshDropDown2(summary){
+    let dropdownChangeRegion = function() {
+        // FilteredData = data.filter(function(d) { return d.Region == d3.select("#select_region").property('value') });
+        let dropdowndistrict = d3.select("#select_district2")
+                                 .on("click", dropdownChangeDistrict);
+        let tempobj = summary[d3.select("#select_region2").property('value') ]
+        let district_data = tempobj[Object.keys(tempobj)[0]]
+        // console.log(district_data)
+        let district_element = dropdowndistrict.selectAll("option").data(district_data)
+        district_element.exit().remove()
+        district_element.enter().append("option").merge(district_element)
+        .attr("value", function (d) { return d; })
+                      .text(function (d) {
+                            return d;});
+    };
+   let dropdownChangeDistrict = function() {
+        filename = filename2
+        hiearchy = ['Region','District']
+        hierchy_values = [d3.select("#select_region2").property('value') ,d3.select("#select_district2").property('value') ]
+        GetData(filename,hiearchy,hierchy_values)
+        .then(FilteredDataTwice =>{
+            console.log(FilteredDataTwice)
+            let y_column = [...new Set(FilteredDataTwice.map(d => d.Village))].sort()
+            // x_column = [...new Set(data.map(d => d.year))].sort()
+            let key = [...new Set(FilteredDataTwice.map(d => d.Period))].sort()
+
+            // Build color scale
+            let myColor = d3.scaleOrdinal().domain(key)
+                .range(["#3366cc", "#dc3912", "#ff9900", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00", "#b82e2e"]);
+
+            let size = 20
+            function rect_explain(){}
+
+            function tooptip_mouseover(d){tooltipdiv.style("opacity", .9);
+                let parseDate = d3.timeFormat("%Y-%m-%d");
+                return tooltipdiv.html("Village: " + d.Village +
+                "<br/>" +  "Period: " + d.Period +
+                "<br/>" +  "Start: " + d.start +
+                "<br/>" +  "End: " + d.end)}
+
+            spec = {
+                    data: FilteredDataTwice,
+                    encoding:{
+                        x1: {field:"start"},
+                        x2: {field:"end"},
+                        y: {range:y_column,field:"Village"},
+                        rect: {color: myColor, field: "Period",click: rect_explain}
+                    },
+                    legend:{
+                        size:size,
+                        key:key
+                    },
+                    tooltip:{
+                        mouseover: tooptip_mouseover}
+                };
+            Render_gantt(spec)
+        })
+    }
+    // region drop down
+    let dropdownregion = d3.select("#select_region2");
+    region_data = Object.keys(summary)
+    region_element = dropdownregion.selectAll("option").data(region_data)
+    region_element.enter().append("option")
+                .attr("value", function (d) { return d; })
+                .text(function (d) {
+                      return d;
+                })
+                .on("click", dropdownChangeRegion);
+    region_element.exit().remove()
+}
+
+
+
+
+// This is for heatmap
+// see which explanation is selected and updates the solution
+function Solution () {
+  let selected = d3.select('input[name="explan"]:checked').node().value
+  let form = d3.select("#sol");
+  if (selected == 1){
+      let schema = {
+                fields: [
+                    {name: 'country', type: 'dropdown', display: 'Correct the rank of village: ',
+                         values: ['1', '2', '3','4','5','6','7','8','9','10']
+                    },
+                    {name: 'submit_button', type: 'button', display: 'Choose the Solution'}
+                ]
+            };
+        FormRender(form,schema)
+  }
+  else if (selected == 2){
+      let schema = {
+                fields: [
+                    {name: 'country', type: 'text', display: 'Correct the name of village: '},
+                    {name: 'submit_button', type: 'button', display: 'Choose the Solution'}
+                ]
+            };
+        FormRender(form,schema)
+  }
+  else if (selected == 3){
+      let schema = {
+                fields: [
+                    {display: 'Not implemented'}
+                ]
+            };
+        FormRender(form,schema)
+  }
+}
+
+// add form according to schema
+function FormRender (form, schema={fields: []}) {
+    form.selectAll("*").remove()
+    form.selectAll("p")
+            .data(schema.fields)
+            .enter()
+            .append("p")
+            .each(function(d){
+                let self = d3.select(this);
+                let label = self.append("label")
+                    .text(d.display)
+                    // .style("width", "100px")
+                    // .style("display", "inline-block");
+
+                if(d.type == 'text'){
+                    let input = self.append("input").attr("type",d.type).attr("name",d.name)
+                }
+
+                if(d.type == 'radio'){
+                    let input = self.append("input")
+                     .attr("type",d.type).attr("name",d.name).attr("value",d.value)
+                        // .attr({
+                        //     "type":  d.type,
+                        //     "name":  d.name
+                        // });
+                }
+                if(d.type == 'dropdown'){
+                let select = self.append("select")
+                        .attr("name", "country")
+                        .selectAll("option")
+                        .data(d.values)
+                        .enter()
+                        .append("option")
+                        .text(function(d) { return d; });
+                }
+                if(d.type == 'button'){
+                let select = self.append("button").attr("type",d.type).attr('onClick',d.onclick).text('Submit')
+                }
+            });
+        // form.append("button").attr("type","button").text('Submit').attr('onClick',"Solution()");
+}
+
+// create a tooltip
+// let tooltipdiv = d3.select("#my_dataviz2").append("div")
+//     .attr("class", "tooltip")
+//     .style("opacity", 0)
+//     .style("left", "20px")
+//     .style("top", "44px");
+
+// set the dimsensions and margins of the graph
+let margin = {top: 10, right: 200, bottom: 30, left: 60},
+    width = 1000 - margin.left - margin.right,
+    height = 550 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+let svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+let tooltipdiv = d3.select("#my_dataviz").append("div")
+  .attr("class", "tooltip")
+  .style("opacity", 0)
+  .style("left", "20px")
+  .style("top", "44px");
+  // // Add X axis
+  // let x = d3.scaleLinear()
+  //   .domain([0, 4000])
+  //   .range([ 0, width ]);
+  // svg.append("g")
+  //   .attr("transform", "translate(0," + height + ")")
+  //   .call(d3.axisBottom(x).ticks(3));
+  // // Add Y axis
+  // let y = d3.scaleLinear()
+  //   .domain([0, 500000])
+  //   .range([ height, 0]);
+  // svg.append("g")
+  //   .call(d3.axisLeft(y).ticks(4));
+
+//Read the data
+// d3.csv("https://raw.githubusercontent.com/zachary62/data/master/heatmap_data.csv", function(data) {
+//     // two dimension array for region & district
+//     // first array is unique region
+//     // second array is unique
+//     let index_RegionDistrict = d3.nest()
+//       .key(function(d) { return d.Region; })
+//       .rollup(function(v) { return [...new Set(v.map(x=>x.District))].sort(); })
+//       .object(data);
+//     console.log(index_RegionDistrict)
+//     let dropdownChangeRegion = function() {
+//         // FilteredData = data.filter(function(d) { return d.Region == d3.select("#select_region").property('value') });
+//         let dropdowndistrict = d3.select("#select_district")
+//                                  .on("change", dropdownChangeDistrict);
+//         district_data = index_RegionDistrict[d3.select("#select_region").property('value') ]
+//         // console.log(district_data)
+//         district_element = dropdowndistrict.selectAll("option").data(district_data)
+//         district_element.exit().remove()
+//         district_element.enter().append("option").merge(district_element)
+//         .attr("value", function (d) { return d; })
+//                       .text(function (d) {
+//                             return d;});
+//     };
+//    let dropdownChangeDistrict = function() {
+//         let FilteredDataTwice = data.filter(function(d) {
+//             return d.District == d3.select("#select_district").property('value')
+//             && d.Region == d3.select("#select_region").property('value')});
+//         y_column = [...new Set(data.map(d => d.year))].sort()
+//         x_column = [...new Set(FilteredDataTwice.map(d => d.Village))].sort()
+//         // Build color scale
+//         let myColor = d3.scaleLinear()
+//           .range(["#ae0f07","#f2d5d4"])
+//           .domain([1,10])
+//         let key = [1,2,3,4,5,6,7,8,9,10]
+//         let size = 20
+//         function rect_explain(d){
+//             d3.selectAll("#heatmap_rect")
+//                 .classed("highlight",false);
+//             d3.select("#comp")
+//                 .text("Complain about: village: " + d.Village + ", year: " + d.year + ", rank: " + d.rank)
+//             let schema = {
+//                fields: [
+//                    {name: 'explan', type: 'radio', display: 'The rank is wrong', value: "1"},
+//                    {name: 'explan', type: 'radio', display: 'The village is wrong', value: "2"},
+//                    {name: 'explan', type: 'radio', display: 'Further investigate', value: "3"},
+//                    {name: 'submit_button', type: 'button', display: 'Choose the Explanation', onclick: "Solution()"}
+//                ]
+//             };
+//             let form = d3.select("#exp");
+//             FormRender(form, schema)
+//             //  render without schema to clear
+//             form = d3.select("#sol");
+//             FormRender(form)
+//             return d3.select(this).classed("highlight",true);
+//         }
+//         function tooptip_mouseover(d){tooltipdiv.style("opacity", .9);
+//             return tooltipdiv.html("Village: " + d.Village +
+//             "<br/>" +  "year: " +d.year +
+//             "<br/>" +  "rank: " +d.rank)}
+
+//         spec = {
+//                   data: FilteredDataTwice,
+//                   encoding:{
+//                       x: {range:x_column,field:"Village"},
+//                       y: {range:y_column,field:"year"},
+//                       rect: {color: myColor, field: "rank",click: rect_explain}
+//                   },
+//                   legend:{
+//                       size:size,
+//                       key:key
+//                   },
+//                   tooltip:{
+//                       mouseover: tooptip_mouseover}
+//               };
+//         Render_heatmap(spec)
+//     }
+//     // region drop down
+//     let dropdownregion = d3.select("#select_region").on("change", dropdownChangeRegion);
+//     region_data = Object.keys(index_RegionDistrict)
+//     region_element = dropdownregion.selectAll("option").data(region_data)
+//     region_element.enter().append("option")
+//                 .attr("value", function (d) { return d; })
+//                 .text(function (d) {
+//                       return d;
+//                 });
+//     region_element.exit().remove()
+// })
+
+//Read the data
+// d3.csv("https://raw.githubusercontent.com/zachary62/data/master/intitiate_cleaned.csv", function(data) {
+//     let parseDate = d3.timeParse("%Y-%m-%d");
+//     mindate = 0
+//     maxdate = 0
+//     function transform_date(obj){
+//         obj.start = parseDate(obj.start)
+//         obj.end = parseDate(obj.end)
+//         if (mindate == 0 && maxdate == 0) {
+//             mindate = obj.start
+//             maxdate = obj.end
+//         } else {
+//             if (obj.start < mindate) {
+//                 mindate = obj.start
+//             }
+//             if (obj.end > maxdate) {
+//                 maxdate = obj.end
+//             }
+//         }
+//         return obj
+//     }
+//     data = data.map(transform_date)
+//     // two dimension array for region & district
+//     // first array is unique region
+//     // second array is unique
+//     let index_RegionDistrict = d3.nest()
+//       .key(function(d) { return d.Region; })
+//       .rollup(function(v) { return [...new Set(v.map(x=>x.District))].sort(); })
+//       .object(data);
+
+//     let dropdownChangeRegion = function() {
+//         // FilteredData = data.filter(function(d) { return d.Region == d3.select("#select_region").property('value') });
+//         let dropdowndistrict = d3.select("#select_district2")
+//                                  .on("change", dropdownChangeDistrict);
+//         district_data = index_RegionDistrict[d3.select("#select_region2").property('value') ]
+//         // console.log(district_data)
+//         district_element = dropdowndistrict.selectAll("option").data(district_data)
+//         district_element.exit().remove()
+//         district_element.enter().append("option").merge(district_element)
+//         .attr("value", function (d) { return d; })
+//                       .text(function (d) {
+//                             return d;});
+//     };
+//    let dropdownChangeDistrict = function() {
+//         let FilteredDataTwice = data.filter(function(d) {
+//             return d.District == d3.select("#select_district2").property('value')
+//             && d.Region == d3.select("#select_region2").property('value')});
+
+//         y_column = [...new Set(FilteredDataTwice.map(d => d.Village))].sort()
+//         // x_column = [...new Set(data.map(d => d.year))].sort()
+//         let key = [...new Set(data.map(x=>x.Period))].sort()
+
+//         // Build color scale
+//         let myColor = d3.scaleOrdinal().domain(key)
+//             .range(["#3366cc", "#dc3912", "#ff9900", "#109618", "#990099", "#0099c6", "#dd4477", "#66aa00", "#b82e2e"]);
+
+//         let size = 20
+//         // function rect_explain(d){
+//         //     d3.selectAll("#heatmap_rect")
+//         //         .classed("highlight",false);
+//         //     d3.select("#comp")
+//         //         .text("Complain about: village: " + d.Village + ", year: " + d.year + ", rank: " + d.rank)
+//         //     let schema = {
+//         //        fields: [
+//         //            {name: 'explan', type: 'radio', display: 'The rank is wrong', value: "1"},
+//         //            {name: 'explan', type: 'radio', display: 'The village is wrong', value: "2"},
+//         //            {name: 'explan', type: 'radio', display: 'Further investigate', value: "3"},
+//         //            {name: 'submit_button', type: 'button', display: 'Choose the Explanation', onclick: "Solution()"}
+//         //        ]
+//         //     };
+//         //     let form = d3.select("#exp");
+//         //     FormRender(form, schema)
+//         //     //  render without schema to clear
+//         //     form = d3.select("#sol");
+//         //     FormRender(form)
+//         //     return d3.select(this).classed("highlight",true);
+//         // }
+//         function rect_explain(){}
+
+//         function tooptip_mouseover(d){tooltipdiv.style("opacity", .9);
+//             let parseDate = d3.timeFormat("%Y-%m-%d");
+//             return tooltipdiv.html("Village: " + d.Village +
+//             "<br/>" +  "Period: " + d.Period +
+//             "<br/>" +  "Start: " + parseDate(d.start) +
+//             "<br/>" +  "End: " + parseDate(d.end))}
+
+//         spec = {
+//                   data: FilteredDataTwice,
+//                   encoding:{
+//                       x1: {range:[mindate,maxdate],field:"start"},
+//                       x2: {field:"end"},
+//                       y: {range:y_column,field:"Village"},
+//                       rect: {color: myColor, field: "Period",click: rect_explain}
+//                   },
+//                   legend:{
+//                       size:size,
+//                       key:key
+//                   },
+//                   tooltip:{
+//                       mouseover: tooptip_mouseover}
+//               };
+//         Render_gantt(spec)
+//     }
+//     // region drop down
+//     let dropdownregion = d3.select("#select_region2").on("change", dropdownChangeRegion);
+//     // console.log(index_RegionDistrict)
+//     region_data = Object.keys(index_RegionDistrict)
+//     region_element = dropdownregion.selectAll("option").data(region_data)
+//     region_element.enter().append("option")
+//                 .attr("value", function (d) { return d; })
+//                 .text(function (d) {
+//                       return d;
+//                 });
+//     region_element.exit().remove()
+// })
+
+function Render_gantt(spec){
+    // console.log(spec)
+    if("legend" in spec){
+        // Add one dot in the legend for each name.
+        let dots =  svg.selectAll("#mydots")
+            .data(spec.legend.key)
+        dots.exit().remove()
+        dots.enter()
+            .append("rect").merge(dots)
+            .attr("x", width+margin.left)
+            .attr("y", function(d,i){ return 100 + i*(spec.legend.size+5)})
+            .attr("width", spec.legend.size)
+            .attr("height", spec.legend.size)
+            .style("fill", function(d){ return spec.encoding.rect.color(d)})
+            .attr("id","mydots")
+
+        // Add one dot in the legend for each name.
+        let labels =  svg.selectAll("#mylabels").data(spec.legend.key)
+        labels.exit().remove()
+        labels.enter()
+            .append("text").merge(labels)
+            .attr("x", width+margin.left+30)
+            .attr("y", function(d,i){ return 100 + i*(spec.legend.size+5) + (spec.legend.size/2)})
+            .text(function(d){ return d})
+            .attr("text-anchor", "left")
+            .style("alignment-baseline", "middle")
+            .attr("id","mylabels")
+    }
+
+    // Build y scales and axis:
+    let y = d3.scaleBand()
+        .range([height, 0])
+        .domain(spec.encoding.y.range)
+        .padding(0.01);
+    d3.select("#y_axis").remove()
+    svg.append("g")
+        .attr("id","y_axis")
+        .call(d3.axisLeft(y));
+
+    // Build X scales and axis:
+    let x = d3.scaleLinear()
+    .range([ 0, width ])
+    .domain([1,365])
+
+    month = ["1-1","2-1","3-1","4-1","5-1","6-1","7-1","8-1","9-1","10-1","11-1","12-1"]
+    month_name = ["jan", "feb", "march", "april", "may", "june", "july", "aug", "sep", "oct", "nov", "dec"]
+    ticks = month.map(get_day_of_year)
+    month_map = {}
+    ticks.forEach((key, i) => month_map[key] = month_name[i]);
+    d3.select("#x_axis").remove()
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .attr("id","x_axis")
+        .call(d3.axisBottom(x).tickValues(ticks).tickFormat(d => month_map[d]))
+
+
+    let rectangle = svg.selectAll(".heatmap_rect").data(spec.data)
+    rectangle.exit().remove()
+
+    let round_data = []
+    rectangle.enter()
+        .append("rect").merge(rectangle)
+        .attr("x", function(d) { return x(get_day_of_year(d[spec.encoding.x1.field]))})
+        .attr("y", function(d) { return y(d[spec.encoding.y.field])})
+        
+        .attr("width", function(d, i) {
+            if (x(get_day_of_year(d[spec.encoding.x2.field])) - x(get_day_of_year(d[spec.encoding.x1.field])) < 0){
+                let newobj = {}
+                newobj[spec.encoding.x2.field] = d[spec.encoding.x2.field]
+                newobj[spec.encoding.x1.field] = d[spec.encoding.x1.field]
+                newobj[spec.encoding.y.field] = d[spec.encoding.y.field]
+                newobj[spec.encoding.rect.field] = d[spec.encoding.rect.field]
+                newobj["id"]= i
+                round_data.push(newobj)
+                // console.log(i, x(365), x(get_day_of_year(d[spec.encoding.x1.field])))
+                return x(365) - x(get_day_of_year(d[spec.encoding.x1.field]))
+            }
+            // console.log(i, x(get_day_of_year(d[spec.encoding.x2.field])) - x(get_day_of_year(d[spec.encoding.x1.field])))
+            return x(get_day_of_year(d[spec.encoding.x2.field])) - x(get_day_of_year(d[spec.encoding.x1.field]))
+                })
+        .classed("heatmap_rect",true)
+        .attr("id",function(d, i){return i})        
+        .attr("height", y.bandwidth() )
+        .style("fill", function(d) { return spec.encoding.rect.color(d[spec.encoding.rect.field])})
+        .on("mouseover",spec.tooltip.mouseover)
+        .on("mousemove", function(){return tooltipdiv.style("top", (event.pageY)+"px").style("left",(event.pageX)+"px");})
+        .on("mouseout", function(){return tooltipdiv.style("opacity", 0);})
+        .on("click", spec.encoding.rect.click)
+        .style("opacity", 0.5);
+
+    rectangle = svg.selectAll(".heatmap_rect").data(round_data)
+    rectangle.enter()
+        .append("rect").merge(rectangle)
+        .attr("x", function(d) { return x(1)})
+        .attr("y", function(d) { return y(d[spec.encoding.y.field])})
+        
+        .attr("width", function(d, i) {
+                return x(get_day_of_year(d[spec.encoding.x2.field])) - x(1) 
+            })
+        .classed("heatmap_rect",true)
+        .attr("id",function(d, i){return d["id"]})        
+        .attr("height", y.bandwidth() )
+        .style("fill", function(d) { return spec.encoding.rect.color(d[spec.encoding.rect.field])})
+        .on("mouseover",spec.tooltip.mouseover)
+        .on("mousemove", function(){return tooltipdiv.style("top", (event.pageY)+"px").style("left",(event.pageX)+"px");})
+        .on("mouseout", function(){return tooltipdiv.style("opacity", 0);})
+        .on("click", spec.encoding.rect.click)
+        .style("opacity", 0.5);
+}
+
+
+function Render_heatmap(spec){
+
+    if("legend" in spec){
+        // Add one dot in the legend for each name.
+        let dots =  svg.selectAll("#mydots")
+            .data(spec.legend.key)
+        dots.exit().remove()
+        dots.enter()
+            .append("rect").merge(dots)
+            .attr("x", width+margin.left)
+            .attr("y", function(d,i){ return 100 + i*(spec.legend.size+5)})
+            .attr("width", spec.legend.size)
+            .attr("height", spec.legend.size)
+            .style("fill", function(d){
+                return spec.encoding.rect.color(d)})
+            .attr("id","mydots")
+
+        // Add one dot in the legend for each name.
+        let labels =  svg.selectAll("#mylabels").data(spec.legend.key)
+        labels.exit().remove()
+        labels.enter()
+            .append("text").merge(labels)
+            .attr("x", width+margin.left+30)
+            .attr("y", function(d,i){ return 100 + i*(spec.legend.size+5) + (spec.legend.size/2)})
+            .text(function(d){ return d})
+            .attr("text-anchor", "left")
+            .style("alignment-baseline", "middle")
+            .attr("id","mylabels")
+    }
+
+    // Build y scales and axis:
+    let y = d3.scaleBand()
+        .range([height, 0])
+        .domain(spec.encoding.y.range)
+        .padding(0.01);
+    d3.select("#y_axis").remove()
+    svg.append("g")
+        .attr("id","y_axis")
+        .call(d3.axisLeft(y));
+
+    // Build X scales and axis:
+    let x = d3.scaleBand()
+    .range([ 0, width ])
+    .domain(spec.encoding.x.range)
+    .padding(0.01);
+
+    d3.select("#x_axis").remove()
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .attr("id","x_axis")
+        .call(d3.axisBottom(x))
+
+
+
+    let rectangle = svg.selectAll(".heatmap_rect").data(spec.data)
+    rectangle.exit().remove()
+    rectangle.enter()
+        .append("rect").merge(rectangle)
+        .attr("x", function(d) { return x(d[spec.encoding.x.field]) })
+        .attr("y", function(d) { return y(d[spec.encoding.y.field]) })
+        .classed("heatmap_rect",true)
+        .attr("width", x.bandwidth() )
+        .attr("height", y.bandwidth() )
+        .style("opacity", 1 )
+        .style("fill", function(d) { 
+            if (d[spec.encoding.rect.field] == null)
+                return "#FFFFFF"
+            else
+                return spec.encoding.rect.color(d[spec.encoding.rect.field])})
+        .on("mouseover",spec.tooltip.mouseover)
+        .on("mousemove", function(){return tooltipdiv.style("top", (event.pageY)+"px").style("left",(event.pageX)+"px");})
+        .on("mouseout", function(){return tooltipdiv.style("opacity", 0);})
+        .on("click", spec.encoding.rect.click);
+}
+
+
+function get_day_of_year(str_date){
+    let month = parseInt(str_date.split("-")[0])
+    let day = parseInt(str_date.split("-")[1])
+    let day_of_year = 0;
+
+    let ary_months = [
+        0,
+        31, //jan
+        28, //feb(non leap)
+        31, //march
+        30, //april
+        31, //may
+        30, //june
+        31, //july
+        31, //aug
+        30, //sep
+        31, //oct
+        30, //nov   
+        31  //dec
+        ];
+
+
+    for(var i=1; i < month; i++){
+        day_of_year += ary_months[i];
+    }
+    day_of_year += day
+    return day_of_year;
+}
+
+
+//drag function, for reference later
+let prex = 0, prey = 0, aftx = 0, afty = 0,presum = 0;
+let drag = d3.drag()
+      .on("start", function(d,i) {
+        prex = d3.select(this).attr("cx");
+        prey = d3.select(this).attr("cy");
+        tooltipdiv.style("opacity", .9);
+        tooltipdiv.html("x: " + Math.round(x.invert(d3.event.x)) +
+      "<br/>" +  "y: " + Math.round(y.invert(d3.event.y)))
+        .style("left", (d3.event.x + 20) + "px")
+        .style("top", (d3.event.y - 10) + "px");
+    })
+      .on("drag", function(d,i) {
+          // console.log(d,i)
+           // console.log(d3.select(this).attr("cx"))
+          // d.cx += d3.event.dx
+          // d.cy += d3.event.dy
+          if (d3.event.x > width || d3.event.x < 0 ||d3.event.y > height ||d3.event.y < 0){return}
+          // console.log(d3.event.x)
+          d3.select(this).attr("cx",  d3.event.x)
+        .attr("cy", d3.event.y)
+        tooltipdiv.html("x: " + Math.round(x.invert(d3.event.x)) +
+      "<br/>" +  "y: " + Math.round(y.invert(d3.event.y)) )
+        .style("left", (d3.event.x + 20) + "px")
+        .style("top", (d3.event.y - 10) + "px");
+      })
+      .on("end", function(d,i) {
+          d3.select(".state").append("div").classed('log', true).append("text")
+          .text("record id =" + this.id + " change x from " + Math.round(x.invert(prex)) + " to "
+          + Math.round(x.invert(d3.event.x)) + ", change y from " + Math.round(y.invert(prey)) + " to "
+          + Math.round(y.invert(d3.event.y)) );
+          aftx = Math.round(d3.event.x);
+          afty = Math.round(d3.event.y);
+          presum = svg2.select(".bar").attr("y");
+          sum += Math.round(y.invert(d3.event.y)) -  Math.round(y.invert(prey));
+          svg2.selectAll(".bar")
+          .data([sum])
+          // .enter().append("rect")
+          // .attr("class", "bar")
+          // .attr("x", width/2 - 30)
+          // .attr("width", 60)
+          .attr("y", function(d) { return y(d/49); })
+          .attr("height", function(d) { return height - y(d/49);})
+          .call( function(d,i) {
+              // console.log(d.attr("x"))
+              // console.log(d.attr("y"))
+              tooltipdiv.style("opacity", .9);
+              tooltipdiv.html("x: AVG(Y) <br/> y: " + Math.round(sum/49))
+             .style("left", ((Number(d.attr("x")) + 57) + "px"))
+             .style("top", ((Number(d.attr("y")) - 10) + "px"));
+           })
+      })
+
+
+</script>
