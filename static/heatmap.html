@@ -238,7 +238,7 @@ function FreshDropDown(summary){
     
     let dropdownChangeRegion = function() {
         // change the region selection
-        let dropdowndistrict = d3.select("#select_district");
+        let dropdowndistrict = d3.select("#select_district").on("click", dropdownChangeDistrict);
                                  
         let tempobj = summary[d3.select("#select_region").property('value') ]
         let district_data = tempobj[Object.keys(tempobj)[0]]
@@ -248,7 +248,8 @@ function FreshDropDown(summary){
         district_element.enter().append("option").merge(district_element)
         .attr("value", function (d) { return d; })
         .text(function (d) {return d;})
-        .on("click", dropdownChangeDistrict);
+        //mac will have some problem with on click option
+        ;
 
         let schema = {
             filename : filename1,
@@ -276,7 +277,7 @@ function FreshDropDown(summary){
         .then(d=>{ProcessHeatMapData(d,schema)})
     }
     // region drop down
-    let dropdownregion = d3.select("#select_region");
+    let dropdownregion = d3.select("#select_region").on("click", dropdownChangeRegion);
     region_data = Object.keys(summary)
     region_element = dropdownregion.selectAll("option").data(region_data)
     region_element.enter().append("option")
@@ -284,7 +285,7 @@ function FreshDropDown(summary){
                 .text(function (d) {
                       return d;
                 })
-                .on("click", dropdownChangeRegion);
+               ;
     region_element.exit().remove()
 }
 
@@ -414,7 +415,7 @@ function ProcessGanttMapData(FilteredDataTwice,schema) {
 function FreshDropDown2(summary){
     let dropdownChangeRegion = function() {
         // FilteredData = data.filter(function(d) { return d.Region == d3.select("#select_region").property('value') });
-        let dropdowndistrict = d3.select("#select_district2") ;
+        let dropdowndistrict = d3.select("#select_district2").on("click", dropdownChangeDistrict) ;
         let tempobj = summary[d3.select("#select_region2").property('value') ]
         let district_data = tempobj[Object.keys(tempobj)[0]]
         // console.log(district_data)
@@ -423,7 +424,7 @@ function FreshDropDown2(summary){
         district_element.enter().append("option").merge(district_element)
         .attr("value", function (d) { return d; })
         .text(function (d) {return d;})
-        .on("click", dropdownChangeDistrict);
+       ;
     };
    let dropdownChangeDistrict = function() {
         let schema = {
@@ -438,13 +439,12 @@ function FreshDropDown2(summary){
 
     }
     // region drop down
-    let dropdownregion = d3.select("#select_region2");
+    let dropdownregion = d3.select("#select_region2").on("click", dropdownChangeRegion);
     region_data = Object.keys(summary)
     region_element = dropdownregion.selectAll("option").data(region_data)
     region_element.enter().append("option")
                 .attr("value", function (d) { return d; })
-                .text(function (d) {return d;})
-                .on("click", dropdownChangeRegion);
+                .text(function (d) {return d;});
     region_element.exit().remove()
 }
 
