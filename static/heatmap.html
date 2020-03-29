@@ -58,21 +58,18 @@ Seasonal Calendar
   <p id="comp"></p>
   <h2>Explanation</h2>
   <form id = "exp" name="myForm">
-  <!-- <INPUT TYPE="text" NAME="inputbox" VALUE=""><P> -->
-  <!-- Name: <input type="text" name="fname"> -->
-  <!-- <INPUT TYPE="button" NAME="button" Value="Click" onClick="Explanation(this.form)"> -->
   </form>
   <h2>Solution</h2>
   <form id = "sol" name="myForm">
   </form>
-  <!-- <h2>Log</h2> -->
 </div>
- <!-- <button type="button">Commit</button> -->
 </div>
 
 
 <script>
-const url = "http://127.0.0.1:5000/";
+// const url = "http://127.0.0.1:5000/";
+const url = window.location.href;
+
 let filename1 = "./db/heatmap_data_lineage.csv"
 let filename2 = "./db/intitiate_cleaned2.csv"
 
@@ -92,7 +89,7 @@ function GetData(schema) {
         mode : "cors"
     };
 
-    return fetch("http://127.0.0.1:5000/api/data", other_params)
+    return fetch(url + "api/data", other_params)
         .then(function(response) {
             if (response.ok) {
                 return response.json();
@@ -122,7 +119,7 @@ function GetExplan(schema) {
         mode : "cors"
     };
 
-    return fetch("http://127.0.0.1:5000/api/explan", other_params)
+    return fetch(url + "api/explan", other_params)
         .then(function(response) {
             if (response.ok) {
                 return response.json();
@@ -155,7 +152,7 @@ function GetHeatMap(schema) {
             method : "POST",
             mode : "cors"
         };
-        return fetch("http://127.0.0.1:5000/api/heatmapdata", other_params)
+        return fetch(url + "api/heatmapdata", other_params)
             .then(function(response) {
                 if (response.ok) {
                     return response.json();
@@ -183,7 +180,7 @@ function GetSummary(filename,hiearchy,category) {
             mode : "cors"
         };
 
-        return fetch("http://127.0.0.1:5000/api/summary", other_params)
+        return fetch(url + "api/summary", other_params)
             .then(function(response) {
                 if (response.ok) {
                     return response.json();
@@ -191,7 +188,7 @@ function GetSummary(filename,hiearchy,category) {
                     throw new Error("Could not reach the API: " + response.statusText);
                 }
             }).then(function(data) {
-                // console.log(data)
+                console.log(data)
                 obj = JSON.parse(data)
                 // console.log(obj)
                 return obj
