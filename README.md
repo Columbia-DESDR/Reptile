@@ -12,7 +12,7 @@ Pandas
 ```
 $ export FLASK_ENV=development
 $ export FLASK_APP=app.py
-$ flask run
+$ flask run --host=0.0.0.0
 ```
 
 ## Windows CMD:
@@ -20,7 +20,7 @@ $ flask run
 ```
 > set FLASK_ENV=development
 > set FLASK_APP=app.py
-> flask run
+> flask run --host=0.0.0.0
 ```
 
 ## Windows PowerShell:
@@ -28,5 +28,5 @@ $ flask run
 ```
 > $env:FLASK_ENV = "development"
 > $env:FLASK_APP = "app.py"
-> flask run
+> flask run --host=0.0.0.0
 ```
