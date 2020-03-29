@@ -1,7 +1,10 @@
 # FIST
 
 ## Dependencies
+python3.6
+
 Flask
+
 Pandas
 
 ## Unix Bash (Linux, Mac, etc.):
