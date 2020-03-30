@@ -67,7 +67,7 @@ function GetData(filename,hiearchy,hierchy_values) {
         mode : "cors"
     };
 
-    return fetch("http://127.0.0.1:5000/api/data", other_params)
+    return fetch(url + "api/data", other_params)
         .then(function(response) {
             if (response.ok) {
                 return response.json();
@@ -114,7 +114,7 @@ function GetHeatMap(filename,hiearchy,hierchy_values,categorical,numerical,aggra
             mode : "cors"
         };
 
-        return fetch("http://127.0.0.1:5000/api/heatmapdata", other_params)
+        return fetch(url + "api/heatmapdata", other_params)
             .then(function(response) {
                 if (response.ok) {
                     return response.json();
@@ -157,7 +157,7 @@ function GetSummary(filename,hiearchy,category) {
             mode : "cors"
         };
 
-        return fetch("http://127.0.0.1:5000/api/summary", other_params)
+        return fetch(url + "api/summary", other_params)
             .then(function(response) {
                 if (response.ok) {
                     return response.json();
