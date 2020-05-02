@@ -800,7 +800,15 @@ function submitRec(){
     "w9":d3.select("#w9").property("value"),"w10":d3.select("#w10").property("value"),
     "name":d3.select("#name").property("value"),"ann":d3.select("#ann").property("value")
     }
-    SendRec(result).then((d)=>console.log)
+    SendRec(result).then(()=>{
+        schema = {
+                sol: [
+                    {display: 'Success'
+                    }]
+           
+            };
+        FormRender('#exp',schema.sol)
+        })
     
 }
 
