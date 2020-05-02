@@ -3,6 +3,10 @@ from flask import request, jsonify, Response, json, render_template
 import db
 import os
 import readcsv
+import json
+
+
+
 df = None
 
 app = flask.Flask(__name__,static_url_path='')
@@ -32,22 +36,43 @@ app.config["DEBUG"] = True
 def home():
     return  app.send_static_file('heatmap.html')
 
+@app.route('/rec', methods=['GET'])
+def rec():
+    return  app.send_static_file('heatmap copy 4.html')
+
+@app.route('/map', methods=['GET'])
+def map():
+    return  app.send_static_file('map.html')
 
 @app.route('/satellite', methods=['GET'])
 def sate():
     return  app.send_static_file('heatmap copy.html')
 
-# # A route to return all of the available entries in our catalog.
-# @app.route('/api/v1/resources/books/all', methods=['GET'])
-# def api_all():
-#     data = {
-#         'hello'  : 'world',
-#         'number' : 3
-#     }
-#     js = json.dumps(data)
-#     resp = Response(js, status=200, mimetype='application/json')
-#     resp.headers['Access-Control-Allow-Origin'] = '*'
-#     return resp
+@app.route('/satellite2', methods=['GET'])
+def sate2():
+    return  app.send_static_file('heatmap copy 2.html')
+
+
+@app.route('/satellite3', methods=['GET'])
+def sate3():
+    return  app.send_static_file('heatmap copy 3.html')
+
+# A route to return all of the available entries in our catalog.
+@app.route('/api/zones', methods=['GET'])
+def api_zones():
+    with open("./db/eth_woredas_dd.json") as f:
+        data = json.load(f)
+    js = json.dumps(data)
+    resp = Response(js, status=200, mimetype='application/json')
+    return resp
+
+recs = []
+
+@app.route('/api/getrec', methods=['GET'])
+def get_rec():
+    js = json.dumps(recs)
+    resp = Response(js, status=200, mimetype='application/json')
+    return resp
 
 @app.route('/api/db', methods=['POST'])
 def api_db():
@@ -95,6 +120,39 @@ def api_summary():
         resp = Response(status=400)
         return resp
 
+
+
+@app.route('/api/unique', methods=['POST'])
+def api_unique():
+    try:
+        # print(request.json)
+        filename = request.json['filename']
+        hiearchy = request.json['hiearchy']
+        hierchy_values = request.json['hierchy_values']
+        if 'category' in request.json:
+            category = request.json['category']
+        else:
+            category = None
+        # print((tuple(filename), tuple(hiearchy)))
+        # data_cache[(filename, tuple(hiearchy))] = 'hi'
+        if (filename, tuple(hiearchy),category) in data_cache:
+            # print("Cached!")
+            d = data_cache[(filename, tuple(hiearchy),category)]
+        else:
+            d = readcsv.HierachyData(filename,hiearchy)
+            if not category is None:
+                d.categorize_attribute(category)
+            data_cache[(filename, tuple(hiearchy),category)] = d
+        # print(d.get_unique(hierchy_values))
+        js = json.dumps(d.get_unique(hierchy_values))
+        # print(js)
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+    except Exception as e:
+        print(e)
+        resp = Response(status=400)
+        return resp
+
 @app.route('/api/heatmapdata', methods=['POST'])
 def api_heatmapdata():
     try:
@@ -108,8 +166,6 @@ def api_heatmapdata():
             category = request.json['category']
         else:
             category = None
-        # print((tuple(filename), tuple(hiearchy)))
-        # data_cache[(filename, tuple(hiearchy))] = 'hi'
         if (filename, tuple(hiearchy),category) in data_cache:
             # print("Cached!")
             d = data_cache[(filename, tuple(hiearchy),category)]
@@ -165,13 +221,14 @@ def api_data():
 
 explanations = [
     {'name': 'explan', 'type': 'radio', 'display': 'The rank is wrong', 'value': "0"},
-    {'name': 'explan', 'type': 'radio', 'display': 'The village is wrong', 'value': "1"},
-    {'name': 'explan', 'type': 'radio', 'display': 'Further investigate', 'value': "2"},
+    {'name': 'explan', 'type': 'radio', 'display': 'The name is wrong', 'value': "1"},
+    {'name': 'explan', 'type': 'radio', 'display': 'Drill down', 'value': "2"},
     {'name': 'explan', 'type': 'radio', 'display': 'The rank is missing', 'value': "3"},
     {'name': 'explan', 'type': 'radio', 'display': 'Modify the start value', 'value': "4"},
     {'name': 'explan', 'type': 'radio', 'display': 'Modify the end value', 'value': "5"},
     {'name': 'explan', 'type': 'radio', 'display': 'Exchange the start and end value', 'value': "6"},
-    {'name': 'explan', 'type': 'radio', 'display': 'Exchange the ranks of two years', 'value': "7"}
+    {'name': 'explan', 'type': 'radio', 'display': 'Exchange the ranks of two years', 'value': "7"},
+    {'name': 'explan', 'type': 'radio', 'display': 'Mean rank should be', 'value': "7"}
     ]
 
 solutions = [
@@ -193,12 +250,20 @@ def api_explan():
                 data['explan'].append(explanations[3])    
             else:
                 data['explan'].append(explanations[1])
-                if(request.json['des']['year'] is not None ):
+                data['explan'].append(explanations[0])
+                if('mean' in request.json['des']):
+                    checked = explanations[7].copy()
+                    checked['checked'] = 'true'
+                    checked['display'] = 'Mean rank should be' + ": " + \
+                        str(request.json['des']['mean'])
+                    data['explan'].append(checked)  
+                elif('year' in request.json['des']):
                     checked = explanations[7].copy()
                     checked['checked'] = 'true'
                     checked['display'] = 'Exchange the ranks of two years' + ": " \
                         + str(request.json['comp']['year'])  + " and " +  str(request.json['des']['year'])
                     data['explan'].append(checked)  
+               
 
         elif(request.json['visual']['filename'] == filename2):
             data['explan'].append(explanations[4]) 
@@ -217,10 +282,91 @@ def api_explan():
         return resp
 
 
+@app.route('/api/sol', methods=['POST'])
+def api_sol():
+    try:
+        print(request.json)
+        filename = request.json['visual']['filename']
+        hiearchy = request.json['visual']['hiearchy']
+        hierchy_values = request.json['visual']['hierchy_values']
+        categorical = request.json['visual']['categorical']
+        numerical = request.json['visual']['numerical']
+        aggragation = request.json['visual']['aggragation']
+        if 'category' in request.json['visual']:
+            category = request.json['visual']['category']
+        else:
+            category = None
+        if (filename, tuple(hiearchy),category) in data_cache:
+            # print("Cached!")
+            d = data_cache[(filename, tuple(hiearchy),category)]
+        else:
+            d = readcsv.HierachyData(filename,hiearchy)
+            if not category is None:
+                d.categorize_attribute(category)
+            data_cache[(filename, tuple(hiearchy),category)] = d
+        year = request.json['des']['year']
+        de_mean = request.json['des']['mean']
+        
+        data =  d.complaint(hierchy_values,categorical,numerical,aggragation,year,de_mean)
+        # print(data)
+        js = json.dumps(data)
+        # # print(js)
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+    except Exception as e:
+        print(e)
+        resp = Response(status=400)
+        return resp
+
+
+
+@app.route('/api/rec', methods=['POST'])
+def api_rec():
+    try:
+        
+        rec = request.json['rec']
+        rec['filename'] = request.json['visual']['filename']
+        rec['hiearchy'] = request.json['visual']['hiearchy']
+        rec['hierchy_values'] = request.json['visual']['hierchy_values']
+        rec['curr_value'] = request.json['comp'][request.json['visual']['categorical'][0]]
+        recs.append(rec)
+        # filename = request.json['visual']['filename']
+        # hiearchy = request.json['visual']['hiearchy']
+        # hierchy_values = request.json['visual']['hierchy_values']
+        # categorical = request.json['visual']['categorical']
+        # numerical = request.json['visual']['numerical']
+        # aggragation = request.json['visual']['aggragation']
+        # if 'category' in request.json['visual']:
+        #     category = request.json['visual']['category']
+        # else:
+        #     category = None
+        # if (filename, tuple(hiearchy),category) in data_cache:
+        #     # print("Cached!")
+        #     d = data_cache[(filename, tuple(hiearchy),category)]
+        # else:
+        #     d = readcsv.HierachyData(filename,hiearchy)
+        #     if not category is None:
+        #         d.categorize_attribute(category)
+        #     data_cache[(filename, tuple(hiearchy),category)] = d
+        # year = request.json['des']['year']
+        # de_mean = request.json['des']['mean']
+        
+        data =  "good"
+        # print(data)
+        js = json.dumps(data)
+        # # print(js)
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+    except Exception as e:
+        print(e)
+        resp = Response(status=400)
+        return resp
+
+
 # just to get around Cors
 @app.after_request
 def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Origisn', '*')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
     return response

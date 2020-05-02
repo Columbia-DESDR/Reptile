@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
-.flex-container {display: flex;justify-content: space-between}
+.flex-container {display: flex; flex-direction: row;}
 .change-line {
 	fill: none;
 	stroke: black;
@@ -33,19 +33,22 @@ div.tooltip {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <!-- Create a div where the graph will take place -->
-<div class="flex-container">
-
-<div id="my_dataviz">
+<div>
 <p id='status'></p>
-Worst years
-<select id="select_region"></select>
-<select id="select_district"></select>
+<h3>Worst years HeatMap</h3>
+Region: <select id="select_region"></select><button type="button" onclick="HeatmapR()">Show Region Summary</button>
 <br>
-Seasonal Calendar
-<select id="select_region2"></select>
-<select id="select_district2"></select>
+District: <select id="select_district"></select><button type="button" onclick="HeatmapD()">Show District Summary</button>
+<br>
+<h3>Seasonal Calendar</h3>
+
+Region: <select id="select_region2"></select> 
+<br>
+District: <select id="select_district2"></select> <button type="button" onclick="Season()">Show District Summary</button>
 <!-- <button type="button" onclick="Solution()">Render</button> -->
 <h3 id='title'></h3>
+<div id="my_dataviz"  class="flex-container">
+
 </div>
 
 
@@ -54,15 +57,22 @@ Seasonal Calendar
 </div>
 <br>
 <div class="state">
-  <h2>Complaint</h2>
-  <p id="comp"></p>
-  <h2>Explanation</h2>
-  <form id = "exp" name="myForm">
-  </form>
-  <h2>Solution</h2>
-  <form id = "sol" name="myForm">
-  </form>
+<!-- <h2>Complaint</h2> -->
+    <p id="comp"></p>
+    <div class="flex-container">
+        <div style="margin: 0 auto; width:855px;"> 
+            <h2 >Complaint</h2>
+            <form id = "exp" name="myForm">
+            </form>
+        </div>
+        <div style="margin: 0 auto; width:855px;"> 
+            <h2>Explanation</h2>
+            <form id = "sol" name="myForm">
+            </form>
+        </div>
+    </div>
 </div>
+
 </div>
 
 
@@ -98,6 +108,7 @@ function GetData(schema) {
             }
         }).then(function(data) {
             obj = JSON.parse(data)
+            
             return obj
 
         })
@@ -118,7 +129,6 @@ function GetExplan(schema) {
         method : "POST",
         mode : "cors"
     };
-
     return fetch(url + "api/explan", other_params)
         .then(function(response) {
             if (response.ok) {
@@ -129,10 +139,36 @@ function GetExplan(schema) {
         }).then(function(data) {
             // obj = JSON.parse(data)
             return data
-
         })
-
 }
+
+function GetSol(schema) {
+    var x, text;
+    // Get the value of the input field with id="numb"
+    const data = {
+        'visual' : curr_schema,
+        'comp': curr_comp,
+        'des': schema
+    };
+    const other_params = {
+        headers : { "content-type" : "application/json; charset=UTF-8" },
+        body : JSON.stringify(data),
+        method : "POST",
+        mode : "cors"
+    };
+    return fetch(url + "api/sol", other_params)
+        .then(function(response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Could not reach the API: " + response.statusText);
+            }
+        }).then(function(data) {
+            // obj = JSON.parse(data)
+            return data
+        })
+}
+
 
 function GetHeatMap(schema) {
         var x, text;
@@ -161,9 +197,38 @@ function GetHeatMap(schema) {
                 }
             }).then(function(data) {
                 obj = JSON.parse(data)
+                console.log(obj)
                 return obj
             })
     }
+function HeatmapR(){
+    let schema = {
+        filename : filename1,
+        hiearchy : ['Region','District','Village','_index'],
+        hierchy_values : [d3.select("#select_region").property('value')],
+        categorical : ['District','year'],
+        numerical : ['rank'],
+        aggragation : ['mean','std','count'],
+        category : 'year'}
+    GetHeatMap(schema)
+    .then(d=>{ProcessHeatMapData(d,schema)})
+}
+
+function HeatmapD() {
+        let schema = {
+            filename : filename1,
+            hiearchy : ['Region','District','Village','_index'],
+            hierchy_values : [d3.select("#select_region").property('value') ,d3.select("#select_district").property('value') ],
+            categorical : ['Village','year'],
+            numerical : ['rank'],
+            // aggragation : 'mean',
+            aggragation : ['mean','std','count'],
+            category : 'year'
+        }
+        GetHeatMap(schema)
+        .then(d=>{ProcessHeatMapData(d,schema)})
+    }
+
 
 function GetSummary(filename,hiearchy,category) {
         var x, text;
@@ -188,7 +253,7 @@ function GetSummary(filename,hiearchy,category) {
                     throw new Error("Could not reach the API: " + response.statusText);
                 }
             }).then(function(data) {
-                console.log(data)
+                // console.log(data)
                 obj = JSON.parse(data)
                 // console.log(obj)
                 return obj
@@ -212,7 +277,10 @@ function ProcessHeatMapData(FilteredDataTwice,schema) {
         function heatmap_tooptip_mouseover2(d){tooltipdiv.style("opacity", .9);
             return tooltipdiv.html(schema.categorical[0] + ": " + d[schema.categorical[0]] +
             "<br/>" +  schema.categorical[1] + ": " +d[schema.categorical[1]] +
-            "<br/>" +  schema.numerical[0] + ": " +d[schema.numerical[0]])}
+            "<br/>" +  schema.numerical[0] + ": " +d[schema.numerical[0]] +
+            "<br/>" + "mean: " +d['mean'] +
+            "<br/>" + "std: " +d['std'] +
+            "<br/>" + "count: " +d['count'])}
         spec = {
                 data: FilteredDataTwice,
                 encoding:{
@@ -228,6 +296,47 @@ function ProcessHeatMapData(FilteredDataTwice,schema) {
                     mouseover: heatmap_tooptip_mouseover2}
             };
         Render_heatmap(spec)
+        function heatmap_tooptip_mouseover3(d){tooltipdiv.style("opacity", .9);
+            return tooltipdiv.html(schema.categorical[0] + ": " + d[schema.categorical[0]] +
+            "<br/>" +  schema.categorical[1] + ": " +d[schema.categorical[1]] +
+            "<br/>" +  schema.numerical[0] + ": " +d[schema.numerical[0]]+
+            "<br/>" + "mean: " +d['mean']+
+            "<br/>" + "std: " +d['std'])}
+        spec2 = {
+                data: FilteredDataTwice,
+                encoding:{
+                    x: {range:x_column,field:schema.categorical[0]},
+                    y: {range:y_column,field:schema.categorical[1]},
+                    rect: {color: myColor, field: schema.numerical[0], drag: point_drag}
+                },
+                legend:{
+                    size:size,
+                    key:key
+                },
+                tooltip:{
+                    mouseover: heatmap_tooptip_mouseover3}
+            };
+        Render_mean(spec2,svg2)
+        function heatmap_tooptip_mouseover4(d){tooltipdiv.style("opacity", .9);
+            return tooltipdiv.html(schema.categorical[0] + ": " + d[schema.categorical[0]] +
+            "<br/>" +  schema.categorical[1] + ": " +d[schema.categorical[1]] +
+            "<br/>" +  schema.numerical[0] + ": " +d[schema.numerical[0]] +
+            "<br/>" +  "count: " +d['count'])}
+        spec3 = {
+                data: FilteredDataTwice,
+                encoding:{
+                    x: {range:x_column,field:schema.categorical[0]},
+                    y: {range:y_column,field:schema.categorical[1]},
+                    rect: {color: myColor, field: schema.numerical[0], drag: rect_drag}
+                },
+                legend:{
+                    size:size,
+                    key:key
+                },
+                tooltip:{
+                    mouseover: heatmap_tooptip_mouseover4}
+            };
+        Render_barmean(spec3,svg3)
     }
 
 GetSummary(filename1, ['Region','District','Village','_index'], 'year').then(FreshDropDown)
@@ -235,44 +344,19 @@ function FreshDropDown(summary){
     
     let dropdownChangeRegion = function() {
         // change the region selection
-        let dropdowndistrict = d3.select("#select_district").on("change", dropdownChangeDistrict);
+        let dropdowndistrict = d3.select("#select_district");
                                  
-        let tempobj = summary[d3.select("#select_region").property('value') ]
+        let tempobj = summary[d3.select("#select_region").property('value')]
         let district_data = tempobj[Object.keys(tempobj)[0]]
         // console.log(district_data)
         let district_element = dropdowndistrict.selectAll("option").data(district_data)
         district_element.exit().remove()
         district_element.enter().append("option").merge(district_element)
         .attr("value", function (d) { return d; })
-        .text(function (d) {return d;})
-        //mac will have some problem with on click option
-        ;
-
-        let schema = {
-            filename : filename1,
-            hiearchy : ['Region','District','Village','_index'],
-            hierchy_values : [d3.select("#select_region").property('value')],
-            categorical : ['District','year'],
-            numerical : ['rank'],
-            aggragation : 'mean',
-            category : 'year'}
-        GetHeatMap(schema)
-        .then(d=>{ProcessHeatMapData(d,schema)})
+        .text(function (d) {return d;});
         
     };
-   let dropdownChangeDistrict = function() {
-        let schema = {
-            filename : filename1,
-            hiearchy : ['Region','District','Village','_index'],
-            hierchy_values : [d3.select("#select_region").property('value') ,d3.select("#select_district").property('value') ],
-            categorical : ['Village','year'],
-            numerical : ['rank'],
-            aggragation : 'mean',
-            category : 'year'
-        }
-        GetHeatMap(schema)
-        .then(d=>{ProcessHeatMapData(d,schema)})
-    }
+   
     // region drop down
     let dropdownregion = d3.select("#select_region").on("change", dropdownChangeRegion);
     region_data = Object.keys(summary)
@@ -284,6 +368,7 @@ function FreshDropDown(summary){
                 })
                ;
     region_element.exit().remove()
+    dropdownChangeRegion()
 }
 
 d3.selection.prototype.moveToFront = function() {  
@@ -308,7 +393,6 @@ var rect_drag = d3.drag()
         d3.select(this).moveToFront().attr("y", d3.event.y);
         })
     .on("end",function (d){
-        
         if(d.rank != null){
             let desired_year = inverty(d3.select(this).attr("y"));
             d3.select(this).attr("y", original);
@@ -323,6 +407,20 @@ var rect_drag = d3.drag()
         }
         d3.select(this).classed("highlight",true)
     });
+
+var point_drag = d3.drag()
+    .on("start",function (d){original = d3.select(this).moveToFront().attr("cx")}) 
+    .on("drag", function (d) {
+        if (d3.event.x > width || d3.event.x < 0 ||d3.event.y > height ||d3.event.y < 0 ||d.rank == null){return};
+            d3.select(this).moveToFront().attr("cx", d3.event.x);
+        })
+    .on("end",function (d){
+        let desired_mean = invertx(d3.select(this).attr("cx"))
+        console.log(desired_mean)
+        d3.select(this).attr("cx", original);
+        heatmap_point_explain(d, {"mean": desired_mean, "year": d.year})
+        // d3.select(this).classed("highlight",true)
+    });   
 
 var gnatt_drag = d3.drag()
     .on("start",function (d){original = d3.select(this).moveToFront().attr("y")})  
@@ -349,7 +447,7 @@ var gnatt_drag = d3.drag()
 
 
 let curr_comp;
-function heatmap_rect_explain(d, schema = {"year" : null}){
+function heatmap_rect_explain(d, schema = {}){
                 curr_comp = d;
                 // console.log(desired_year)
                 d3.selectAll(".heatmap_rect")
@@ -362,16 +460,34 @@ function heatmap_rect_explain(d, schema = {"year" : null}){
                     d3.select("#comp")
                     .text(curr_schema.categorical[0] + ": " + d[curr_schema.categorical[0]] + ", Period: " + d.Period + ", start: " + d.start + ", end: " + d.end)
                 }
-                // schema.fields.push({name: 'submit_button', type: 'button', display: 'Choose the Explanation', onclick: "Solution()"}) 
-                // let form = d3.select("#sol")
-                // FormRender(form)
-                // form = d3.select("#exp");
-                GetExplan(schema).then((schema)=>{FormRender("#exp",schema.explan);FormRender("#sol",schema.sol)})
-                // .then(()=>{
 
-                //     }  )
-                
+                GetExplan(schema).then((schema)=>{FormRender("#exp",schema.explan);FormRender("#sol",schema.sol)})
             }
+
+function heatmap_point_explain(d, schema = {}){
+    curr_comp = d;
+    d3.selectAll(".heatmap_rect")
+        .classed("highlight",false);
+    if(curr_schema.filename == filename1){
+        d3.select("#comp").text(curr_schema.categorical[0] + ": " + d[curr_schema.categorical[0]] + ", year: " + d.year +  ", mean: " + d.mean)
+        
+    }
+    // else if(curr_schema.filename == filename2){
+    //     d3.select("#comp")
+    //     .text(curr_schema.categorical[0] + ": " + d[curr_schema.categorical[0]] + ", Period: " + d.Period + ", start: " + d.start + ", end: " + d.end)
+    // }
+    GetExplan(schema).then((schema)=>{FormRender("#exp",schema.explan);FormRender("#sol",schema.sol)})
+    GetSol(schema).then((d)=>{
+            schema = [];
+            d.forEach(function (item, index) {
+                console.log(item)
+                schema.push({display: item[1] + " shoud have mean:" + item[2] + " , count: " + item[3]})
+                svg.select(("#" + item[1] + " " + curr_comp.year).replace(/ /g,"_")).classed("highlight",true)
+            });
+            FormRender("#sol",schema)
+        }
+    )
+}
 
 GetSummary(filename2, ['Region','District','Village','_index']).then(FreshDropDown2)
 // given data and schema, render as heatmap
@@ -412,7 +528,7 @@ function ProcessGanttMapData(FilteredDataTwice,schema) {
 function FreshDropDown2(summary){
     let dropdownChangeRegion = function() {
         // FilteredData = data.filter(function(d) { return d.Region == d3.select("#select_region").property('value') });
-        let dropdowndistrict = d3.select("#select_district2").on("change", dropdownChangeDistrict) ;
+        let dropdowndistrict = d3.select("#select_district2") ;
         let tempobj = summary[d3.select("#select_region2").property('value') ]
         let district_data = tempobj[Object.keys(tempobj)[0]]
         // console.log(district_data)
@@ -423,18 +539,6 @@ function FreshDropDown2(summary){
         .text(function (d) {return d;})
        ;
     };
-   let dropdownChangeDistrict = function() {
-        let schema = {
-            filename : filename2,
-            hiearchy : ['Region','District','Village','_index'],
-            hierchy_values : [d3.select("#select_region2").property('value') ,d3.select("#select_district2").property('value') ],
-            categorical : ['Village']
-        }
-        
-        GetData(schema)
-        .then(d=>{ProcessGanttMapData(d,schema)})
-
-    }
     // region drop down
     let dropdownregion = d3.select("#select_region2").on("change", dropdownChangeRegion);
     region_data = Object.keys(summary)
@@ -443,8 +547,19 @@ function FreshDropDown2(summary){
                 .attr("value", function (d) { return d; })
                 .text(function (d) {return d;});
     region_element.exit().remove()
+    dropdownChangeRegion();
 }
 
+function Season() {
+    let schema = {
+            filename : filename2,
+            hiearchy : ['Region','District','Village','_index'],
+            hierchy_values : [d3.select("#select_region2").property('value') ,d3.select("#select_district2").property('value') ],
+            categorical : ['Village']
+        } 
+        GetData(schema)
+        .then(d=>{ProcessGanttMapData(d,schema)})
+}
 
 
 
@@ -536,7 +651,7 @@ function DrillDown(){
 
 // add form according to schema
 function FormRender (id, schema={}) {
-    // console.log(schema)
+    console.log(schema)
     // let form = d3.select("#sol")
     //             FormRender(form)
 
@@ -551,6 +666,8 @@ function FormRender (id, schema={}) {
                 if(d.type == 'text'){
                     let input = self.append("input").attr("type",d.type).attr("name",d.name)
                 }
+                
+
 
                 if(d.type == 'radio'){
                     let input = self.append("input")
@@ -580,9 +697,6 @@ function FormRender (id, schema={}) {
                         .enter()
                         .append("option")
                         .text(function(d) { return d; });
-
-
-
                 }
                 if(d.type == 'button'){
                 let select = self.append("button").attr("type",d.type).attr('onClick',d.onclick).text('Submit')
@@ -593,8 +707,8 @@ function FormRender (id, schema={}) {
 
 
 // set the dimsensions and margins of the graph
-let margin = {top: 10, right: 200, bottom: 30, left: 60},
-    width = 1000 - margin.left - margin.right,
+let margin = {top: 10, right: 200, bottom: 100, left: 60},
+    width = 500 - margin.left - margin.right,
     height = 550 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
@@ -605,6 +719,20 @@ let svg = d3.select("#my_dataviz")
   .append("g")
     .attr("transform",
           "translate(" + margin.left + "," + margin.top + ")");
+let svg2 = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");       
+let svg3 = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");       
 let tooltipdiv = d3.select("#my_dataviz").append("div")
   .attr("class", "tooltip")
   .style("opacity", 0)
@@ -612,6 +740,8 @@ let tooltipdiv = d3.select("#my_dataviz").append("div")
   .style("top", "44px");
 
 function Render_gantt(spec){
+    width = 1000 - margin.left - margin.right;
+    d3.select("#my_dataviz").select("svg").attr("width", width + margin.left + margin.right)
     // console.log(spec)
     if("legend" in spec){
         // Add one dot in the legend for each name.
@@ -723,11 +853,14 @@ function Render_gantt(spec){
 
 let inverty;
 
-function Render_heatmap(spec){
-
+let invertx;
+function Render_heatmap(spec, s = svg){
+    
+    width = spec.encoding.x.range.length*20;
+    d3.select("#my_dataviz").select("svg").attr("width", width + margin.left + margin.right);
     if("legend" in spec){
         // Add one dot in the legend for each name.
-        let dots =  svg.selectAll("#mydots")
+        let dots =  s.selectAll("#mydots")
             .data(spec.legend.key)
         dots.exit().remove()
         dots.enter()
@@ -741,7 +874,7 @@ function Render_heatmap(spec){
             .attr("id","mydots")
 
         // Add one dot in the legend for each name.
-        let labels =  svg.selectAll("#mylabels").data(spec.legend.key)
+        let labels =  s.selectAll("#mylabels").data(spec.legend.key)
         labels.exit().remove()
         labels.enter()
             .append("text").merge(labels)
@@ -765,8 +898,8 @@ function Render_heatmap(spec){
         return y.domain()[y.domain().length-index - 1];
     } 
 
-    d3.select("#y_axis").remove()
-    svg.append("g")
+    s.select("#y_axis").remove()
+    s.append("g")
         .attr("id","y_axis")
         .call(d3.axisLeft(y));
 
@@ -776,24 +909,32 @@ function Render_heatmap(spec){
     .domain(spec.encoding.x.range)
     .padding(0.01);
 
-    d3.select("#x_axis").remove()
-    svg.append("g")
+    s.select("#x_axis").remove()
+    s.append("g")
         .attr("transform", "translate(0," + height + ")")
         .attr("id","x_axis")
+        // .attr('transform', 'rotate(45 -10 10)')
         .call(d3.axisBottom(x))
+        .selectAll("text")  
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(-65)");
+        
 
 
-
-    let rectangle = svg.selectAll(".heatmap_rect").data(spec.data)
+    let rectangle = s.selectAll(".heatmap_rect").data(spec.data)
     rectangle.exit().remove()
     rectangle.enter()
         .append("rect").merge(rectangle)
         .attr("x", function(d) { return x(d[spec.encoding.x.field]) })
         .attr("y", function(d) { return y(d[spec.encoding.y.field]) })
         .classed("heatmap_rect",true)
+        .attr("id",function(d) { return (d[spec.encoding.x.field] + " " + d[spec.encoding.y.field]).replace(/ /g,"_") })
         .attr("width", x.bandwidth() )
         .attr("height", y.bandwidth() )
         .style("opacity", 1 )
+        .classed("highlight",false)
         .style("fill", function(d) { 
             if (d[spec.encoding.rect.field] == null)
                 return "#FFFFFF"
@@ -805,6 +946,170 @@ function Render_heatmap(spec){
         .on("click", spec.encoding.rect.click)
         .call(spec.encoding.rect.drag);
 }
+
+function Render_mean(spec, s = svg){
+    
+    width = 300
+
+    // Build y scales and axis:
+    let y = d3.scalePoint()
+        .range([height, 0])
+        .domain(spec.encoding.y.range)
+        .padding(0.5);
+
+
+    s.select("#y_axis").remove()
+    s.append("g")
+        .attr("id","y_axis")
+        .call(d3.axisLeft(y));
+
+    // Build X scales and axis:
+    let x = d3.scaleLinear()
+    .domain([-1, 11])
+    .range([ 0, width ]);
+
+    invertx = function (mouse_y){
+        let r = Math.round(x.invert(mouse_y))
+        if(r < 1){
+            r = 1
+        }else if(r > 10){
+            r = 10
+        }
+        return r;
+    } 
+
+    s.select("#x_axis").remove()
+    s.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .attr("id","x_axis")
+        .call(d3.axisBottom(x))
+        .selectAll("text")  
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(-65)");
+    data = spec.data.filter(function (d){
+        return d[spec.encoding.x.field] === "total";
+    });
+    let line = s.selectAll(".line").remove()
+    s.selectAll(".line").data(data).enter()
+        .append('path')
+        .attr('d',  function(d) {return d3.line()([[x(d["mean"]-d["std"]),y(d["year"])], [x(d["mean"]+d["std"]),y(d["year"])]]) })
+        .attr('stroke', 'blue')
+        .attr('stroke-width', 2)
+        .classed("dot",false)
+        .classed("line",true)
+        .on("mouseover",spec.tooltip.mouseover)
+        .on("mousemove", function(){return tooltipdiv.style("top", (event.pageY)+"px").style("left",(event.pageX)+"px");})
+        .on("mouseout", function(){return tooltipdiv.style("opacity", 0);})
+
+    let dot = s.selectAll(".dot").remove()
+    s.selectAll(".dot").data(data).enter()
+        .append("circle")
+        .attr("cx", function(d) { return x(d["mean"]) })
+        .attr("cy", function(d) { return y(d["year"]) })
+        .attr("r", 3)
+        .classed("dot",true)
+        .classed("line",false)
+        .attr('fill', function(d){if(d["mean"] === null){return 'none'} return "black"})
+        .on("mouseover",spec.tooltip.mouseover)
+        .on("mousemove", function(){return tooltipdiv.style("top", (event.pageY)+"px").style("left",(event.pageX)+"px");})
+        .on("mouseout", function(){return tooltipdiv.style("opacity", 0);})
+        .call(spec.encoding.rect.drag);
+
+
+    
+}
+
+function Render_barmean(spec, s = svg){
+    
+    width = 300
+    if("legend" in spec){
+        // Add one dot in the legend for each name.
+        let dots =  s.selectAll("#mydots")
+            .data(spec.legend.key)
+        dots.exit().remove()
+        dots.enter()
+            .append("rect").merge(dots)
+            .attr("x", width+margin.left)
+            .attr("y", function(d,i){ return 100 + i*(spec.legend.size+5)})
+            .attr("width", spec.legend.size)
+            .attr("height", spec.legend.size)
+            .style("fill", function(d){
+                return spec.encoding.rect.color(d)})
+            .attr("id","mydots")
+
+        // Add one dot in the legend for each name.
+        let labels =  s.selectAll("#mylabels").data(spec.legend.key)
+        labels.exit().remove()
+        labels.enter()
+            .append("text").merge(labels)
+            .attr("x", width+margin.left+30)
+            .attr("y", function(d,i){ return 100 + i*(spec.legend.size+5) + (spec.legend.size/2)})
+            .text(function(d){ return d})
+            .attr("text-anchor", "left")
+            .style("alignment-baseline", "middle")
+            .attr("id","mylabels")
+    }
+    // Build y scales and axis:
+    let y = d3.scaleBand()
+        .range([height, 0])
+        .domain(spec.encoding.y.range)
+        .padding(0.01);
+
+    inverty = function (mouse_y){
+        var eachBand = y.step();
+        var index = Math.round((mouse_y / eachBand));
+        return y.domain()[y.domain().length-index - 1];
+    } 
+
+    s.select("#y_axis").remove()
+    s.append("g")
+        .attr("id","y_axis")
+        .call(d3.axisLeft(y));
+
+    data = spec.data.filter(function (d){
+        return d[spec.encoding.x.field] === "total";
+    });
+    mcount = 0;
+    data.forEach(d => mcount = Math.max(mcount, d["count"]));
+    // Build X scales and axis:
+    let x = d3.scaleLinear()
+    .domain([0, mcount])
+    .range([ 0, width ]);
+
+    s.select("#x_axis").remove()
+    s.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .attr("id","x_axis")
+        .call(d3.axisBottom(x))
+        .selectAll("text")  
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(-65)");
+
+
+    s.selectAll(".bar").remove()
+    s.selectAll(".bar").data(data).enter()
+        .append("rect")
+        .attr("x", 0)
+        .attr("y", function(d) { return y(d["year"]) })
+        .classed("bar",true)
+        .attr("width", function(d) { return x(d["count"]) } )
+        .attr("height", y.bandwidth() )
+        .style("opacity", 1 )
+        .style("fill", function(d) { 
+            if (d[spec.encoding.rect.field] == null)
+                return "#FFFFFF"
+            else
+                return spec.encoding.rect.color(d[spec.encoding.rect.field])})
+        .on("mouseover",spec.tooltip.mouseover)
+        .on("mousemove", function(){return tooltipdiv.style("top", (event.pageY)+"px").style("left",(event.pageX)+"px");})
+        .on("mouseout", function(){return tooltipdiv.style("opacity", 0);})
+    
+}
+
 
 let month_name = ["jan", "feb", "march", "april", "may", "june", "july", "aug", "sep", "oct", "nov", "dec"]
 
