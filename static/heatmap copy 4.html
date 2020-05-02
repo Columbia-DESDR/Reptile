@@ -223,6 +223,7 @@ function GetHeatMap(schema) {
             })
     }
 function HeatmapR(){
+    d3.select("#my_dataviz").selectAll("svg").attr("width",500);
     let schema = {
         filename : filename1,
         hiearchy : ['Region','District','Village','_index'],
@@ -268,6 +269,7 @@ function HeatmapR(){
 }
 
 function HeatmapD() {
+    d3.select("#my_dataviz").selectAll("svg").attr("width",0);
         let schema = {
             filename : filename1,
             hiearchy : ['Region','District','Village','_index'],
