@@ -336,11 +336,19 @@ function ProcessHeatMapData(FilteredDataTwice,schema,svg,main = false) {
             .style("font-size", "16px") 
             .text(schema.filename + ":  " + schema.hierchy_values.toString())
         x_column = [...new Set(FilteredDataTwice.map(d => d[schema.categorical[0]]))].sort()
-        y_column = [...new Set(FilteredDataTwice.map(d => d[schema.categorical[1]]))].sort()
+        y_column = Array.from({length: 36}, (x,i) => i+1983)
         // Build color scale
-        let myColor = d3.scaleLinear()
-        .range(["#ae0f07","#f2d5d4"])
-        .domain([1,10])
+        let myColor
+        if(main){
+            myColor = d3.scaleLinear()
+            .range(["#ae0f07","#f2d5d4"])
+            .domain([1,10])
+        }else{
+            myColor = d3.scaleLinear()
+            .range(["#cc6600","#fff3e6"])
+            .domain([1,10])
+        }
+        
         let key = [1,2,3,4,5,6,7,8,9,10]
         let size = 20
         function heatmap_tooptip_mouseover2(d){tooltipdiv.style("opacity", .9);
