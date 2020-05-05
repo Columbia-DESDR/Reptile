@@ -40,6 +40,8 @@ div.tooltip {
 <h3>Worst years HeatMap</h3>
 Region: <select id="select_region"></select><button type="button" onclick="HeatmapR()">Show Region Summary</button>
 <br>
+Satellite: <select id="select_satellite"></select>
+<br>
 District: <select id="select_district"></select><button type="button" onclick="HeatmapD()">Show District Summary</button>
 <br>
 <!-- <h3>Seasonal Calendar</h3>
@@ -66,11 +68,6 @@ District: <select id="select_district2"></select> <button type="button" onclick=
 <h2 >Recommend</h2>
 <form id = "exp" name="myForm">
 </form>
-
-
-   
-
-
 </div>
 
 
@@ -82,6 +79,24 @@ let filename1 = "./db/heatmap_data_lineage.csv"
 let filename2 = "./db/intitiate_cleaned2.csv"
 let filename3 = "./db/CHIRPSr.csv"
 let filename4 = "./db/enactsr.csv"
+let filename5 = "./db/0-SubregionYearRanksEarlyARC.csv"
+let filename6 = "./db/0-SubregionYearRanksLateARC.csv"
+let filename7 = "./db/0-SubregionYearRanksEarlyCHIRPDK.csv"
+let filename8 = "./db/0-SubregionYearRanksLateCHIRPDK.csv"
+let filename9 = "./db/0-SubregionYearRanksEarlyENACTSDK.csv"
+let filename10 = "./db/0-SubregionYearRanksLateENACTSDK.csv"
+let filename11 = "./db/0-SubregionYearRanksEarlyMIXEDET.csv"
+let filename12 = "./db/0-SubregionYearRanksLateMIXEDET.csv"
+let filename13 = "./db/0-SubregionYearRanksEarlyMIXEDVEGg.csv"
+let filename14 = "./db/0-SubregionYearRanksLateMIXEDVEGg.csv"
+let filename15 = "./db/0-SubregionYearRanksEarlyTAMSAT3.csv"
+let filename16 = "./db/0-SubregionYearRanksLateTAMSAT3.csv"
+d3.select("#select_satellite").selectAll("option")
+    .data(['ARC','CHIRPDK','ENACTSDK','MIXEDET','MIXEDVEGg','TAMSAT3'])
+    .enter()
+    .append("option")
+    .attr("value", function (d) { return d; })
+    .text(function (d) {return d;})
 
 function GetData(schema) {
     var x, text;
@@ -110,6 +125,36 @@ function GetData(schema) {
             return obj
         })
 }
+
+function GetData2(schema) {
+    var x, text;
+    // Get the value of the input field with id="numb"
+    const data = {
+        'filename' : schema.filename,
+        'hiearchy': schema.hiearchy,
+        'hierchy_values': schema.hierchy_values,
+    };
+    const other_params = {
+        headers : { "content-type" : "application/json; charset=UTF-8" },
+        body : JSON.stringify(data),
+        method : "POST",
+        mode : "cors"
+    };
+
+    return fetch(url + "api/data2", other_params)
+        .then(function(response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Could not reach the API: " + response.statusText);
+            }
+        }).then(function(data) {
+            obj = JSON.parse(data)
+            return obj
+        })
+}
+
+
 
 function GetExplan(schema) {
     var x, text;
@@ -270,8 +315,10 @@ function HeatmapR(){
         ProcessHeatMapData(d,schema3,svg3)})
 }
 
+let village = new Set() 
+
 function HeatmapD() {
-    d3.select("#my_dataviz").selectAll("svg").attr("width",0);
+    d3.select("#my_dataviz").selectAll("svg").attr("width",500);
         let schema = {
             filename : filename1,
             hiearchy : ['Region','District','Village','_index'],
@@ -283,46 +330,75 @@ function HeatmapD() {
             category : 'year'
         }
         GetHeatMap(schema)
-        .then(d=>{ProcessHeatMapData(d,schema,svg,true)})
-        svg2.selectAll("*").remove();
+        .then(d=>{
+            village = new Set() 
+            d.forEach((d)=>{village.add(d.Village.replace(/-|\s/g, ''))})
+            village.delete('total')
+            ProcessHeatMapData(d,schema,svg,true)
+            
+            let schema2 = {
+                filename : "./db/0-SubregionYearRanksEarly" + d3.select("#select_satellite").property('value') + ".csv",
+                hiearchy : ['Village'],
+                categorical : ['Village','Year'],
+                hierchy_values : Array.from(village)}
+            // console.log(schema2)
+            GetData2(schema2)
+            .then(d=>{
+                schema2.numerical = ['value']
+                ProcessHeatMapData(d,schema2,svg2,false,true)})
+
+            let schema3 = {
+            filename :  "./db/0-SubregionYearRanksLate" + d3.select("#select_satellite").property('value') + ".csv",
+            hiearchy : ['Village'],
+            categorical : ['Village','Year'],
+            hierchy_values : Array.from(village)}
+            
+            // console.log(schema2)
+            GetData2(schema3)
+            .then(d=>{
+                schema3.numerical = ['value']
+                ProcessHeatMapData(d,schema3,svg3,false,true)})
+            })
+        // svg2.selectAll("*").remove();
         svg3.selectAll("*").remove();
     }
 
 
 function GetSummary(filename,hiearchy,category) {
-        var x, text;
-        // Get the value of the input field with id="numb"
-        const data = {
-            'filename': filename,
-            'hiearchy': hiearchy,
-            'category': category
-        };
-        const other_params = {
-            headers : { "content-type" : "application/json; charset=UTF-8" },
-            body : JSON.stringify(data),
-            method : "POST",
-            mode : "cors"
-        };
+    var x, text;
+    // Get the value of the input field with id="numb"
+    const data = {
+        'filename': filename,
+        'hiearchy': hiearchy,
+        'category': category
+    };
+    const other_params = {
+        headers : { "content-type" : "application/json; charset=UTF-8" },
+        body : JSON.stringify(data),
+        method : "POST",
+        mode : "cors"
+    };
 
-        return fetch(url + "api/summary", other_params)
-            .then(function(response) {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error("Could not reach the API: " + response.statusText);
-                }
-            }).then(function(data) {
-                // console.log(data)
-                obj = JSON.parse(data)
-                // console.log(obj)
-                return obj
-            })
-    }
+    return fetch(url + "api/summary", other_params)
+        .then(function(response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Could not reach the API: " + response.statusText);
+            }
+        }).then(function(data) {
+            // console.log(data)
+            obj = JSON.parse(data)
+            // console.log(obj)
+            return obj
+        })
+}
 
 let curr_schema;
 let curr_data
 // given data and schema, render as heatmap
-function ProcessHeatMapData(FilteredDataTwice,schema,svg,main = false) {
+function ProcessHeatMapData(FilteredDataTwice,schema,svg,main = false,sate = false) {
+    console.log(sate)
         if(main){
             curr_schema = schema;
             curr_data = FilteredDataTwice;
@@ -334,7 +410,8 @@ function ProcessHeatMapData(FilteredDataTwice,schema,svg,main = false) {
             .attr("y", 0 - (margin.top / 2))
             .attr("text-anchor", "middle")  
             .style("font-size", "16px") 
-            .text(schema.filename + ":  " + schema.hierchy_values.toString())
+            .text(schema.filename)
+            // .text(schema.filename + ":  " + schema.hierchy_values.toString())
         x_column = [...new Set(FilteredDataTwice.map(d => d[schema.categorical[0]]))].sort()
         y_column = Array.from({length: 36}, (x,i) => i+1983)
         // Build color scale
@@ -347,6 +424,12 @@ function ProcessHeatMapData(FilteredDataTwice,schema,svg,main = false) {
             myColor = d3.scaleLinear()
             .range(["#cc6600","#fff3e6"])
             .domain([1,10])
+        }
+        if(sate){
+            
+            myColor = d3.scaleLinear()
+            .range(["#cc6600","#fff3e6"])
+            .domain([1,0])
         }
         
         let key = [1,2,3,4,5,6,7,8,9,10]
@@ -383,15 +466,12 @@ function ProcessHeatMapData(FilteredDataTwice,schema,svg,main = false) {
                     y: {range:y_column,field:schema.categorical[1]},
                     rect: {color: myColor, field: schema.numerical[0],drag:null}
                 },
-                legend:{
-                    size:size,
-                    key:key
-                },
                 tooltip:{
                     mouseover: heatmap_tooptip_mouseover2},
                 svg:svg
             };
         }
+        console.log(spec)
         Render_heatmap(spec)
     }
 
@@ -972,7 +1052,7 @@ function Render_heatmap(spec){
     s = spec.svg
     
     width = spec.encoding.x.range.length*20;
-    d3.select("#my_dataviz").select("svg").attr("width", width + margin.left + margin.right);
+    d3.select("#my_dataviz").selectAll("svg").attr("width", width + margin.left + margin.right);
     if("legend" in spec){
         // Add one dot in the legend for each name.
         let dots =  s.selectAll("#mydots")

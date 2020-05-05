@@ -1,4 +1,4 @@
-gid,Village,District,Region,Country
+gid,District,Zone,Region,Country
 1,Minjarna Shenkora, North Shewa (K3), Amhara, Ethiopia
 2,Mojana Wadera, North Shewa (K3), Amhara, Ethiopia
 3,Moretna Jiru, North Shewa (K3), Amhara, Ethiopia
@@ -436,103 +436,103 @@ gid,Village,District,Region,Country
 435,Danot, Welwel & Warder, Somali, Ethiopia
 436,Geladin, Welwel & Warder, Somali, Ethiopia
 437,Warder, Welwel & Warder, Somali, Ethiopia
-438,Amaro, Amaro Special Woreda, Southern Nations, Nationalities and Peoples, Ethiopia
-439,Basketo, Basketo Special Woreda, Southern Nations, Nationalities and Peoples, Ethiopia
-440,Bench, Benchi Maji, Southern Nations, Nationalities and Peoples, Ethiopia
-441,Bero, Benchi Maji, Southern Nations, Nationalities and Peoples, Ethiopia
-442,Maji, Benchi Maji, Southern Nations, Nationalities and Peoples, Ethiopia
-443,Meanit Goldiiya, Benchi Maji, Southern Nations, Nationalities and Peoples, Ethiopia
-444,Menit Shasha, Benchi Maji, Southern Nations, Nationalities and Peoples, Ethiopia
-445,Sheka, Benchi Maji, Southern Nations, Nationalities and Peoples, Ethiopia
-446,Shewa Bench, Benchi Maji, Southern Nations, Nationalities and Peoples, Ethiopia
-447,Surma, Benchi Maji, Southern Nations, Nationalities and Peoples, Ethiopia
-448,Burji, Burji Special Woreda, Southern Nations, Nationalities and Peoples, Ethiopia
-449,Gena Bosa, Dawuro, Southern Nations, Nationalities and Peoples, Ethiopia
-450,Isara, Dawuro, Southern Nations, Nationalities and Peoples, Ethiopia
-451,Loma Bosa, Dawuro, Southern Nations, Nationalities and Peoples, Ethiopia
-452,Mareka Gena, Dawuro, Southern Nations, Nationalities and Peoples, Ethiopia
-453,Tocha, Dawuro, Southern Nations, Nationalities and Peoples, Ethiopia
-454,Dirashe, Derashe Special Woreda, Southern Nations, Nationalities and Peoples, Ethiopia
-455,Arba Minch Zuria, Gamo Gofa, Southern Nations, Nationalities and Peoples, Ethiopia
-456,Bonke, Gamo Gofa, Southern Nations, Nationalities and Peoples, Ethiopia
-457,Boreda, Gamo Gofa, Southern Nations, Nationalities and Peoples, Ethiopia
-458,Chencha, Gamo Gofa, Southern Nations, Nationalities and Peoples, Ethiopia
-459,Daramalo, Gamo Gofa, Southern Nations, Nationalities and Peoples, Ethiopia
-460,Dita, Gamo Gofa, Southern Nations, Nationalities and Peoples, Ethiopia
-461,Gofa Zuria, Gamo Gofa, Southern Nations, Nationalities and Peoples, Ethiopia
-462,Kemba, Gamo Gofa, Southern Nations, Nationalities and Peoples, Ethiopia
-463,Kucha, Gamo Gofa, Southern Nations, Nationalities and Peoples, Ethiopia
-464,Melekoza, Gamo Gofa, Southern Nations, Nationalities and Peoples, Ethiopia
-465,MirabAbaya, Gamo Gofa, Southern Nations, Nationalities and Peoples, Ethiopia
-466,Ubadebretsehay, Gamo Gofa, Southern Nations, Nationalities and Peoples, Ethiopia
-467,Zala, Gamo Gofa, Southern Nations, Nationalities and Peoples, Ethiopia
-468,Bule, Gedeo, Southern Nations, Nationalities and Peoples, Ethiopia
-469,Kochere, Gedeo, Southern Nations, Nationalities and Peoples, Ethiopia
-470,Wenago, Gedeo, Southern Nations, Nationalities and Peoples, Ethiopia
-471,Yirgachefe, Gedeo, Southern Nations, Nationalities and Peoples, Ethiopia
-472,Akililna Mohr, Guraghe, Southern Nations, Nationalities and Peoples, Ethiopia
-473,Alicho Woriro, Guraghe, Southern Nations, Nationalities and Peoples, Ethiopia
-474,Cheha, Guraghe, Southern Nations, Nationalities and Peoples, Ethiopia
-475,Dalocha, Guraghe, Southern Nations, Nationalities and Peoples, Ethiopia
-476,Endagagn, Guraghe, Southern Nations, Nationalities and Peoples, Ethiopia
-477,Enemorina Eaner, Guraghe, Southern Nations, Nationalities and Peoples, Ethiopia
-478,Ezha, Guraghe, Southern Nations, Nationalities and Peoples, Ethiopia
-479,Goro, Guraghe, Southern Nations, Nationalities and Peoples, Ethiopia
-480,Gumer, Guraghe, Southern Nations, Nationalities and Peoples, Ethiopia
-481,Kokir Gedbano Gutazer, Guraghe, Southern Nations, Nationalities and Peoples, Ethiopia
-482,Lanfero, Guraghe, Southern Nations, Nationalities and Peoples, Ethiopia
-483,Meskanena Mareko, Guraghe, Southern Nations, Nationalities and Peoples, Ethiopia
-484,Selti, Guraghe, Southern Nations, Nationalities and Peoples, Ethiopia
-485,Sodo, Guraghe, Southern Nations, Nationalities and Peoples, Ethiopia
-486,Badawacho, Hadiya, Southern Nations, Nationalities and Peoples, Ethiopia
-487,Limu, Hadiya, Southern Nations, Nationalities and Peoples, Ethiopia
-488,Misha, Hadiya, Southern Nations, Nationalities and Peoples, Ethiopia
-489,Soro, Hadiya, Southern Nations, Nationalities and Peoples, Ethiopia
-490,Bita, Kaffa, Southern Nations, Nationalities and Peoples, Ethiopia
-491,Chena, Kaffa, Southern Nations, Nationalities and Peoples, Ethiopia
-492,Cheta, Kaffa, Southern Nations, Nationalities and Peoples, Ethiopia
-493,Decha, Kaffa, Southern Nations, Nationalities and Peoples, Ethiopia
-494,Gelila, South Omo, Southern Nations, Nationalities and Peoples, Ethiopia
-495,Hamer, South Omo, Southern Nations, Nationalities and Peoples, Ethiopia
-496,Kuraz, South Omo, Southern Nations, Nationalities and Peoples, Ethiopia
-497,Selamgo, South Omo, Southern Nations, Nationalities and Peoples, Ethiopia
-498,Boloso Sore, Wolayita, Southern Nations, Nationalities and Peoples, Ethiopia
-499,Damot Gale, Wolayita, Southern Nations, Nationalities and Peoples, Ethiopia
-500,Damot Weyde, Wolayita, Southern Nations, Nationalities and Peoples, Ethiopia
-501,Humbo, Wolayita, Southern Nations, Nationalities and Peoples, Ethiopia
-502,Kindo Koysha, Wolayita, Southern Nations, Nationalities and Peoples, Ethiopia
-503,Ofa, Wolayita, Southern Nations, Nationalities and Peoples, Ethiopia
-504,Sodo Zuria, Wolayita, Southern Nations, Nationalities and Peoples, Ethiopia
-505,Yem, Yem Special Woreda, Southern Nations, Nationalities and Peoples, Ethiopia
+438,Amaro, Amaro Special Woreda," Southern Nations, Nationalities and Peoples", Ethiopia
+439,Basketo, Basketo Special Woreda," Southern Nations, Nationalities and Peoples", Ethiopia
+440,Bench, Benchi Maji," Southern Nations, Nationalities and Peoples", Ethiopia
+441,Bero, Benchi Maji," Southern Nations, Nationalities and Peoples", Ethiopia
+442,Maji, Benchi Maji," Southern Nations, Nationalities and Peoples", Ethiopia
+443,Meanit Goldiiya, Benchi Maji," Southern Nations, Nationalities and Peoples", Ethiopia
+444,Menit Shasha, Benchi Maji," Southern Nations, Nationalities and Peoples", Ethiopia
+445,Sheka, Benchi Maji," Southern Nations, Nationalities and Peoples", Ethiopia
+446,Shewa Bench, Benchi Maji," Southern Nations, Nationalities and Peoples", Ethiopia
+447,Surma, Benchi Maji," Southern Nations, Nationalities and Peoples", Ethiopia
+448,Burji, Burji Special Woreda," Southern Nations, Nationalities and Peoples", Ethiopia
+449,Gena Bosa, Dawuro," Southern Nations, Nationalities and Peoples", Ethiopia
+450,Isara, Dawuro," Southern Nations, Nationalities and Peoples", Ethiopia
+451,Loma Bosa, Dawuro," Southern Nations, Nationalities and Peoples", Ethiopia
+452,Mareka Gena, Dawuro," Southern Nations, Nationalities and Peoples", Ethiopia
+453,Tocha, Dawuro," Southern Nations, Nationalities and Peoples", Ethiopia
+454,Dirashe, Derashe Special Woreda," Southern Nations, Nationalities and Peoples", Ethiopia
+455,Arba Minch Zuria, Gamo Gofa," Southern Nations, Nationalities and Peoples", Ethiopia
+456,Bonke, Gamo Gofa," Southern Nations, Nationalities and Peoples", Ethiopia
+457,Boreda, Gamo Gofa," Southern Nations, Nationalities and Peoples", Ethiopia
+458,Chencha, Gamo Gofa," Southern Nations, Nationalities and Peoples", Ethiopia
+459,Daramalo, Gamo Gofa," Southern Nations, Nationalities and Peoples", Ethiopia
+460,Dita, Gamo Gofa," Southern Nations, Nationalities and Peoples", Ethiopia
+461,Gofa Zuria, Gamo Gofa," Southern Nations, Nationalities and Peoples", Ethiopia
+462,Kemba, Gamo Gofa," Southern Nations, Nationalities and Peoples", Ethiopia
+463,Kucha, Gamo Gofa," Southern Nations, Nationalities and Peoples", Ethiopia
+464,Melekoza, Gamo Gofa," Southern Nations, Nationalities and Peoples", Ethiopia
+465,MirabAbaya, Gamo Gofa," Southern Nations, Nationalities and Peoples", Ethiopia
+466,Ubadebretsehay, Gamo Gofa," Southern Nations, Nationalities and Peoples", Ethiopia
+467,Zala, Gamo Gofa," Southern Nations, Nationalities and Peoples", Ethiopia
+468,Bule, Gedeo," Southern Nations, Nationalities and Peoples", Ethiopia
+469,Kochere, Gedeo," Southern Nations, Nationalities and Peoples", Ethiopia
+470,Wenago, Gedeo," Southern Nations, Nationalities and Peoples", Ethiopia
+471,Yirgachefe, Gedeo," Southern Nations, Nationalities and Peoples", Ethiopia
+472,Akililna Mohr, Guraghe," Southern Nations, Nationalities and Peoples", Ethiopia
+473,Alicho Woriro, Guraghe," Southern Nations, Nationalities and Peoples", Ethiopia
+474,Cheha, Guraghe," Southern Nations, Nationalities and Peoples", Ethiopia
+475,Dalocha, Guraghe," Southern Nations, Nationalities and Peoples", Ethiopia
+476,Endagagn, Guraghe," Southern Nations, Nationalities and Peoples", Ethiopia
+477,Enemorina Eaner, Guraghe," Southern Nations, Nationalities and Peoples", Ethiopia
+478,Ezha, Guraghe," Southern Nations, Nationalities and Peoples", Ethiopia
+479,Goro, Guraghe," Southern Nations, Nationalities and Peoples", Ethiopia
+480,Gumer, Guraghe," Southern Nations, Nationalities and Peoples", Ethiopia
+481,Kokir Gedbano Gutazer, Guraghe," Southern Nations, Nationalities and Peoples", Ethiopia
+482,Lanfero, Guraghe," Southern Nations, Nationalities and Peoples", Ethiopia
+483,Meskanena Mareko, Guraghe," Southern Nations, Nationalities and Peoples", Ethiopia
+484,Selti, Guraghe," Southern Nations, Nationalities and Peoples", Ethiopia
+485,Sodo, Guraghe," Southern Nations, Nationalities and Peoples", Ethiopia
+486,Badawacho, Hadiya," Southern Nations, Nationalities and Peoples", Ethiopia
+487,Limu, Hadiya," Southern Nations, Nationalities and Peoples", Ethiopia
+488,Misha, Hadiya," Southern Nations, Nationalities and Peoples", Ethiopia
+489,Soro, Hadiya," Southern Nations, Nationalities and Peoples", Ethiopia
+490,Bita, Kaffa," Southern Nations, Nationalities and Peoples", Ethiopia
+491,Chena, Kaffa," Southern Nations, Nationalities and Peoples", Ethiopia
+492,Cheta, Kaffa," Southern Nations, Nationalities and Peoples", Ethiopia
+493,Decha, Kaffa," Southern Nations, Nationalities and Peoples", Ethiopia
+494,Gelila, South Omo," Southern Nations, Nationalities and Peoples", Ethiopia
+495,Hamer, South Omo," Southern Nations, Nationalities and Peoples", Ethiopia
+496,Kuraz, South Omo," Southern Nations, Nationalities and Peoples", Ethiopia
+497,Selamgo, South Omo," Southern Nations, Nationalities and Peoples", Ethiopia
+498,Boloso Sore, Wolayita," Southern Nations, Nationalities and Peoples", Ethiopia
+499,Damot Gale, Wolayita," Southern Nations, Nationalities and Peoples", Ethiopia
+500,Damot Weyde, Wolayita," Southern Nations, Nationalities and Peoples", Ethiopia
+501,Humbo, Wolayita," Southern Nations, Nationalities and Peoples", Ethiopia
+502,Kindo Koysha, Wolayita," Southern Nations, Nationalities and Peoples", Ethiopia
+503,Ofa, Wolayita," Southern Nations, Nationalities and Peoples", Ethiopia
+504,Sodo Zuria, Wolayita," Southern Nations, Nationalities and Peoples", Ethiopia
+505,Yem, Yem Special Woreda," Southern Nations, Nationalities and Peoples", Ethiopia
 506,Adwa, Central Tigray, Tigray, Ethiopia
 507,Ahferom, Central Tigray, Tigray, Ethiopia
-508,Gesha Daka, Kaffa, Southern Nations, Nationalities and Peoples, Ethiopia
-509,Gewata, Kaffa, Southern Nations, Nationalities and Peoples, Ethiopia
-510,Gimbo, Kaffa, Southern Nations, Nationalities and Peoples, Ethiopia
-511,Menjiwo, Kaffa, Southern Nations, Nationalities and Peoples, Ethiopia
-512,Sylem, Kaffa, Southern Nations, Nationalities and Peoples, Ethiopia
-513,Telo, Kaffa, Southern Nations, Nationalities and Peoples, Ethiopia
-514,Alaba, Kembata Alaba Tembaro, Southern Nations, Nationalities and Peoples, Ethiopia
-515,Angacha, Kembata Alaba Tembaro, Southern Nations, Nationalities and Peoples, Ethiopia
-516,Kacha Bira, Kembata Alaba Tembaro, Southern Nations, Nationalities and Peoples, Ethiopia
-517,Kedida Gamela, Kembata Alaba Tembaro, Southern Nations, Nationalities and Peoples, Ethiopia
-518,Omo Sheleko, Kembata Alaba Tembaro, Southern Nations, Nationalities and Peoples, Ethiopia
-519,Konso, Konso Special Woreda, Southern Nations, Nationalities and Peoples, Ethiopia
-520,Ela (Konta), Konta Special Woreda, Southern Nations, Nationalities and Peoples, Ethiopia
-521,Anderacha, Shaka, Southern Nations, Nationalities and Peoples, Ethiopia
-522,Masha, Shaka, Southern Nations, Nationalities and Peoples, Ethiopia
-523,Yeki, Shaka, Southern Nations, Nationalities and Peoples, Ethiopia
-524,Aleta Wendo, Sidama, Southern Nations, Nationalities and Peoples, Ethiopia
-525,Arbe Gona, Sidama, Southern Nations, Nationalities and Peoples, Ethiopia
-526,Aroresa, Sidama, Southern Nations, Nationalities and Peoples, Ethiopia
-527,Awasa, Sidama, Southern Nations, Nationalities and Peoples, Ethiopia
-528,Bensa, Sidama, Southern Nations, Nationalities and Peoples, Ethiopia
-529,Dale, Sidama, Southern Nations, Nationalities and Peoples, Ethiopia
-530,Dara, Sidama, Southern Nations, Nationalities and Peoples, Ethiopia
-531,Hulla, Sidama, Southern Nations, Nationalities and Peoples, Ethiopia
-532,Shebedino, Sidama, Southern Nations, Nationalities and Peoples, Ethiopia
-533,Bako Gazer, South Omo, Southern Nations, Nationalities and Peoples, Ethiopia
-534,Bena, South Omo, Southern Nations, Nationalities and Peoples, Ethiopia
+508,Gesha Daka, Kaffa," Southern Nations, Nationalities and Peoples", Ethiopia
+509,Gewata, Kaffa," Southern Nations, Nationalities and Peoples", Ethiopia
+510,Gimbo, Kaffa," Southern Nations, Nationalities and Peoples", Ethiopia
+511,Menjiwo, Kaffa," Southern Nations, Nationalities and Peoples", Ethiopia
+512,Sylem, Kaffa," Southern Nations, Nationalities and Peoples", Ethiopia
+513,Telo, Kaffa," Southern Nations, Nationalities and Peoples", Ethiopia
+514,Alaba, Kembata Alaba Tembaro," Southern Nations, Nationalities and Peoples", Ethiopia
+515,Angacha, Kembata Alaba Tembaro," Southern Nations, Nationalities and Peoples", Ethiopia
+516,Kacha Bira, Kembata Alaba Tembaro," Southern Nations, Nationalities and Peoples", Ethiopia
+517,Kedida Gamela, Kembata Alaba Tembaro," Southern Nations, Nationalities and Peoples", Ethiopia
+518,Omo Sheleko, Kembata Alaba Tembaro," Southern Nations, Nationalities and Peoples", Ethiopia
+519,Konso, Konso Special Woreda," Southern Nations, Nationalities and Peoples", Ethiopia
+520,Ela (Konta), Konta Special Woreda," Southern Nations, Nationalities and Peoples", Ethiopia
+521,Anderacha, Shaka," Southern Nations, Nationalities and Peoples", Ethiopia
+522,Masha, Shaka," Southern Nations, Nationalities and Peoples", Ethiopia
+523,Yeki, Shaka," Southern Nations, Nationalities and Peoples", Ethiopia
+524,Aleta Wendo, Sidama," Southern Nations, Nationalities and Peoples", Ethiopia
+525,Arbe Gona, Sidama," Southern Nations, Nationalities and Peoples", Ethiopia
+526,Aroresa, Sidama," Southern Nations, Nationalities and Peoples", Ethiopia
+527,Awasa, Sidama," Southern Nations, Nationalities and Peoples", Ethiopia
+528,Bensa, Sidama," Southern Nations, Nationalities and Peoples", Ethiopia
+529,Dale, Sidama," Southern Nations, Nationalities and Peoples", Ethiopia
+530,Dara, Sidama," Southern Nations, Nationalities and Peoples", Ethiopia
+531,Hulla, Sidama," Southern Nations, Nationalities and Peoples", Ethiopia
+532,Shebedino, Sidama," Southern Nations, Nationalities and Peoples", Ethiopia
+533,Bako Gazer, South Omo," Southern Nations, Nationalities and Peoples", Ethiopia
+534,Bena, South Omo," Southern Nations, Nationalities and Peoples", Ethiopia
 535,Degua Temben, Central Tigray, Tigray, Ethiopia
 536,Kola Temben, Central Tigray, Tigray, Ethiopia
 537,Laelay Maychew, Central Tigray, Tigray, Ethiopia

@@ -219,6 +219,33 @@ def api_data():
         resp = Response(status=400)
         return resp
 
+
+@app.route('/api/data2', methods=['POST'])
+def api_data2():
+    try:
+        filename = request.json['filename']
+        hiearchy = request.json['hiearchy']
+        hierchy_values = request.json['hierchy_values']
+        if 'category' in request.json:
+            category = request.json['category']
+        else:
+            category = None
+        if (filename, tuple(hiearchy),category) in data_cache:
+            d = data_cache[(filename, tuple(hiearchy),category)]
+        else:
+            d = readcsv.HierachyData(filename,hiearchy)
+            if not category is None:
+                d.categorize_attribute(category)
+            data_cache[(filename, tuple(hiearchy),category)] = d
+        result = d.get_data2(hierchy_values)
+        js = json.dumps(result)
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+    except Exception as e:
+        print(e)
+        resp = Response(status=400)
+        return resp
+
 explanations = [
     {'name': 'explan', 'type': 'radio', 'display': 'The rank is wrong', 'value': "0"},
     {'name': 'explan', 'type': 'radio', 'display': 'The name is wrong', 'value': "1"},

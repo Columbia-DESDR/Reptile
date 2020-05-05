@@ -8,11 +8,11 @@ class HierachyData():
     # hiearchy is a list of hiearchy attributes in descending order
     def __init__(self, filename, hiearchy):
         self.data = pd.read_csv(filename)
-        self.summary = self.data[hiearchy[0:2]].groupby(hiearchy[0]).agg(['unique']).to_json(orient='index')
+        
         self.data = self.data.set_index(hiearchy)
         self.hiearchy = hiearchy
     def get_summary(self):
-
+        self.summary = self.data.reset_index()[self.hiearchy[0:2]].groupby(self.hiearchy[0]).agg(['unique']).to_json(orient='index')
         return self.summary
 
     # get unique for header
@@ -24,6 +24,22 @@ class HierachyData():
     # get data given hierchy_values
     def get_data(self,hierchy_values):
         return self.data.loc[tuple(hierchy_values)].reset_index().to_json(orient='records')  
+
+    # get data given hierchy_values
+    def get_data2(self,set_values):
+        result = None
+        print(set_values)
+        for value in set_values:
+            try:
+                if(result is None):
+                    result = self.data.loc[value]
+                else:
+                    result = result.append(self.data.loc[value])
+            except: 
+                pass
+            # print(self.data.loc[value])
+        return result.reset_index().to_json(orient='records')  
+
 
     # get data given hierchy_values
     # list of two categorical attributes
@@ -154,3 +170,5 @@ class HierachyData():
 
 # df.get_heatmap_data(['Amhara'],['District','year'],['rank'],'mean')
 
+# d = HierachyData("db/0-SubregionYearRanksEarlyARC.csv",['Village'])
+# print(d.get_data2(['AbaBikila','Ziha']))  
