@@ -40,7 +40,7 @@ div.tooltip {
 <h3>Worst years HeatMap</h3>
 Region: <select id="select_region"></select><button type="button" onclick="HeatmapR()">Show Region Summary</button>
 <br>
-Satellite: <select id="select_satellite"></select>
+<!-- Satellite: <select id="select_satellite"></select> -->
 <br>
 District: <select id="select_district"></select><button type="button" onclick="HeatmapD()">Show District Summary</button>
 <br>
@@ -153,8 +153,6 @@ function GetData2(schema) {
             return obj
         })
 }
-
-
 
 function GetExplan(schema) {
     var x, text;
@@ -318,7 +316,9 @@ function HeatmapR(){
 let village = new Set() 
 
 function HeatmapD() {
-    d3.select("#my_dataviz").selectAll("svg").attr("width",500);
+    // d3.select("#my_dataviz").selectAll("svg").attr("width",500);
+    d3.select("#my_dataviz").selectAll("svg").attr("width",0);
+    // d3.select("#my_dataviz").selectAll("svg").attr("width",0);
         let schema = {
             filename : filename1,
             hiearchy : ['Region','District','Village','_index'],
@@ -336,30 +336,30 @@ function HeatmapD() {
             village.delete('total')
             ProcessHeatMapData(d,schema,svg,true)
             
-            let schema2 = {
-                filename : "./db/0-SubregionYearRanksEarly" + d3.select("#select_satellite").property('value') + ".csv",
-                hiearchy : ['Village'],
-                categorical : ['Village','Year'],
-                hierchy_values : Array.from(village)}
-            // console.log(schema2)
-            GetData2(schema2)
-            .then(d=>{
-                schema2.numerical = ['value']
-                ProcessHeatMapData(d,schema2,svg2,false,true)})
+            // let schema2 = {
+            //     filename : "./db/0-SubregionYearRanksEarly" + d3.select("#select_satellite").property('value') + ".csv",
+            //     hiearchy : ['Village'],
+            //     categorical : ['Village','Year'],
+            //     hierchy_values : Array.from(village)}
+            // // console.log(schema2)
+            // GetData2(schema2)
+            // .then(d=>{
+            //     schema2.numerical = ['value']
+            //     ProcessHeatMapData(d,schema2,svg2,false,true)})
 
-            let schema3 = {
-            filename :  "./db/0-SubregionYearRanksLate" + d3.select("#select_satellite").property('value') + ".csv",
-            hiearchy : ['Village'],
-            categorical : ['Village','Year'],
-            hierchy_values : Array.from(village)}
+            // let schema3 = {
+            // filename :  "./db/0-SubregionYearRanksLate" + d3.select("#select_satellite").property('value') + ".csv",
+            // hiearchy : ['Village'],
+            // categorical : ['Village','Year'],
+            // hierchy_values : Array.from(village)}
             
-            // console.log(schema2)
-            GetData2(schema3)
-            .then(d=>{
-                schema3.numerical = ['value']
-                ProcessHeatMapData(d,schema3,svg3,false,true)})
+            // // console.log(schema2)
+            // GetData2(schema3)
+            // .then(d=>{
+            //     schema3.numerical = ['value']
+            //     ProcessHeatMapData(d,schema3,svg3,false,true)})
             })
-        // svg2.selectAll("*").remove();
+        svg2.selectAll("*").remove();
         svg3.selectAll("*").remove();
     }
 
@@ -413,6 +413,15 @@ function ProcessHeatMapData(FilteredDataTwice,schema,svg,main = false,sate = fal
             .text(schema.filename)
             // .text(schema.filename + ":  " + schema.hierchy_values.toString())
         x_column = [...new Set(FilteredDataTwice.map(d => d[schema.categorical[0]]))].sort()
+        function removeElement(array, elem) {
+            var index = array.indexOf(elem);
+            if (index > -1) {
+                array.splice(index, 1);
+            }
+        }
+        removeElement(x_column , 'total');
+
+
         y_column = Array.from({length: 36}, (x,i) => i+1983)
         // Build color scale
         let myColor
@@ -429,7 +438,7 @@ function ProcessHeatMapData(FilteredDataTwice,schema,svg,main = false,sate = fal
             
             myColor = d3.scaleLinear()
             .range(["#cc6600","#fff3e6"])
-            .domain([1,0])
+            .domain([0,1])
         }
         
         let key = [1,2,3,4,5,6,7,8,9,10]
@@ -481,9 +490,9 @@ GetSummary(filename1, ['Region','District','Village','_index'], 'year').then(Fre
 function FreshDropDown(summary){
     cur_summary = summary
     let dropdownChangeRegion = function() {
+        // console.log("hi")
         // change the region selection
-        let dropdowndistrict = d3.select("#select_district");
-                                 
+        let dropdowndistrict = d3.select("#select_district");       
         let tempobj = summary[d3.select("#select_region").property('value')]
         let district_data = tempobj[Object.keys(tempobj)[0]]
         // console.log(district_data)
@@ -492,7 +501,6 @@ function FreshDropDown(summary){
         district_element.enter().append("option").merge(district_element)
         .attr("value", function (d) { return d; })
         .text(function (d) {return d;});
-        
     };
    
     // region drop down
@@ -506,7 +514,28 @@ function FreshDropDown(summary){
                 })
                ;
     region_element.exit().remove()
-    dropdownChangeRegion()
+    let params = (new URL(document.location)).searchParams;
+    if(params.get('Region') != null){
+        // console.log(params.get('Region'))
+        let found  = false
+        d3.select("#select_region").selectAll("option")
+          .property("selected", function(d) {if(d == params.get('Region')){found = true; return true}else{return false}})
+        dropdownChangeRegion();
+
+        if(found && params.get('District') != null){
+            // console.log(params.get('District'))
+            let found  = false
+            d3.select("#select_district").selectAll("option")
+              .property("selected", function(d) {if(d == params.get('District')){found = true; return true}else{return false}})
+            }
+            if(found){
+                HeatmapD();
+            }
+        }
+    else{
+        dropdownChangeRegion();
+    }
+
 }
 
 d3.selection.prototype.moveToFront = function() {  
@@ -1052,7 +1081,8 @@ function Render_heatmap(spec){
     s = spec.svg
     
     width = spec.encoding.x.range.length*20;
-    d3.select("#my_dataviz").selectAll("svg").attr("width", width + margin.left + margin.right);
+    // d3.select("#my_dataviz").selectAll("svg").attr("width", width + margin.left + margin.right);
+    d3.select("#my_dataviz").select("svg").attr("width", width + margin.left + margin.right);
     if("legend" in spec){
         // Add one dot in the legend for each name.
         let dots =  s.selectAll("#mydots")
@@ -1333,6 +1363,7 @@ function get_day_of_year(str_date){
     day_of_year += day
     return day_of_year;
 }
+
 
 
 
