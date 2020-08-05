@@ -1,14 +1,23 @@
 import pandas as pd
 import numpy as np  
 from queue import PriorityQueue
+import psycopg2
+con = psycopg2.connect(host = 'pgdb12.iri.columbia.edu',
+    database = 'DesignEngine',
+    user = 'fist',
+    password = 'MonellIRI')
 
+
+# dataFrame = pd.read_sql("select * from badyears_drought_ethiopia_compiled_forms", con)
 
 class HierachyData():
     # filename is the file to be read 
     # hiearchy is a list of hiearchy attributes in descending order
     def __init__(self, filename, hiearchy):
-        self.data = pd.read_csv(filename)
-        
+        if(filename.startswith("./")):
+            self.data = pd.read_csv(filename)
+        else:
+            self.data = pd.read_sql("select * from " + filename, con)
         self.data = self.data.set_index(hiearchy)
         self.hiearchy = hiearchy
     def get_summary(self):
@@ -37,7 +46,8 @@ class HierachyData():
                     result = result.append(self.data.loc[value])
             except: 
                 pass
-            # print(self.data.loc[value])
+        result["rank"] = result.groupby("Village")["value"].rank(ascending=True,method='first')
+        # result.groupby(categorical[0]).rank(ascending=False,method='first') 
         return result.reset_index().to_json(orient='records')  
 
 

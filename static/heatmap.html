@@ -80,7 +80,8 @@ District: <select id="select_district2"></select> <button type="button" onclick=
 // const url = "http://127.0.0.1:5000/";
 const url = window.location.origin + '/';
 
-let filename1 = "./db/heatmap_data_lineage.csv"
+// let filename1 = "./db/heatmap_data_lineage.csv"
+let filename1 = "badyears_drought_ethiopia_compiled_forms"
 let filename2 = "./db/intitiate_cleaned2.csv"
 
 
@@ -204,9 +205,9 @@ function GetHeatMap(schema) {
 function HeatmapR(){
     let schema = {
         filename : filename1,
-        hiearchy : ['Region','District','Village','_index'],
+        hiearchy : ['region','district','village','sid'],
         hierchy_values : [d3.select("#select_region").property('value')],
-        categorical : ['District','year'],
+        categorical : ['district','year'],
         numerical : ['rank'],
         aggragation : ['mean','std','count'],
         category : 'year'}
@@ -217,9 +218,9 @@ function HeatmapR(){
 function HeatmapD() {
         let schema = {
             filename : filename1,
-            hiearchy : ['Region','District','Village','_index'],
+            hiearchy : ['region','district','village','sid'],
             hierchy_values : [d3.select("#select_region").property('value') ,d3.select("#select_district").property('value') ],
-            categorical : ['Village','year'],
+            categorical : ['village','year'],
             numerical : ['rank'],
             // aggragation : 'mean',
             aggragation : ['mean','std','count'],
@@ -339,7 +340,7 @@ function ProcessHeatMapData(FilteredDataTwice,schema) {
         Render_barmean(spec3,svg3)
     }
 
-GetSummary(filename1, ['Region','District','Village','_index'], 'year').then(FreshDropDown)
+GetSummary(filename1, ['region','district','village','sid'], 'year').then(FreshDropDown)
 function FreshDropDown(summary){
     
     let dropdownChangeRegion = function() {
