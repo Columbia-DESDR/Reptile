@@ -7,6 +7,8 @@ Flask
 
 Pandas
 
+psycopg2
+
 ## Unix Bash (Linux, Mac, etc.):
 
 ```
