@@ -36,6 +36,14 @@ app.config["DEBUG"] = True
 def home():
     return  app.send_static_file('heatmap.html')
 
+@app.route('/gambia', methods=['GET'])
+def gam():
+    return  app.send_static_file('heatmap gambia.html')
+
+@app.route('/malawi', methods=['GET'])
+def mala():
+    return  app.send_static_file('heatmap malawi.html')
+
 @app.route('/rec', methods=['GET'])
 def rec():
     return  app.send_static_file('heatmap copy 4.html')

@@ -18,6 +18,10 @@ class HierachyData():
             self.data = pd.read_csv(filename)
         else:
             self.data = pd.read_sql("select * from " + filename, con)
+        for attr in hiearchy:
+            if attr not in self.data.columns:
+                self.data[attr] = ""
+        print(self.data)
         self.data = self.data.set_index(hiearchy)
         self.hiearchy = hiearchy
     def get_summary(self):
