@@ -2,11 +2,14 @@ import pandas as pd
 import numpy as np  
 from queue import PriorityQueue
 import psycopg2
-con = psycopg2.connect(host = 'pgdb12.iri.columbia.edu',
-    database = 'DesignEngine',
-    user = 'fist',
-    password = 'MonellIRI')
 
+try:
+    con = psycopg2.connect(host = 'pgdb12.iri.columbia.edu',
+        database = 'DesignEngine',
+        user = 'fist',
+        password = 'MonellIRI')
+except:
+    pass
 
 # dataFrame = pd.read_sql("select * from badyears_drought_ethiopia_compiled_forms", con)
 

@@ -65,6 +65,11 @@ def sate2():
 def sate3():
     return  app.send_static_file('heatmap copy 3.html')
 
+
+@app.route('/recmega', methods=['GET'])
+def recmega():
+    return  app.send_static_file('heatmap mega.html')
+
 # A route to return all of the available entries in our catalog.
 @app.route('/api/zones', methods=['GET'])
 def api_zones():
@@ -407,4 +412,6 @@ def after_request(response):
     return response
 
 
+# if __name__ == "__main__":
+#     app.run()
 app.run()
