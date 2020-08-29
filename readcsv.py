@@ -1,9 +1,10 @@
 import pandas as pd
 import numpy as np  
 from queue import PriorityQueue
-import psycopg2
+
 
 try:
+    import psycopg2s
     con = psycopg2.connect(host = 'pgdb12.iri.columbia.edu',
         database = 'DesignEngine',
         user = 'fist',
