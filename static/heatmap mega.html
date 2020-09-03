@@ -596,21 +596,40 @@ function heatmap_rect_explain(d, schema = {}){
                     }   
                     cur_worst[schema.rank] = schema.year
                 }
-                
+                values_arr = Array.from({length: 36}, (x,i) => i+1983)
+                values_arr.push(null)
                 // console.log(cur_worst)
                 schema = {
                 sol: [
                     {name: 'w1', type: 'sdropdown', display: ' 1st worst: ',
-                    values: Array.from({length: 36}, (x,i) => i+1983), selected: cur_worst[1]
+                    values:values_arr, selected: cur_worst[1]
                     },
                     {name: 'w2', type: 'sdropdown', display: ' 2nd worst: ',
-                    values: Array.from({length: 36}, (x,i) => i+1983), selected: cur_worst[2]
+                    values:values_arr, selected: cur_worst[2]
                     },
                     {name: 'w3', type: 'sdropdown', display: ' 3rd worst: ',
-                    values: Array.from({length: 36}, (x,i) => i+1983), selected: cur_worst[3]
+                    values: values_arr, selected: cur_worst[3]
                     },
                     {name: 'w4', type: 'sdropdown', display: ' 4th worst: ',
-                    values: Array.from({length: 36}, (x,i) => i+1983), selected: cur_worst[4]
+                    values: values_arr, selected: cur_worst[4]
+                    },
+                    {name: 'w5', type: 'sdropdown', display: ' 5th worst: ',
+                    values:values_arr, selected: null
+                    },
+                    {name: 'w6', type: 'sdropdown', display: ' 6th worst: ',
+                    values:values_arr, selected: null
+                    },
+                    {name: 'w7', type: 'sdropdown', display: ' 7th worst: ',
+                    values:values_arr, selected: null
+                    },
+                    {name: 'w8', type: 'sdropdown', display: ' 8th worst: ',
+                    values: values_arr, selected:null
+                    },
+                    {name: 'w9', type: 'sdropdown', display: ' 9th worst: ',
+                    values:values_arr, selected:null
+                    },
+                    {name: 'w10', type: 'sdropdown', display: ' 10th worst: ',
+                    values:values_arr, selected:null
                     },
                     {name: 'name', type: 'text', display: 'Your name: '},
                     {name: 'ann', type: 'text', display: 'Side note: '},
@@ -875,6 +894,9 @@ function FormRender (id, schema={}) {
 function submitRec(){
     result = {"w1":d3.select("#w1").property("value"),"w2":d3.select("#w2").property("value"),
     "w3":d3.select("#w3").property("value"),"w4":d3.select("#w4").property("value"),
+    "w5":d3.select("#w5").property("value"),"w6":d3.select("#w6").property("value"),
+    "w7":d3.select("#w7").property("value"),"w8":d3.select("#w8").property("value"),
+    "w9":d3.select("#w9").property("value"),"w10":d3.select("#w10").property("value"),
     "name":d3.select("#name").property("value"),"ann":d3.select("#ann").property("value")
     }
     SendRec(result).then(()=>{
