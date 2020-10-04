@@ -32,6 +32,10 @@ app.config["DEBUG"] = True
 # ]
 
 
+@app.route('/com', methods=['GET'])
+def com():
+    return  app.send_static_file('res.html')
+
 @app.route('/', methods=['GET'])
 def home():
     return  app.send_static_file('heatmap.html')

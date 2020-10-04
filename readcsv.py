@@ -68,25 +68,49 @@ class HierachyData():
         return self.get_heatmap(hierchy_values,categorical,numerical,aggragation).to_json(orient='records')
         # return self.data.loc[tuple(hierchy_values)].groupby(categorical).agg(aggragation).reset_index().to_json(orient='records')   
 
-    def get_heatmap(self,hierchy_values,categorical,numerical,aggragation):
+    def get_heatmap_withtotal(self,hierchy_values,categorical,numerical,aggragation):
         # return self.data.loc[tuple(hierchy_values)][categorical+numerical]\
         #              .groupby(categorical)[numerical].agg(aggragation).reset_index().to_json(orient='records')   
         aggregation = ['mean','std','count']
-        agg = self.data.loc[tuple(hierchy_values)].groupby(categorical[-1])[numerical].agg(aggregation)
+        
+        if len(hierchy_values) == 0:
+            agg = self.data
+        else:
+            agg = self.data.loc[tuple(hierchy_values)]
+        agg = agg.groupby(categorical[-1])[numerical].agg(aggregation)
         agg = agg.replace(np.nan, 0)
-        # print("hi")
+   
         # print(agg)
         agg.columns = ['mean','std','count']
         agg[categorical[0]] = 'total'
         # agg["rank"]  = (agg["mean"]*agg["count"]).rank(ascending=True)
         agg["rank"]  = (agg["mean"]*agg["count"]).rank(ascending=False,method='first')
-        each = self.data.loc[tuple(hierchy_values)].groupby(categorical)[numerical].agg(aggregation)
+        if len(hierchy_values) == 0:
+            each = self.data
+        else:
+            each = self.data.loc[tuple(hierchy_values)]
+        each = each.groupby(categorical)[numerical].agg(aggregation)
         # print(each)
         each.columns = ['mean','std','count']
         each = each.replace(np.nan, 0)
         each["rank"]  = (each["mean"]*each["count"]).groupby(categorical[0]).rank(ascending=False,method='first') 
         # print(each)
         return pd.concat([agg.reset_index(),each.reset_index()])
+
+    def get_heatmap(self,hierchy_values,categorical,numerical,aggragation):
+        aggregation = ['mean','std','count']
+
+        if len(hierchy_values) == 0:
+            each = self.data
+        else:
+            each = self.data.loc[tuple(hierchy_values)]
+        each = each.groupby(categorical)[numerical].agg(aggregation)
+        # print(each)
+        each.columns = ['mean','std','count']
+        each = each.replace(np.nan, 0)
+        each["rank"]  = (each["mean"]*each["count"]).groupby(categorical[0]).rank(ascending=False,method='first') 
+        # print(each)
+        return each.reset_index()
 
     def get_heatmap_withoutagg(self,hierchy_values,categorical,numerical,aggragation):
         # return self.data.loc[tuple(hierchy_values)][categorical+numerical]\
