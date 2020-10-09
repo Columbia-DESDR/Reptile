@@ -3,6 +3,7 @@ from flask import request, jsonify, Response, json, render_template
 import db
 import os
 import readcsv
+import getExplanation
 import json
 
 
@@ -321,9 +322,25 @@ def api_explan():
         resp = Response(js, status=200, mimetype='application/json')
         return resp
     except Exception as e:
+        
         print(e)
         resp = Response(status=400)
         return resp
+
+@app.route('/api/explan2', methods=['POST'])
+def api_explan2():
+    print(request.json)
+    data = {}
+    if(request.json['level'] == "Region"):
+        data = getExplanation.getRegionExplanation(request.json['value'],request.json['year'],
+        request.json['aggOriginal'], request.json['complained_agg'], request.json['com_too_small'])
+    else:
+        data = getExplanation.getDistrictExplanation(request.json['value'],request.json['year'],
+        request.json['aggOriginal'], request.json['complained_agg'], request.json['com_too_small'])
+ 
+    js = json.dumps(data)
+    resp = Response(js, status=200, mimetype='application/json')
+    return resp
 
 
 @app.route('/api/sol', methods=['POST'])
