@@ -381,12 +381,37 @@
                 <div class="pane data-pane noselect">
                     <div class="card no-top-margin data-card abs-100" style="color: white;">
                         <h2>Guide</h2>
-                        To view details, hover over or click on the rectangle in the heatmap. <br>
-                        Value = 11 - rank. The higher the value is, the more severe<br>
-                        After you click a rectangle in the heatmap, the scatterplot and barchart will show up. <br>
+                        <b>Data:</b> 
+                        <br>
+                        Data contains location hiearchy: Country, Region, District, Village. <br>
+                        <!-- At submission level, each submission rperesents each tuple inside of database <br> -->
+                        <!-- Originally, the value represents the rank of severity in each village. Only top ten most severe village is recorded. So the rank is from 1 to 10. 1 means most severe and 10 means 10th severe.<br> -->
+                        <!-- Before visualization, the value is transformed by 11 - rank.  -->
+                        For the value of data, 10 means most severe and 1 means 10th severe.<br>
+                        <!-- The satellite data at region level is processed in the same way.<br>
+                        The satellite data at village level is the raw value. If it's rainfall satellite, the larger the value of satellite is, the less severe this village should be. <br> -->
 
-                        To make complaints, click on the aggregation function in the detail pane, enter your desired value, and click on "complain" <br>
-                        For any problem, contact Zachary Huang zh2408 AT columbia.edu.
+                        <br>
+                        <b>Exploration:</b> <br>
+                        <!-- You are first presented with the heatmap at the given hiearchy.<br> -->
+                        You can click on any ractangle inside of the heatmap. <br>
+                        The details of selected location will be presented in the scatterplot, barchart and detail panels. <br>
+
+                        <br>
+                        <b>Drill Down:</b> <br>
+                        To drill down the next level of the seleted location, click on "Drill Down" button in the detail panel. <br>
+
+                        <br>
+                        <b>Complaint:</b> <br>
+                        To make complaints, click on the aggregation value in the detail panel.<br>
+                        Currently, we support two complaint options: too small or too large.<br>
+                        After you make complaint, you can check explanations in the next level section. <br>
+                        <!-- You can click on explanation, which will highlight the location.<br>
+                        Currently, satellite data and data under district level can't be complained. <br> -->
+
+                        <br>
+                        <b>Contact:</b> <br>
+                        For any problem, contact Zachary Huang zh2408 AT columbia.edu.<br>
                     </div>
                 </div>
 

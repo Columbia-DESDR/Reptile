@@ -20,12 +20,18 @@ def getRegionExplanation(region, year, aggOriginal, complained_agg, com_too_smal
         for agg in aggs:
             aggOld[agg] = row[agg]
             aggNew[agg] = row["p" + agg]
+        print(row["District"])
+        print(aggNew)
+        # introuce a mean 0 with count doesn't help
+        if(not com_too_small and complained_agg == 'mean' and aggOld['count'] == 0 and (aggNew['count'] < 1 or aggNew['mean'] < 1 )):
+            continue
  
         aggAfterRepair = add(remove(aggOriginal,aggOld),aggNew)
-
+        
+        print(aggAfterRepair)
         if((com_too_small and aggAfterRepair[complained_agg] > aggOriginal[complained_agg] + 0.01) or
          (not com_too_small and aggAfterRepair[complained_agg] < aggOriginal[complained_agg] - 0.01)) :
-
+            
             explanation = {}
             explanation["District"] = row["District"]
             explanation["year"] = year
@@ -56,8 +62,9 @@ def getDistrictExplanation(district, year, aggOriginal, complained_agg, com_too_
 
         aggNew['mean'] = row["pmean"]
 
+        
         aggAfterRepair = add(remove(aggOriginal,aggOld),aggNew)
-
+        
         if((com_too_small and aggAfterRepair[complained_agg] > aggOriginal[complained_agg] + 0.01) or
          (not com_too_small and aggAfterRepair[complained_agg] < aggOriginal[complained_agg] - 0.01)) :
 
