@@ -100,6 +100,8 @@ def add(agg1, agg2):
     var = ((agg1["count"] - 1) * (agg1["std"]**2) + (agg2["count"] - 1) * (agg2["std"]**2)
                     + agg1["count"] * ((agg1["mean"] -  agg3["mean"]) **2)
                     + agg2["count"] * ((agg2["mean"] -  agg3["mean"]) **2) )/(agg3["count"] - 1)
+    if(var < 0):
+        var = 0
     agg3["std"] = var**(0.5)
     return agg3
 
@@ -121,6 +123,8 @@ def remove(agg1, agg2):
     var = ((agg1["count"] - 1) * (agg1["std"]**2) - (agg2["count"] - 1) * (agg2["std"]**2)
                     + agg1["count"] * ((agg1["mean"] -  agg3["mean"]) **2)
                     - agg2["count"] * ((agg2["mean"] -  agg3["mean"]) **2) )/(agg3["count"] - 1)
+    if(var < 0):
+        var = 0
     agg3["std"] = var**(0.5)
     return agg3
 
