@@ -285,7 +285,7 @@ filename1 = "./db/heatmap_data_lineage.csv"
 filename2 = "./db/intitiate_cleaned2.csv"
 @app.route('/api/explan', methods=['POST'])
 def api_explan():
-    try:
+
         # print(request.json)
         data = {'explan': [],'sol':[]}
         if(request.json['visual']['filename'] == filename1):
@@ -321,21 +321,17 @@ def api_explan():
         # # print(js)
         resp = Response(js, status=200, mimetype='application/json')
         return resp
-    except Exception as e:
-        
-        print(e)
-        resp = Response(status=400)
-        return resp
+
 
 @app.route('/api/explan2', methods=['POST'])
 def api_explan2():
     print(request.json)
     data = {}
-    if(request.json['level'] == "Region"):
-        data = getExplanation.getRegionExplanation(request.json['value'],request.json['year'],
+    if(request.json['level'] == "region"):
+        data = readcsv.getRegionExplanation(request.json['value'],request.json['year'],
         request.json['aggOriginal'], request.json['complained_agg'], request.json['com_too_small'])
     else:
-        data = getExplanation.getDistrictExplanation(request.json['value'],request.json['year'],
+        data = readcsv.getDistrictExplanation(request.json['value'],request.json['year'],
         request.json['aggOriginal'], request.json['complained_agg'], request.json['com_too_small'])
  
     js = json.dumps(data)

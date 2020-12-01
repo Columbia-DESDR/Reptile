@@ -490,13 +490,13 @@
                             </div>
                         </div>
 
-                        <div id="RegionStart" class="alternatives-pane card ng-scope hidden">
+                        <div id="regionStart" class="alternatives-pane card ng-scope hidden">
                             <div class="alternatives-header">
                                 <h2>Region</h2>
                                 <h3 id="RegionName" class="ng-binding">name</h3>
-                                <div class="field-info  enumerated-channel" id="RegionCompBox">
-                                    <div id="RegionComp" style="color:#f36528">Complaint: region value too high</div>
-                                    <div id="RegionCompButton" class="shelf comp-shelf" style="justify-content: normal">
+                                <div class="field-info  enumerated-channel" id="regionCompBox">
+                                    <div id="regionComp" style="color:#f36528">Complaint: region value too high</div>
+                                    <div id="regionCompButton" class="shelf comp-shelf" style="justify-content: normal">
                                         <div class="shelf-group" style="margin-right: 20px;">
                                             <div class="shelf explan" >
                                                 <span style="margin: auto;">Explanation 1</span>
@@ -508,7 +508,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="RegionExp" style="color:#0289ae">
+                                    <div id="regionExp" style="color:#0289ae">
                                         <div >Explanation: Village <b>a</b> year <b>1212</b> mean should be <b>1231</b></div>
                                         <div >After repair, Region <b>Amhara</b> year <b>1231</b> mean would be <b>3.23</b> </div>
                                     </div>
@@ -599,16 +599,16 @@
                             </div>
                         </div>
 
-                        <div id="DistrictStart" class="alternatives-pane card ng-scope hidden">
+                        <div id="districtStart" class="alternatives-pane card ng-scope hidden">
                             <div class="alternatives-header">
                                 <h2>District</h2>
                                 
                                 <h3 id="DistrictName" class="ng-binding">name</h3>
                                 
-                                <div class="field-info  enumerated-channel" id="DistrictCompBox">
+                                <div class="field-info  enumerated-channel" id="districtCompBox">
                                     
-                                    <div id="DistrictComp" style="color:#f36528">Complaint: region value too high</div>
-                                    <div id="DistrictCompButton" class="shelf comp-shelf" style="justify-content: normal">
+                                    <div id="districtComp" style="color:#f36528">Complaint: region value too high</div>
+                                    <div id="districtCompButton" class="shelf comp-shelf" style="justify-content: normal">
                                         <div class="shelf-group" style="margin-right: 20px;">
                                             <div class="shelf explan" >
                                                 <span style="margin: auto;">Explanation 1</span>
@@ -620,7 +620,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="DistrictExp" style="color:#0289ae">
+                                    <div id="districtExp" style="color:#0289ae">
                                         <div >Explanation: Village <b>a</b> year <b>1212</b> mean should be <b>1231</b></div>
                                         <div >After repair, Region <b>Amhara</b> year <b>1231</b> mean would be <b>3.23</b> </div>
                                     </div>
@@ -713,7 +713,7 @@
                             </div>
                         </div>
 
-                        <div id="VillageStart" class="alternatives-pane card ng-scope hidden">
+                        <div id="villageStart" class="alternatives-pane card ng-scope hidden">
                             <div class="alternatives-header">
                                 <h2>Village</h2>
                                 <h3 id="VillageName" class="ng-binding">name</h3>
@@ -1204,22 +1204,22 @@ class RegionSatelliteHeatMap extends HeatMap{
     // when plot, need to first get satellite data
     // when put sate, first filter values
     plot(schema) {
-        // deep copy schema since we are going to change it
-        // can pass nothing when changing satellite
-        if(schema){
-            this.schema = JSON.parse(JSON.stringify(schema))
-        }
+        // // deep copy schema since we are going to change it
+        // // can pass nothing when changing satellite
+        // if(schema){
+        //     this.schema = JSON.parse(JSON.stringify(schema))
+        // }
         
-        let level = "Region"
-        let sate = d3.select("#" + level +"Sate").property("value")
-        this.schema.filename = SateToFile[sate]
-
-        GetHeatMap(this.schema).then(d=>{
-            // filter out 
-            d = d.filter((e)=> m2.spec.encoding.x.range.includes(e[nextLevel(level)]))
+        // let level = "Region"
+        // let sate = d3.select("#" + level +"Sate").property("value")
+        // this.schema.filename = SateToFile[sate]
+        // console.log(this.schema)
+        // GetHeatMap(this.schema).then(d=>{
+        //     // filter out 
+        //     d = d.filter((e)=> m2.spec.encoding.x.range.includes(e[nextLevel(level)]))
             
-            this.process(d)
-        })
+        //     this.process(d)
+        // })
 
     }
 
@@ -1233,33 +1233,33 @@ class DistrictSatelliteHeatMap extends HeatMap{
     // when plot, need to first get satellite data
     // when put sate, first filter values
     plot(schema) {
-        // can pass nothing when changing satellite
-        if(schema){
-            this.schema = schema
-        }
+        // // can pass nothing when changing satellite
+        // if(schema){
+        //     this.schema = schema
+        // }
         
-        let level = "District"
-        let sate = d3.select("#" + level +"Sate").property("value")
-        // hard link to m3
-        let Sateschema = {
-                filename : SateToFile[sate],
-                hiearchy : ['Village'],
-                categorical : ['Village','Year'],
-                hierchy_values : m3.spec.encoding.x.range}
+        // let level = "District"
+        // let sate = d3.select("#" + level +"Sate").property("value")
+        // // hard link to m3
+        // let Sateschema = {
+        //         filename : SateToFile[sate],
+        //         hiearchy : ['Village'],
+        //         categorical : ['Village','Year'],
+        //         hierchy_values : m3.spec.encoding.x.range}
 
-        GetData2(Sateschema).then((d)=>{
-            // console.log(d)
-                d.forEach(e => {
-                    e['year'] = e['Year']
-                    delete e['Year']
+        // GetData2(Sateschema).then((d)=>{
+        //     // console.log(d)
+        //         d.forEach(e => {
+        //             e['year'] = e['Year']
+        //             delete e['Year']
   
-                })
+        //         })
                 
-                // filter out our of bound years
-                this.process(d.filter((d) => 
-                    m3.spec.encoding.y.range.includes(d['year'])))
+        //         // filter out our of bound years
+        //         this.process(d.filter((d) => 
+        //             m3.spec.encoding.y.range.includes(d['year'])))
 
-            })
+        //     })
 
     }
     process(data){
@@ -1363,6 +1363,13 @@ class ScatterPlot extends Visualization {
         s.append("g")
             .attr("id","y_axis")
             .call(d3.axisLeft(y).ticks(36).tickFormat(d3.format("d")));
+        
+        s.append("text")             
+         .attr("transform",
+                "translate(" + (width/2) + " ," + 
+                (height + margin.top + 20) + ")")
+         .style("text-anchor", "middle")
+         .text("Mean");
 
         // Build X scales and axis:
         let x = d3.scaleLinear()
@@ -1380,7 +1387,7 @@ class ScatterPlot extends Visualization {
             .attr("dx", "-.8em")
             .attr("dy", ".15em")
             .attr("transform", "rotate(-65)");
-
+        
         // http://bl.ocks.org/dustinlarimer/5888271
         // marker
         let marks = [ { name: 'stub', path: 'M 0,0 m -1,-5 L 1,-5 L 1,5 L -1,5 Z', viewbox: '-1 -5 2 10' }]
@@ -1539,6 +1546,13 @@ class BarChart extends Visualization {
             .attr("dx", "-.8em")
             .attr("dy", ".15em")
             .attr("transform", "rotate(-65)");
+
+        s.append("text")             
+         .attr("transform",
+                "translate(" + (width/2) + " ," + 
+                (height + margin.top + 30) + ")")
+         .style("text-anchor", "middle")
+         .text("Count");
 
         
         let callerClass = this;
@@ -1709,7 +1723,7 @@ class Explanation{
         let nextSchema = JSON.parse(JSON.stringify(curSchema));
         nextSchema.categorical[0] = nextLevel(nextLevelData[0])
         nextSchema.hierchy_values.push(nextLevelData[1])
-
+        console.log(nextSchema)
         GetHeatMap(nextSchema).then(d=>{
             LocalData.putData(nextSchema.categorical[0],d)
             LocalData.putSchema(nextSchema.categorical[0], nextSchema)
@@ -1886,7 +1900,7 @@ b1.registerLinks([e1,s1,m1])
 m1.registerLinks([s1,b1,e1])
 
 
-let filename1 = "./db/heatmap_data_lineage.csv"
+let filename1 = "badyears_drought_ethiopia_compiled_forms"
 let filename2 = "./db/intitiate_cleaned2.csv"
 let filename3 = "./db/CHIRPS.csv"
 let filename4 = "./db/enacts.csv"
@@ -1953,9 +1967,9 @@ d3.select("#DistrictSate").on("change", function() {
 
 let schemaInitial = {
         filename : filename1,
-        hiearchy : ['Region','District','Village','_index'],
+        hiearchy : ['region','district','village','sid'],
         hierchy_values : [],
-        categorical : ['Region','year'],
+        categorical : ['region','year'],
         numerical : ['rank'],
         aggragation : ['mean','std','count'],
         category : 'year'}
@@ -2030,10 +2044,16 @@ function getLevel(schema){
 // hardcode
 // ['Region','District','Village','_index']
 function nextLevel(curLevel){
-    if(curLevel === 'Region') return 'District'
-    else if(curLevel === 'District') return 'Village'
-    else if(curLevel === 'Village') return '_index'
+    if(curLevel === 'region') return 'district'
+    else if(curLevel === 'district') return 'village'
+    else if(curLevel === 'village') return 'sid'
 }
+
+// function nextLevel(curLevel){
+//     if(curLevel === 'Region') return 'District'
+//     else if(curLevel === 'District') return 'Village'
+//     else if(curLevel === 'Village') return '_index'
+// }
 
 function isFloat(n){
     return Number(n) === n && n % 1 !== 0;

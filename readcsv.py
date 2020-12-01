@@ -2,9 +2,11 @@ import pandas as pd
 import numpy as np  
 from queue import PriorityQueue
 
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
 
 try:
-    import psycopg2s
+    import psycopg2
     con = psycopg2.connect(host = 'pgdb12.iri.columbia.edu',
         database = 'DesignEngine',
         user = 'fist',
@@ -12,7 +14,8 @@ try:
 except:
     pass
 
-# dataFrame = pd.read_sql("select * from badyears_drought_ethiopia_compiled_forms", con)
+DataStore = None
+# dataFrame = pd.read_sql("select * from bad1years_drought_ethiopia_compiled_forms", con)
 
 class HierachyData():
     # filename is the file to be read 
@@ -26,8 +29,11 @@ class HierachyData():
             if attr not in self.data.columns:
                 self.data[attr] = ""
         print(self.data)
+        global DataStore
+        DataStore  = self.data.copy()
         self.data = self.data.set_index(hiearchy)
         self.hiearchy = hiearchy
+
     def get_summary(self):
         self.summary = self.data.reset_index()[self.hiearchy[0:2]].groupby(self.hiearchy[0]).agg(['unique']).to_json(orient='index')
         return self.summary
@@ -183,7 +189,154 @@ class HierachyData():
     # categorize an attribute
     # e.g., categorize year so that return NA for all missing years
     def categorize_attribute(self, att):
+        
         self.data[att] = pd.Categorical(self.data[att]) 
+
+        
+
+
+def getRegionExplanation(region, year, aggOriginal, complained_agg, com_too_small):
+    RegionData = DataStore.copy()
+    aggs = ["count","std","mean"]
+    RegionData["year"] = pd.Categorical(RegionData["year"] ) 
+    RegionData["region"] = pd.Categorical(RegionData["region"] ) 
+    RegionData["district"] = pd.Categorical(RegionData["district"] ) 
+
+
+    aggg = RegionData.groupby(["region","year","district"])["rank"].agg(["count","std","mean"])
+    aggg = aggg.fillna(0)
+
+    explanations = []
+    
+    selected = aggg.loc[(region,year)]
+    pmean = selected["mean"].mean()
+    pstd = selected["std"].mean()
+    pcount = selected["count"].mean()
+
+    for index, row in selected.iterrows():
+        aggOld = {}
+        aggNew = {}
+        for agg in aggs:
+            aggOld[agg] = row[agg]
+        aggNew= {'mean': pmean, 'std': pstd, 'count': pcount}
+
+        # introuce a mean 0 with count doesn't help
+        if(not com_too_small and complained_agg == 'mean' and aggOld['count'] == 0 and (aggNew['count'] < 1 or aggNew['mean'] < 1 )):
+            continue
+        print(aggOld)
+        print(aggNew)
+        aggAfterRepair = add(remove(aggOriginal,aggOld),aggNew)
+        
+        print(aggAfterRepair)
+        if((com_too_small and aggAfterRepair[complained_agg] > aggOriginal[complained_agg] + 0.01) or
+         (not com_too_small and aggAfterRepair[complained_agg] < aggOriginal[complained_agg] - 0.01)) :
+            
+            explanation = {}
+            print(row)
+            explanation["district"] = row.name
+            explanation["year"] = year
+            explanation["aggNew"] = aggNew
+            explanation["after"] = aggAfterRepair[complained_agg]
+            explanations.append(explanation)
+                
+    
+    if com_too_small:
+        explanations.sort(key=lambda x: -x["after"])
+    else:
+        explanations.sort(key=lambda x: x["after"])
+    
+    return explanations[:5]
+        
+
+def getDistrictExplanation(district, year, aggOriginal, complained_agg, com_too_small):
+    RegionData = DataStore[DataStore['district']==district].copy()
+    aggs = ["count","std","mean"]
+    RegionData["year"] = pd.Categorical(RegionData["year"] ) 
+    RegionData["district"] = pd.Categorical(RegionData["district"] ) 
+    RegionData["village"] = pd.Categorical(RegionData["village"] ) 
+
+
+    aggg = RegionData.groupby(["district","year","village"])["rank"].agg(["count","std","mean"])
+    aggg = aggg.fillna(0)
+
+    explanations = []
+    
+    selected = aggg.loc[(district,year)]
+    pmean = selected["mean"].mean()
+    pstd = selected["std"].mean()
+    pcount = selected["count"].mean()
+
+    for index, row in selected.iterrows():
+        aggOld = {}
+        aggNew = {}
+        for agg in aggs:
+            aggOld[agg] = row[agg]
+        aggNew= {'mean': pmean, 'std': pstd, 'count': pcount}
+        
+        aggAfterRepair = add(remove(aggOriginal,aggOld),aggNew)
+        
+        if((com_too_small and aggAfterRepair[complained_agg] > aggOriginal[complained_agg] + 0.01) or
+         (not com_too_small and aggAfterRepair[complained_agg] < aggOriginal[complained_agg] - 0.01)) :
+
+            explanation = {}
+            explanation["village"] = row.name
+            explanation["year"] = year
+            explanation["aggNew"] = aggNew
+            explanation["after"] = aggAfterRepair[complained_agg]
+            explanations.append(explanation)
+                
+    
+    if com_too_small:
+        explanations.sort(key=lambda x: -x["after"])
+    else:
+        explanations.sort(key=lambda x: x["after"])
+    
+    return explanations[:5]
+
+
+def add(agg1, agg2):
+    agg3 = {}
+    agg3["count"] = agg1["count"] + agg2["count"]
+    if(agg3["count"] == 0):
+        agg3["mean"] = 0
+        agg3["std"] = 0
+        return agg3
+    agg3["mean"] = (agg1["count"] * agg1["mean"] + agg2["count"] * agg2["mean"])/agg3["count"]
+
+    if(agg3["count"] == 1):
+        agg3["std"] = 0
+        return agg3
+
+    var = ((agg1["count"] - 1) * (agg1["std"]**2) + (agg2["count"] - 1) * (agg2["std"]**2)
+                    + agg1["count"] * ((agg1["mean"] -  agg3["mean"]) **2)
+                    + agg2["count"] * ((agg2["mean"] -  agg3["mean"]) **2) )/(agg3["count"] - 1)
+    if(var < 0):
+        var = 0
+    agg3["std"] = var**(0.5)
+    return agg3
+
+def remove(agg1, agg2):
+    agg3 = {}
+    agg3["count"] = agg1["count"] - agg2["count"]
+    
+    if(agg3["count"] == 0):
+        agg3["mean"] = 0
+        agg3["std"] = 0
+        return agg3
+    
+    agg3["mean"] = (agg1["count"] * agg1["mean"] - agg2["count"] * agg2["mean"])/agg3["count"]
+    
+    if(agg3["count"] == 1):
+        agg3["std"] = 0
+        return agg3
+        
+    var = ((agg1["count"] - 1) * (agg1["std"]**2) - (agg2["count"] - 1) * (agg2["std"]**2)
+                    + agg1["count"] * ((agg1["mean"] -  agg3["mean"]) **2)
+                    - agg2["count"] * ((agg2["mean"] -  agg3["mean"]) **2) )/(agg3["count"] - 1)
+    if(var < 0):
+        var = 0
+    agg3["std"] = var**(0.5)
+    return agg3
 
 # d = HierachyData("./db/heatmap_data_lineage.csv",['Region','District','Village','_index'])
 # d.categorize_attribute('year')
