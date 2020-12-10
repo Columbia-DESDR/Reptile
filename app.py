@@ -381,11 +381,11 @@ def api_sol():
 def api_rec():
     try:
         
-        rec = request.json['rec']
-        rec['filename'] = request.json['visual']['filename']
-        rec['hiearchy'] = request.json['visual']['hiearchy']
-        rec['hierchy_values'] = request.json['visual']['hierchy_values']
-        rec['curr_value'] = request.json['comp'][request.json['visual']['categorical'][0]]
+        rec = request.json
+        # rec['filename'] = request.json['visual']['filename']
+        # rec['hiearchy'] = request.json['visual']['hiearchy']
+        # rec['hierchy_values'] = request.json['visual']['hierchy_values']
+        # rec['curr_value'] = request.json['comp'][request.json['visual']['categorical'][0]]
         recs.append(rec)
         # filename = request.json['visual']['filename']
         # hiearchy = request.json['visual']['hiearchy']

@@ -1625,83 +1625,184 @@ class Explanation{
 
         let callerClass = this;
 
-        // can also use data enter
-        // however some logics are hard to write like staggering shelf and content
-        Object.entries(data).forEach(function(attribute) {
-            // console.log(attribute)
+        if(Object.entries(data)[0][0] == 'sid'){
+            let sidData  = LocalData.getData("sid")
+            sidData = sidData.filter(sidData => sidData['sid'] == data['sid'])
+            let worstMap = new Map();
+            Object.entries(sidData).forEach(function(sidD){
+                if(sidD[1]['mean']!= 0){
+                    worstMap[sidD[1]['mean']] = sidD[1]['year']
+                }})
+            
+            console.log(sidData)
 
             let shelf_group = s.append("div")
                                 .classed('shelf-group',true)
                                 
             let shelf = shelf_group.append("div")
                                 .classed('shelf',true) 
-
-        
-            if(callerClass.allowComplaint && agg.includes(attribute[0]) && explanable){
-                let content = shelf_group.append("div")
-                                      .classed('content',true)
-                                      .classed('hidden',true)          
-
-                let comp_shelf = content.append("div")
-                                        .classed('shelf',true)
-                                        .classed('comp-shelf',true)
-
-                comp_shelf.append("div")
-                        .classed('shelf-group',true)
-                        .style("width", "40%")
-                        .append("div")
-                        .classed('shelf',true)
-                        .classed('complaint',true)
-                        .append("span")
-                        .style("margin","auto")
-                        .text("Too small")
-                        .on('click', function() {
-                                callerClass.writeComplain(data, attribute[0], false)
-                                callerClass.drillDown(Object.entries(data)[0])
-                                showComp(getLevel(data))
-                            })
-
-                comp_shelf.append("div")
-                        .classed('shelf-group',true)
-                        .style("width", "40%")
-                        .append("div")
-                        .classed('shelf',true)
-                        .classed('complaint',true)
-                        .append("span")
-                        .style("margin","auto")
-                        .text("Too large")
-                        .on('click', function() {
-                                callerClass.writeComplain(data, attribute[0], true)
-                                callerClass.drillDown(Object.entries(data)[0])
-                                showComp(getLevel(data))
-                            })
-
-                shelf.classed("collapsible",true)
-                    .on("click", function(){
-                        if(shelf.classed('active')){
-                            shelf.classed('active',false)
-                            content.style("display", "none")
-                        }else{
-                            shelf.classed('active',true)
-                            content.style("display", "block")
-                        }
-                    })
-            }
-            shelf.append("div")
-                 .classed('shelf-label',true) 
-                 .text(attribute[0])
             
             shelf.append("div")
-                 .classed('field-drop',true)
-                 .append("span")
-                 .classed('placeholder',true)
-                 .text(attribute[1])
-        })
+                 .classed('shelf-label',true) 
+                 .text('sid')
+            
+            let select = shelf.append("div")
+                            .classed('field-drop',true)
+                            .append("span")
+                            .classed('placeholder',true)
+                            .text(data['sid'].substring(0,8) + "...")
+
+            for (let i = 1; i <= 10; i++) {
+                let shelf_group = s.append("div")
+                                .classed('shelf-group',true)
+                                
+                let shelf = shelf_group.append("div")
+                                    .classed('shelf',true) 
+                
+                shelf.append("div")
+                    .classed('shelf-label',true) 
+                    .text(i==1?"1st":(i==2?"2nd":(i==3?"3rd":i+"th")))
+                
+                let select = shelf.append("div")
+                                .classed('field-drop',true)
+                                .append("select")
+                                .classed('placeholder',true)
+                                .style('height',"20px")
+                                .style("width", "120px")
+                                .attr("id", "worst" + i)
+                                
+
+                let years = Array.from({length: 36}, (x,i) => i+1983)
+                let options = select.selectAll("option")
+                options.remove()
+                options.data(years).enter().append("option")
+                        .attr("value", function (d) { return d; })
+                        .text(function (d) { return d;})
+                        .property("selected", function(d) {
+                                    return d == worstMap[i];
+                                })
+                
+
+            } 
+
+            shelf_group = s.append("div")
+                                .classed('shelf-group',true)
+                                
+            shelf = shelf_group.append("div")
+                                .classed('shelf',true) 
+            
+            shelf.append("div")
+                 .classed('shelf-label',true) 
+                 .text('name')
+            
+            select = shelf.append("div")
+                            .classed('field-drop',true)
+                            .append("input")
+                            .classed('placeholder',true)
+                            .attr("value","your name")
+                            .attr("id", "worstname")
+
+            shelf_group = s.append("div")
+                            .classed('shelf-group',true)
+                                
+            shelf = shelf_group.append("div")
+                                .classed('shelf',true) 
+            
+            shelf.append("div")
+                 .classed('shelf-label',true) 
+                 .text('comment')
+            
+            select = shelf.append("div")
+                        .classed('field-drop',true)
+                        .append("input")
+                        .classed('placeholder',true)
+                        .attr("value","your comment")
+                        .attr("id", "worstcomment")
+            
+        }
+        else{
+            // can also use data enter
+            // however some logics are hard to write like staggering shelf and content
+            Object.entries(data).forEach(function(attribute) {
+                // console.log(attribute)
+
+                let shelf_group = s.append("div")
+                                    .classed('shelf-group',true)
+                                    
+                let shelf = shelf_group.append("div")
+                                    .classed('shelf',true) 
+                
+                if(callerClass.allowComplaint && agg.includes(attribute[0]) && explanable){
+                    let content = shelf_group.append("div")
+                                        .classed('content',true)
+                                        .classed('hidden',true)          
+
+                    let comp_shelf = content.append("div")
+                                            .classed('shelf',true)
+                                            .classed('comp-shelf',true)
+
+                    comp_shelf.append("div")
+                            .classed('shelf-group',true)
+                            .style("width", "40%")
+                            .append("div")
+                            .classed('shelf',true)
+                            .classed('complaint',true)
+                            .append("span")
+                            .style("margin","auto")
+                            .text("Too small")
+                            .on('click', function() {
+                                    callerClass.writeComplain(data, attribute[0], false)
+                                    callerClass.drillDown(Object.entries(data)[0])
+                                    showComp(getLevel(data))
+                                })
+
+                    comp_shelf.append("div")
+                            .classed('shelf-group',true)
+                            .style("width", "40%")
+                            .append("div")
+                            .classed('shelf',true)
+                            .classed('complaint',true)
+                            .append("span")
+                            .style("margin","auto")
+                            .text("Too large")
+                            .on('click', function() {
+                                    callerClass.writeComplain(data, attribute[0], true)
+                                    callerClass.drillDown(Object.entries(data)[0])
+                                    showComp(getLevel(data))
+                                })
+
+                    shelf.classed("collapsible",true)
+                        .on("click", function(){
+                            if(shelf.classed('active')){
+                                shelf.classed('active',false)
+                                content.style("display", "none")
+                            }else{
+                                shelf.classed('active',true)
+                                content.style("display", "block")
+                            }
+                        })
+                }
+                shelf.append("div")
+                    .classed('shelf-label',true) 
+                    .text(attribute[0])
+                
+                shelf.append("div")
+                    .classed('field-drop',true)
+                    .append("span")
+                    .classed('placeholder',true)
+                    .text(attribute[1])
+            })
+
+        }
+        
+
+      
+        
 
         
-        
         // drill down to next level
-        if(Object.entries(data)[0][0] != '_index'){
+        if(Object.entries(data)[0][0] != 'sid'){
+            
             s.append("div")
                 .classed('shelf-group',true)
                 .style("width", "40%")
@@ -1713,7 +1814,22 @@ class Explanation{
                 .text("Drill down")
                 .on('click', function() {
                     callerClass.drillDown(Object.entries(data)[0])})
+        }else{
+
+            s.append("div")
+                .classed('shelf-group',true)
+                .style("width", "40%")
+                .append("div")
+                .classed('shelf',true)
+                .classed('submit',true)
+                .append("span")
+                .style("margin","auto")
+                .text("Submit")
+                .on('click', function() {
+                    submitRec(data['sid'])
+                    })
         }
+
     }
 
     drillDown(nextLevelData){
@@ -2082,6 +2198,55 @@ function hideComp(level){
 
 function showComp(level){
     d3.select("#" + level + "CompBox").style("display", "block").style("overflow","visible")
+}
+
+
+function submitRec(sidvalue){
+    result = {
+        "sid": sidvalue,
+        "w1":d3.select("#worst1").property("value"),
+        "w2":d3.select("#worst2").property("value"),
+        "w3":d3.select("#worst3").property("value"),
+        "w4":d3.select("#worst4").property("value"),
+        "w5":d3.select("#worst5").property("value"),
+        "w6":d3.select("#worst6").property("value"), 
+        "w7":d3.select("#worst7").property("value"),
+        "w8":d3.select("#worst8").property("value"),
+        "w9":d3.select("#worst9").property("value"),
+        "w10":d3.select("#worst10").property("value"),
+        "name":d3.select("#worstname").property("value"),
+        "comment":d3.select("#worstcomment").property("value")
+    }
+
+    SendRec(result).then(()=>{
+        alert("We have received your submission!")
+        })
+    
+}
+
+function SendRec(schema) {
+    var x, text;
+    // Get the value of the input field with id="numb"
+    const data = {
+        'data': schema
+    };
+    const other_params = {
+        headers : { "content-type" : "application/json; charset=UTF-8" },
+        body : JSON.stringify(data),
+        method : "POST",
+        mode : "cors"
+    };
+    return fetch(url + "api/rec", other_params)
+        .then(function(response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Could not reach the API: " + response.statusText);
+            }
+        }).then(function(data) {
+            // obj = JSON.parse(data)
+            return data
+        })
 }
 
 </script>
