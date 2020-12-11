@@ -493,7 +493,7 @@
                         <div id="regionStart" class="alternatives-pane card ng-scope hidden">
                             <div class="alternatives-header">
                                 <h2>Region</h2>
-                                <h3 id="RegionName" class="ng-binding">name</h3>
+                                <h3 id="regionName" class="ng-binding">name</h3>
                                 <div class="field-info  enumerated-channel" id="regionCompBox">
                                     <div id="regionComp" style="color:#f36528">Complaint: region value too high</div>
                                     <div id="regionCompButton" class="shelf comp-shelf" style="justify-content: normal">
@@ -603,7 +603,7 @@
                             <div class="alternatives-header">
                                 <h2>District</h2>
                                 
-                                <h3 id="DistrictName" class="ng-binding">name</h3>
+                                <h3 id="districtName" class="ng-binding">name</h3>
                                 
                                 <div class="field-info  enumerated-channel" id="districtCompBox">
                                     
@@ -716,7 +716,7 @@
                         <div id="villageStart" class="alternatives-pane card ng-scope hidden">
                             <div class="alternatives-header">
                                 <h2>Village</h2>
-                                <h3 id="VillageName" class="ng-binding">name</h3>
+                                <h3 id="villageName" class="ng-binding">name</h3>
                       
                             </div>
                             <div class="alternatives-content ng-scope">
@@ -1631,7 +1631,7 @@ class Explanation{
             let worstMap = new Map();
             Object.entries(sidData).forEach(function(sidD){
                 if(sidD[1]['mean']!= 0){
-                    worstMap[sidD[1]['mean']] = sidD[1]['year']
+                    worstMap[11 - sidD[1]['mean']] = sidD[1]['year']
                 }})
             
             console.log(sidData)
@@ -2177,10 +2177,10 @@ function isFloat(n){
 
 function hideBelow(level){
     switch(level) {
-        case 'Region':
-            hideLevel('District')
-        case 'District':
-            hideLevel('Village')
+        case 'region':
+            hideLevel('district')
+        case 'district':
+            hideLevel('village')
         } 
 }
 
