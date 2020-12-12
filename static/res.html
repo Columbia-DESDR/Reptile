@@ -387,7 +387,7 @@
                         <!-- At submission level, each submission rperesents each tuple inside of database <br> -->
                         <!-- Originally, the value represents the rank of severity in each village. Only top ten most severe village is recorded. So the rank is from 1 to 10. 1 means most severe and 10 means 10th severe.<br> -->
                         <!-- Before visualization, the value is transformed by 11 - rank.  -->
-                        For the value of data, 10 means most severe and 1 means 10th severe.<br>
+                        For the value of data, 8 means most severe and 1 means 8th severe.<br>
                         <!-- The satellite data at region level is processed in the same way.<br>
                         The satellite data at village level is the raw value. If it's rainfall satellite, the larger the value of satellite is, the less severe this village should be. <br> -->
 
@@ -859,8 +859,12 @@ function GetHeatMap(schema) {
                 obj = JSON.parse(data)
                 console.log(obj)
                 // we don't need rank here
-                obj.forEach(element=> delete element["rank"])
-                ; 
+                obj.forEach(element=> {
+                    if(element["mean"] > 0){
+                        element["mean"] = 9 - element["mean"]
+                    }
+                   
+                    delete element["rank"]}); 
                 return obj
             })
     }
@@ -1055,10 +1059,10 @@ class HeatMap extends Visualization {
         // generate color according to option
         let Color = d3.scaleLinear()
             .range(this.options.color)
-            .domain([0,10])
+            .domain([0,8])
 
         //for the legend
-        let key = [0,1,2,3,4,5,6,7,8,9,10]
+        let key = [0,1,2,3,4,5,6,7,8]
         let size = 15
 
 
@@ -1483,13 +1487,13 @@ class BarChart extends Visualization {
         let y_column = Array.from({length: 36}, (x,i) => i+1983)
 
         //for the legend
-        let key = [1,2,3,4,5,6,7,8,9,10]
+        let key = [1,2,3,4,5,6,7,8]
         let size = 15
         
         // generate color according to option
         let Color = d3.scaleLinear()
             .range(this.options.color)
-            .domain([0,10])
+            .domain([0,8])
 
         let spec = {
             data: data,
@@ -1573,7 +1577,7 @@ class BarChart extends Visualization {
                     return spec.encoding.rect.color(d[spec.encoding.rect.field])})
             .style("stroke-width", 0.5)  
             // stroke with max color value
-            .style("stroke", spec.encoding.rect.color(10))      
+            .style("stroke", spec.encoding.rect.color(8))      
             .on("mouseover",spec.tooltip.mouseover)
             .on("mousemove", function(){return tooltipdiv.style("top", (event.pageY)+"px").style("left",(event.pageX)+"px");})
             .on("mouseout", function(){return tooltipdiv.style("opacity", 0);})
@@ -1629,9 +1633,11 @@ class Explanation{
             let sidData  = LocalData.getData("sid")
             sidData = sidData.filter(sidData => sidData['sid'] == data['sid'])
             let worstMap = new Map();
+            let causeMap = new Map()
             Object.entries(sidData).forEach(function(sidD){
                 if(sidD[1]['mean']!= 0){
-                    worstMap[11 - sidD[1]['mean']] = sidD[1]['year']
+                    worstMap[9 - sidD[1]['mean']] = sidD[1]['year']
+                    causeMap[9 - sidD[1]['mean']] = sidD[1]['cause']
                 }})
             
             console.log(sidData)
@@ -1652,7 +1658,7 @@ class Explanation{
                             .classed('placeholder',true)
                             .text(data['sid'].substring(0,8) + "...")
 
-            for (let i = 1; i <= 10; i++) {
+            for (let i = 1; i <= 8; i++) {
                 let shelf_group = s.append("div")
                                 .classed('shelf-group',true)
                                 
@@ -1673,6 +1679,7 @@ class Explanation{
                                 
 
                 let years = Array.from({length: 36}, (x,i) => i+1983)
+                years.unshift("missing")
                 let options = select.selectAll("option")
                 options.remove()
                 options.data(years).enter().append("option")
@@ -1681,8 +1688,26 @@ class Explanation{
                         .property("selected", function(d) {
                                     return d == worstMap[i];
                                 })
-                
 
+                console.log(causeMap)
+                if(i in causeMap){
+                    let content = shelf_group.append("div")
+                        .classed('content',true)
+                           
+
+                    let comp_shelf = content.append("div")
+                                            .classed('shelf',true)
+                                            .classed('comp-shelf',true)
+                                            .style("height", "40px")
+
+                    comp_shelf.append("span")
+                            .classed('placeholder',true)
+                            .text(causeMap[i])
+                            .style("overflow-y", "scroll")
+                            .style("width", "140px")
+                }
+
+                
             } 
 
             shelf_group = s.append("div")
@@ -1794,11 +1819,6 @@ class Explanation{
             })
 
         }
-        
-
-      
-        
-
         
         // drill down to next level
         if(Object.entries(data)[0][0] != 'sid'){
@@ -2016,7 +2036,7 @@ b1.registerLinks([e1,s1,m1])
 m1.registerLinks([s1,b1,e1])
 
 
-let filename1 = "badyears_drought_ethiopia_compiled_forms"
+let filename1 = "badyears_drought_ethiopia_compiled_clean_forms"
 let filename2 = "./db/intitiate_cleaned2.csv"
 let filename3 = "./db/CHIRPS.csv"
 let filename4 = "./db/enacts.csv"
@@ -2212,8 +2232,8 @@ function submitRec(sidvalue){
         "w6":d3.select("#worst6").property("value"), 
         "w7":d3.select("#worst7").property("value"),
         "w8":d3.select("#worst8").property("value"),
-        "w9":d3.select("#worst9").property("value"),
-        "w10":d3.select("#worst10").property("value"),
+        // "w9":d3.select("#worst9").property("value"),
+        // "w10":d3.select("#worst10").property("value"),
         "name":d3.select("#worstname").property("value"),
         "comment":d3.select("#worstcomment").property("value")
     }

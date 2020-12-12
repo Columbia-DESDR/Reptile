@@ -116,6 +116,18 @@ class HierachyData():
         each = each.replace(np.nan, 0)
         each["rank"]  = (each["mean"]*each["count"]).groupby(categorical[0]).rank(ascending=False,method='first') 
         # print(each)
+        # if sid, also include cause
+        print(categorical)
+        
+        if(categorical[0] == 'sid'):
+            each = each.reset_index()
+            # print(each)
+            # print(self.data.reset_index()[["sid", "cause"]])
+            each = each.merge(self.data.reset_index()[["sid","year", "cause"]])
+            print(each)
+
+            return each
+        
         return each.reset_index()
 
     def get_heatmap_withoutagg(self,hierchy_values,categorical,numerical,aggragation):
