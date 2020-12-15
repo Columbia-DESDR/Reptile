@@ -793,10 +793,11 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
 let user_info ="initializing..."
-$.getJSON('http://gd.geobytes.com/GetCityDetails?callback=?', function(data) {
-    user_info = JSON.stringify(data, null, 2);
+
+$.get('https://www.cloudflare.com/cdn-cgi/trace', function(data) {
+    user_info = data
     SendLoad()
-});
+})
 // url to this page (and infer server address)
 const url = window.location.origin + '/';
 let filename = "./db/heatmap_data_lineage.csv"
@@ -1636,6 +1637,11 @@ class Explanation{
         let s  = this.svg
 
         let callerClass = this;
+        if(explanable){
+            let shelf_group = s.append("div")
+                                .text("To make complaints, click on the aggregation value.")
+                                .style("color","red")
+        }
 
         if(Object.entries(data)[0][0] == 'sid'){
             let sidData  = LocalData.getData("sid")
@@ -1785,15 +1791,7 @@ class Explanation{
             select.append("option")
                   .text("no")
 
-            shelf_group = s.append("div")
-                            .text("I have reviewed the bad years reported for this village to the best of my knowledge and approve their use for index design.")
             
-            select = s.append("select")
-                         .attr("id", "q4")
-            select.append("option")
-                  .text("yes")
-            select.append("option")
-                  .text("no")
 
             shelf_group = s.append("div")
                              .text("How helpful is this complaint-explanation framework to find meaningful problems?")
@@ -1826,6 +1824,19 @@ class Explanation{
                   .text("2")
             select.append("option")
                   .text("1 (very unhelpful)")
+
+            shelf_group = s.append("div")
+                            .text("I have reviewed the bad years reported for this village to the best of my knowledge and approve their use for index design.")
+            
+            select = s.append("input")
+                        .attr("type", "checkbox")
+                        .attr("id", "q4")
+            // select.append("option")
+            //       .text("yes")
+            // select.append("option")
+            //       .text("no")
+
+            
 
 
         }
@@ -2321,7 +2332,7 @@ function submitRec(sidvalue){
         "q1":d3.select("#q1").property("value"),
         "q2":d3.select("#q2").property("value"),
         "q3":d3.select("#q3").property("value"),
-        "q4":d3.select("#q4").property("value"),
+        "q4":d3.select("#q4").property("checked"),
         "q5":d3.select("#q5").property("value"),
         "q6":d3.select("#q6").property("value"),
         "name":d3.select("#worstname").property("value"),

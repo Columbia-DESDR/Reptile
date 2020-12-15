@@ -104,7 +104,17 @@ def get_log():
 
 @app.route('/api/getload', methods=['GET'])
 def get_load():
-    js = json.dumps(loads)
+    f = open("log.txt", "r")
+    content = f.read()
+    contents = content.splitlines()
+    arr = []
+    
+    for c in contents:
+        try:
+            arr.append(json.loads(c))
+        except Exception as e:
+            continue
+    js = json.dumps(arr)
     resp = Response(js, status=200, mimetype='application/json')
     return resp
 
@@ -193,6 +203,10 @@ def api_heatmapdata():
         rec = request.json
         rec['type'] = 'drilldown'
         loads.append(rec)
+        file1 = open("log.txt", "a")
+        file1.write("\n")
+        json.dump(rec, file1)
+        file1.close() 
 
         filename = request.json['filename']
         hiearchy = request.json['hiearchy']
@@ -349,6 +363,10 @@ def api_explan2():
     rec = request.json
     rec['type'] = 'complaint'
     loads.append(rec)
+    file1 = open("log.txt", "a")
+    file1.write("\n")
+    json.dump(rec, file1)
+    file1.close() 
     data = {}
     if(request.json['level'] == "region"):
         data = readcsv.getRegionExplanation(request.json['value'],request.json['year'],
@@ -449,7 +467,10 @@ def api_load():
         rec = request.json
         rec['type'] = 'load'
         loads.append(rec)
-
+        file1 = open("log.txt", "a")
+        file1.write("\n")
+        json.dump(rec, file1)
+        file1.close() 
         data =  "good"
         # print(data)
         js = json.dumps(data)
