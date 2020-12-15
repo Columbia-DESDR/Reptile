@@ -86,9 +86,25 @@ def api_zones():
 
 recs = []
 
+logs = []
+
+loads = []
+
 @app.route('/api/getrec', methods=['GET'])
 def get_rec():
     js = json.dumps(recs)
+    resp = Response(js, status=200, mimetype='application/json')
+    return resp
+
+@app.route('/api/getlog', methods=['GET'])
+def get_log():
+    js = json.dumps(logs)
+    resp = Response(js, status=200, mimetype='application/json')
+    return resp
+
+@app.route('/api/getload', methods=['GET'])
+def get_load():
+    js = json.dumps(loads)
     resp = Response(js, status=200, mimetype='application/json')
     return resp
 
@@ -174,6 +190,10 @@ def api_unique():
 @app.route('/api/heatmapdata', methods=['POST'])
 def api_heatmapdata():
     try:
+        rec = request.json
+        rec['type'] = 'drilldown'
+        loads.append(rec)
+
         filename = request.json['filename']
         hiearchy = request.json['hiearchy']
         hierchy_values = request.json['hierchy_values']
@@ -325,7 +345,10 @@ def api_explan():
 
 @app.route('/api/explan2', methods=['POST'])
 def api_explan2():
-    print(request.json)
+    # print(request.json)
+    rec = request.json
+    rec['type'] = 'complaint'
+    loads.append(rec)
     data = {}
     if(request.json['level'] == "region"):
         data = readcsv.getRegionExplanation(request.json['value'],request.json['year'],
@@ -408,6 +431,25 @@ def api_rec():
         # year = request.json['des']['year']
         # de_mean = request.json['des']['mean']
         
+        data =  "good"
+        # print(data)
+        js = json.dumps(data)
+        # # print(js)
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+    except Exception as e:
+        print(e)
+        resp = Response(status=400)
+        return resp
+
+@app.route('/api/load', methods=['POST'])
+def api_load():
+    try:
+        
+        rec = request.json
+        rec['type'] = 'load'
+        loads.append(rec)
+
         data =  "good"
         # print(data)
         js = json.dumps(data)

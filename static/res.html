@@ -792,7 +792,11 @@
 <script src="https://d3js.org/d3.v4.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
-
+let user_info ="initializing..."
+$.getJSON('http://gd.geobytes.com/GetCityDetails?callback=?', function(data) {
+    user_info = JSON.stringify(data, null, 2);
+    SendLoad()
+});
 // url to this page (and infer server address)
 const url = window.location.origin + '/';
 let filename = "./db/heatmap_data_lineage.csv"
@@ -840,7 +844,9 @@ function GetHeatMap(schema) {
             'categorical': schema.categorical,
             'numerical': schema.numerical,
             'aggragation': schema.aggragation,
-            'category': schema.category
+            'category': schema.category,
+            'geo': user_info,
+            'time': Date().toLocaleString()
         };
         const other_params = {
             headers : { "content-type" : "application/json; charset=UTF-8" },
@@ -878,7 +884,9 @@ function GetHeatMap(schema) {
             'year' : schema.year,
             'aggOriginal' : schema.aggOriginal,
             'complained_agg' : schema.complained_agg,
-            'com_too_small': schema.com_too_small
+            'com_too_small': schema.com_too_small,
+            'geo': user_info,
+            'time': Date().toLocaleString()
         };
         const other_params = {
             headers : { "content-type" : "application/json; charset=UTF-8" },
@@ -1689,7 +1697,7 @@ class Explanation{
                                     return d == worstMap[i];
                                 })
 
-                console.log(causeMap)
+                // console.log(causeMap)
                 if(i in causeMap){
                     let content = shelf_group.append("div")
                         .classed('content',true)
@@ -1744,6 +1752,82 @@ class Explanation{
                         .attr("value","your comment")
                         .attr("id", "worstcomment")
             
+
+            
+
+            shelf_group = s.append("div")
+                            .text("Were the bad years reported for this village similar to other neighboring villages in the woreda?")
+            
+            select = s.append("select")
+                        .attr("id", "q1")
+            select.append("option")
+                  .text("yes")
+            select.append("option")
+                  .text("no")
+
+            shelf_group = s.append("div")
+                            .text("Do you have any reason to believe that some of the bad years reported for this village are erroneous? (e.g. some of the bad years reported were flood years)")
+            
+            select = s.append("select")
+                        .attr("id", "q2")
+            select.append("option")
+                  .text("yes")
+            select.append("option")
+                  .text("no")
+
+            shelf_group = s.append("div")
+                            .text("Did you submit improvements for this village?")
+            
+            select = s.append("select")
+                        .attr("id", "q3")
+            select.append("option")
+                  .text("yes")
+            select.append("option")
+                  .text("no")
+
+            shelf_group = s.append("div")
+                            .text("I have reviewed the bad years reported for this village to the best of my knowledge and approve their use for index design.")
+            
+            select = s.append("select")
+                         .attr("id", "q4")
+            select.append("option")
+                  .text("yes")
+            select.append("option")
+                  .text("no")
+
+            shelf_group = s.append("div")
+                             .text("How helpful is this complaint-explanation framework to find meaningful problems?")
+            
+            select = s.append("select")
+                        .attr("id", "q5")
+            select.append("option")
+                  .text("5 (very helpful)")
+            select.append("option")
+                  .text("4")
+            select.append("option")
+                  .text("3")
+            select.append("option")
+                  .text("2")
+            select.append("option")
+                  .text("1 (very unhelpful)")
+
+            shelf_group = s.append("div")
+                             .text("How helpful is this complaint-explanation framework to find problems faster?")
+            
+            select = s.append("select")
+                        .attr("id", "q6")
+            select.append("option")
+                  .text("5 (very helpful)")
+            select.append("option")
+                  .text("4")
+            select.append("option")
+                  .text("3")
+            select.append("option")
+                  .text("2")
+            select.append("option")
+                  .text("1 (very unhelpful)")
+
+
         }
         else{
             // can also use data enter
@@ -2234,13 +2318,32 @@ function submitRec(sidvalue){
         "w8":d3.select("#worst8").property("value"),
         // "w9":d3.select("#worst9").property("value"),
         // "w10":d3.select("#worst10").property("value"),
+        "q1":d3.select("#q1").property("value"),
+        "q2":d3.select("#q2").property("value"),
+        "q3":d3.select("#q3").property("value"),
+        "q4":d3.select("#q4").property("value"),
+        "q5":d3.select("#q5").property("value"),
+        "q6":d3.select("#q6").property("value"),
         "name":d3.select("#worstname").property("value"),
-        "comment":d3.select("#worstcomment").property("value")
-    }
+        "comment":d3.select("#worstcomment").property("value"),
 
+    }
+    // let q1 = confirm("Were the bad years reported for this village similar to other neighboring villages in the woreda?")
+    // let q2 = confirm("Do you have any reason to believe that some of the bad years reported for this village are erroneous? (e.g. some of the bad years reported were flood years)")
+    // let q3 = confirm("Did you submit improvements for this village?")
+    // let q4 = confirm("I have reviewed the bad years reported for this village to the best of my knowledge and approve their use for index design.")
+    // result["q1"] = q1
+    // result["q2"] = q2
+    // result["q3"] = q3
+    // result["q4"] = q4
     SendRec(result).then(()=>{
         alert("We have received your submission!")
+        result['geo'] = user_info
+        result['time'] = Date().toLocaleString()
+        result['type'] = 'submission'
+        SendLoad(result)
         })
+
     
 }
 
@@ -2268,5 +2371,36 @@ function SendRec(schema) {
             return data
         })
 }
+
+
+
+function SendLoad(result = "") {
+    var x, text;
+    // Get the value of the input field with id="numb"
+    const data = {
+        'geo': user_info,
+        'time': Date().toLocaleString(),
+        'other': result
+    };
+    const other_params = {
+        headers : { "content-type" : "application/json; charset=UTF-8" },
+        body : JSON.stringify(data),
+        method : "POST",
+        mode : "cors"
+    };
+    return fetch(url + "api/load", other_params)
+        .then(function(response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Could not reach the API: " + response.statusText);
+            }
+        }).then(function(data) {
+            // obj = JSON.parse(data)
+            return data
+        })
+}
+
+
 
 </script>
