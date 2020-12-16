@@ -2349,10 +2349,7 @@ function submitRec(sidvalue){
     // result["q4"] = q4
     SendRec(result).then(()=>{
         alert("We have received your submission!")
-        result['geo'] = user_info
-        result['time'] = Date().toLocaleString()
-        result['type'] = 'submission'
-        SendLoad(result)
+        SendSub(result)
         })
 
     
@@ -2383,6 +2380,32 @@ function SendRec(schema) {
         })
 }
 
+function SendSub(schema) {
+    var x, text;
+    // Get the value of the input field with id="numb"
+    const data = {
+        'geo': user_info,
+        'time': Date().toLocaleString(),
+        'other': result
+    };
+    const other_params = {
+        headers : { "content-type" : "application/json; charset=UTF-8" },
+        body : JSON.stringify(data),
+        method : "POST",
+        mode : "cors"
+    };
+    return fetch(url + "api/sub", other_params)
+        .then(function(response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Could not reach the API: " + response.statusText);
+            }
+        }).then(function(data) {
+            // obj = JSON.parse(data)
+            return data
+        })
+}
 
 
 function SendLoad(result = "") {
