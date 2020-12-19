@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Tree</title>
+
+    <style>
+
+	.node circle {
+	  fill: #fff;
+	  stroke: steelblue;
+	  stroke-width: 3px;
+	}
+
+	.node text { font: 12px sans-serif; }
+
+	.link {
+	  fill: none;
+	  stroke: #ccc;
+	  stroke-width: 2px;
+	}
+
+	div.tooltip {
+		position: absolute;
+		text-align: center;
+		max-width: 100px;
+		/* height: 48px; */
+
+		padding: 2px;
+		font: 12px sans-serif;
+		background: lightsteelblue;
+		border: 0px;
+		border-radius: 8px;
+		pointer-events: none;
+	
+	}
+	
+    </style>
+
+  </head>
+
+  <body>
+
+<!-- load the d3.js library -->	
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+	
+<script>
+
+// var treeData = [
+//   {
+//     "name": "Ethiopia",
+//     "children": [
+//       {
+//         "name": "Level 2: A",
+//         "children": [
+//           {
+//             "name": "Son of A",
+//           },
+//           {
+//             "name": "Daughter of A",
+// 		  }
+// 		  ,
+//           {
+//             "name": "Daughter of A",
+// 		  }
+// 		  ,
+//           {
+//             "name": "Daughter of A",
+//           }
+        
+//         ]
+//       },
+//       {
+//         "name": "Level 2: B",
+//       }
+//     ]
+//   }
+// ];
+
+// ************** Generate the tree diagram	 *****************
+var margin = {top: 40, right: 120, bottom: 20, left: 120},
+	width = 3960 - margin.right - margin.left,
+	height = 3500 - margin.top - margin.bottom;
+	
+var i = 0;
+
+var tree = d3.layout.tree()
+	.size([height, width]);
+
+var diagonal = d3.svg.diagonal()
+	.projection(function(d) { return [d.x, d.y]; });
+
+var svg = d3.select("body").append("svg")
+	.attr("width", width + margin.right + margin.left)
+	.attr("height", height + margin.top + margin.bottom)
+  .append("g")
+	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+let tooltipdiv = d3.select("body").append("div")
+  .attr("class", "tooltip")
+  .style("opacity", 1)
+  .style("left", "20px")
+  .style("top", "44px");
+
+function objToStr(d){
+    let str = ""
+    for (let [key, value] of Object.entries(d)) {
+		if(key == "children" || key == "parent"|| key == "x"|| key == "y"|| key == "depth"|| key == "id" ){
+			continue
+		}
+        if(isFloat(value)){
+            str += key + ": " + value.toFixed(2) + "<br/>";
+        }else{
+            str += key + ": " + value + "<br/>";
+        } 
+    }
+    return str
+}
+
+function isFloat(n){
+    return Number(n) === n && n % 1 !== 0;
+}
+
+function tooptip_mouseover(d){
+	tooltipdiv.style("opacity", .9);
+    return tooltipdiv.html(objToStr(d))
+}
+
+function update(source) {
+
+  // Compute the new tree layout.
+  var nodes = tree.nodes(root).reverse(),
+	  links = tree.links(nodes);
+
+  // Normalize for fixed-depth.
+  nodes.forEach(function(d) { d.y = d.depth * 140; });
+
+  // Declare the nodes…
+  var node = svg.selectAll("g.node")
+	  .data(nodes, function(d) { return d.id || (d.id = ++i); });
+
+  // Enter the nodes.
+  var nodeEnter = node.enter().append("g")
+	  .attr("class", "node")
+	  .attr("transform", function(d) { 
+		  return "translate(" + d.x + "," + d.y + ")"; });
+
+  nodeEnter.append("circle")
+	  .attr("r", 5)
+	  .style("fill", function(d){
+		  if(d["Name"])
+			  return "rgb(0, 219, 255)"
+			  else return "#fff"})
+	  .on("mouseover",tooptip_mouseover)
+	  .on("mousemove", function(){return tooltipdiv.style("top", (event.pageY)+"px").style("left",(event.pageX)+"px");})
+      .on("mouseout", function(){return tooltipdiv.style("opacity", 0);})
+
+  nodeEnter.append("text")
+	  .attr("y", function(d) { 
+		  return d.children || d._children ? -18 : 18; })
+	  .attr("dy", ".35em")
+	//   .attr("text-anchor", "middle")
+	  .text(function(d) { return d.name; })
+	  .style("text-anchor", "end")
+		.attr("dx", "-1.8em")
+		.attr("dy", "2.6em")
+		.attr("transform", "rotate(-65)")
+		.style("font-size","10px")
+
+  // Declare the links…
+  var link = svg.selectAll("path.link")
+	  .data(links, function(d) { return d.target.id; });
+
+  // Enter the links.
+  link.enter().insert("path", "g")
+	  .attr("class", "link")
+	  .attr("d", diagonal);
+
+}
+
+
+
+
+
+let reversemap = new Map()
+
+let filename1 = "badyears_drought_ethiopia_compiled_clean_forms"
+const url = window.location.origin + '/';
+
+GetSummary(filename1,['region','district','village','sid'], 'year')
+	.then((data)=>{
+		var treeData = [
+		{
+			"name": "Ethiopia",
+			"children": [
+			// {
+			// 	"name": "Level 2: A",
+			// 	"children": [
+			// 	{
+			// 		"name": "Son of A",
+			// 	},
+			// 	{
+			// 		"name": "Daughter of A",
+			// 	}
+			// 	,
+			// 	{
+			// 		"name": "Daughter of A",
+			// 	}
+			// 	,
+			// 	{
+			// 		"name": "Daughter of A",
+			// 	}
+				
+			// 	]
+			// },
+			// {
+			// 	"name": "Level 2: B",
+			// }
+			]
+		}
+		];
+
+		let key = Object.keys(data)[0]
+		let value = data[key]
+		let keys =  Object.keys(data)[0].split("'")
+		let regionName = key.split("'")[1]
+		let districtName = key.split("'")[3]
+		let villageName = key.split("'")[5]
+
+		treeData[0]["children"].push(new Map)
+		let region = treeData[0]["children"][treeData[0]["children"].length - 1]
+		region["name"] = regionName
+		region["children"] = new Array()
+		
+		region["children"].push(new Map)
+		let district = region["children"][region["children"].length - 1]
+		district["name"] = districtName
+		district["children"] = new Array()
+		
+		district["children"].push(new Map)
+		let village = district["children"][district["children"].length - 1]
+		village["name"] = villageName
+		village["children"] = new Array()
+		
+		
+		value["('sid', 'unique')"].forEach((sidName)=>{
+			village["children"].push(new Map)
+			let sid = village["children"][village["children"].length - 1]
+			sid["sid"] = sidName
+			reversemap[sidName] = sid
+		})
+		
+		for(let i = 0; i < Object.keys(data).length; i++){
+			let key = Object.keys(data)[i]
+			let value = data[key]
+			let regionName = key.split("'")[1]
+			let districtName = key.split("'")[3]
+			let villageName = key.split("'")[5]
+
+			let invalid = false
+
+			if(region["name"] != regionName){
+				treeData[0]["children"].push(new Map)
+				region = treeData[0]["children"][treeData[0]["children"].length - 1]
+				region["name"] = regionName
+				region["children"] = new Array()
+				
+				invalid = true
+			}
+
+			if(invalid || district["name"] != districtName){
+				region["children"].push(new Map)
+				district = region["children"][region["children"].length - 1]
+				district["name"] = districtName
+				district["children"] = new Array()
+
+				invalid = true
+			}
+
+			if(invalid || village["name"] != villageName){
+				district["children"].push(new Map)
+				village = district["children"][district["children"].length - 1]
+				village["name"] = villageName
+				village["children"] = new Array()
+
+				invalid = true
+			}
+
+			value["('sid', 'unique')"].forEach((sidName)=>{
+				village["children"].push(new Map)
+				let sid = village["children"][village["children"].length - 1]
+				sid["sid"] = sidName
+				reversemap[sidName] = sid
+			})
+
+
+		}
+
+		fetch(url + "api/getrec").then(function(response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Could not reach the API: " + response.statusText);
+            }
+        }).then(function(data) {
+			// console.log(data)
+			
+			data.forEach((submission)=>{
+
+				let sidName = submission["other"]["sid"]
+				let name = submission["other"]["name"]
+				let sid = reversemap[sidName]
+				sid["Name"] = name
+			})
+			root = treeData[0];
+			update(root);
+            return data
+        })
+
+
+		
+	})
+
+
+
+function GetSummary(filename,hiearchy,category) {
+    var x, text;
+    // Get the value of the input field with id="numb"
+    const data = {
+        'filename': filename,
+        'hiearchy': hiearchy,
+        'category': category
+    };
+    const other_params = {
+        headers : { "content-type" : "application/json; charset=UTF-8" },
+        body : JSON.stringify(data),
+        method : "POST",
+        mode : "cors"
+    };
+
+    return fetch(url + "api/summary2", other_params)
+        .then(function(response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error("Could not reach the API: " + response.statusText);
+            }
+        }).then(function(data) {
+            // console.log(data)
+            obj = JSON.parse(data)
+            // console.log(obj)
+            return obj
+        })
+}
+
+</script>
+	
+  </body>
+</html>

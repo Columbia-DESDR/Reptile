@@ -32,6 +32,9 @@ app.config["DEBUG"] = True
 #      'published': '1975'}
 # ]
 
+@app.route('/viewrec', methods=['GET'])
+def view_rec():
+    return  app.send_static_file('filled.html')
 
 @app.route('/com', methods=['GET'])
 def com():
@@ -97,6 +100,9 @@ def get_rec():
     resp = Response(js, status=200, mimetype='application/json')
     return resp
 
+
+
+
 @app.route('/api/getlog', methods=['GET'])
 def get_log():
     js = json.dumps(logs)
@@ -156,6 +162,34 @@ def api_summary():
         resp = Response(status=400)
         return resp
 
+@app.route('/api/summary2', methods=['POST'])
+def api_summary2():
+    try:
+        # print(request.json)
+        filename = request.json['filename']
+        hiearchy = request.json['hiearchy']
+        if 'category' in request.json:
+            category = request.json['category']
+        else:
+            category = None
+        # print((tuple(filename), tuple(hiearchy)))
+        # data_cache[(filename, tuple(hiearchy))] = 'hi'
+        if (filename, tuple(hiearchy),category) in data_cache:
+            # print("Cached!")
+            d = data_cache[(filename, tuple(hiearchy),category)]
+        else:
+            d = readcsv.HierachyData(filename,hiearchy)
+            if not category is None:
+                d.categorize_attribute(category)
+            data_cache[(filename, tuple(hiearchy),category)] = d
+        js = json.dumps(d.get_summary2())
+        # print(js)
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+    except Exception as e:
+        print(e)
+        resp = Response(status=400)
+        return resp
 
 
 @app.route('/api/unique', methods=['POST'])

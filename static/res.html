@@ -1630,6 +1630,8 @@ class Explanation{
     }
     clear(){
         this.svg.selectAll("div").remove()
+        this.svg.selectAll("select").remove()
+        this.svg.selectAll("input").remove()
     }
     addDetail(data, explanable){
         // console.log(d)
@@ -1637,13 +1639,16 @@ class Explanation{
         let s  = this.svg
 
         let callerClass = this;
-        if(explanable){
+        if(callerClass.allowComplaint){
             let shelf_group = s.append("div")
-                                .text("To make complaints, click on the aggregation value.")
+                                .text("To make complaints, click on \"too small\" or \"too large\".")
                                 .style("color","red")
         }
 
         if(Object.entries(data)[0][0] == 'sid'){
+            let shelf_group = s.append("div")
+                                .text("Please fill in your name and click on \"submit\" after filling in the form.")
+                                .style("color","red")
             let sidData  = LocalData.getData("sid")
             sidData = sidData.filter(sidData => sidData['sid'] == data['sid'])
             let worstMap = new Map();
@@ -1656,7 +1661,7 @@ class Explanation{
             
             console.log(sidData)
 
-            let shelf_group = s.append("div")
+            shelf_group = s.append("div")
                                 .classed('shelf-group',true)
                                 
             let shelf = shelf_group.append("div")
@@ -1855,7 +1860,7 @@ class Explanation{
                 if(callerClass.allowComplaint && agg.includes(attribute[0]) && explanable){
                     let content = shelf_group.append("div")
                                         .classed('content',true)
-                                        .classed('hidden',true)          
+                                        // .classed('hidden',true)          
 
                     let comp_shelf = content.append("div")
                                             .classed('shelf',true)
@@ -1891,16 +1896,16 @@ class Explanation{
                                     showComp(getLevel(data))
                                 })
 
-                    shelf.classed("collapsible",true)
-                        .on("click", function(){
-                            if(shelf.classed('active')){
-                                shelf.classed('active',false)
-                                content.style("display", "none")
-                            }else{
-                                shelf.classed('active',true)
-                                content.style("display", "block")
-                            }
-                        })
+                    // shelf.classed("collapsible",true)
+                    //     .on("click", function(){
+                    //         if(shelf.classed('active')){
+                    //             shelf.classed('active',false)
+                    //             content.style("display", "none")
+                    //         }else{
+                    //             shelf.classed('active',true)
+                    //             content.style("display", "block")
+                    //         }
+                    //     })
                 }
                 shelf.append("div")
                     .classed('shelf-label',true) 
@@ -2338,6 +2343,15 @@ function submitRec(sidvalue){
         "name":d3.select("#worstname").property("value"),
         "comment":d3.select("#worstcomment").property("value"),
 
+    }
+    if(result["name"] == "your name"){
+        alert("Please enter your name!")
+        return
+    }
+
+    if(result["q4"] == false){
+        alert("Please click on the checkbox to verify that \"I have reviewed the bad years reported for this village to the best of my knowledge and approve their use for index design.\"!")
+        return
     }
     // let q1 = confirm("Were the bad years reported for this village similar to other neighboring villages in the woreda?")
     // let q2 = confirm("Do you have any reason to believe that some of the bad years reported for this village are erroneous? (e.g. some of the bad years reported were flood years)")

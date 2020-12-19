@@ -32,7 +32,7 @@ def readLog():
         except Exception as e:
             print(e)
             continue
-    print(arr)
+    # print(arr)
     return arr
 
 def readsub():
@@ -47,7 +47,7 @@ def readsub():
         except Exception as e:
             print(e)
             continue
-    print(arr)
+    # print(arr)
     return arr
 
 class HierachyData():
@@ -66,6 +66,10 @@ class HierachyData():
         DataStore  = self.data.copy()
         self.data = self.data.set_index(hiearchy)
         self.hiearchy = hiearchy
+
+    def get_summary2(self):
+        self.summary = self.data.reset_index()[self.hiearchy[0:4]].groupby(self.hiearchy[0:3]).agg(['unique']).to_json(orient='index')
+        return self.summary
 
     def get_summary(self):
         self.summary = self.data.reset_index()[self.hiearchy[0:2]].groupby(self.hiearchy[0]).agg(['unique']).to_json(orient='index')
