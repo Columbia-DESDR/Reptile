@@ -40,6 +40,10 @@ def view_rec():
 def com():
     return  app.send_static_file('res.html')
 
+@app.route('/comzambia', methods=['GET'])
+def comzambia():
+    return  app.send_static_file('res_zambia.html')
+
 @app.route('/', methods=['GET'])
 def home():
     return  app.send_static_file('heatmap.html')
