@@ -22,6 +22,11 @@ def writeLog(typ, time, data):
     cursor.execute("INSERT INTO  clean_log (id, type, time, data ) VALUES(DEFAULT,%s, %s, %s)", (typ, time, data)) 
     con.commit()
 
+def writeLogzambia(typ, time, data):
+    cursor = con.cursor()
+    cursor.execute("INSERT INTO  clean_log_zambia (id, type, time, data ) VALUES(DEFAULT,%s, %s, %s)", (typ, time, data)) 
+    con.commit()    
+
 def readLog():
     df = pd.read_sql("select * from clean_log", con) 
     arr = []
@@ -50,11 +55,26 @@ def readsub():
     # print(arr)
     return arr
 
+def readsub2():
+    df = pd.read_sql("select * from clean_log_zambia", con) 
+    arr = []
+    for index, row in df.iterrows():
+        if(row['type']!= 'submission'):
+            continue
+        try:
+            # print(row['data'])
+            arr.append(json.loads(row['data']))
+        except Exception as e:
+            print(e)
+            continue
+    # print(arr)
+    return arr
+
 class HierachyData():
     # filename is the file to be read 
     # hiearchy is a list of hiearchy attributes in descending order
     def __init__(self, filename, hiearchy):
-        if(filename.startswith("./")):
+        if(filename.startswith("./") or filename.startswith("/")):
             self.data = pd.read_csv(filename)
         else:
             self.data = pd.read_sql("select * from " + filename, con)
@@ -88,7 +108,7 @@ class HierachyData():
     # get data given hierchy_values
     def get_data2(self,set_values):
         result = None
-        print(set_values)
+        
         for value in set_values:
             try:
                 if(result is None):
@@ -97,8 +117,9 @@ class HierachyData():
                     result = result.append(self.data.loc[value])
             except: 
                 pass
-        result["rank"] = result.groupby("Village")["value"].rank(ascending=True,method='first')
+        result["rank"] = result.groupby("District")["value"].rank(ascending=True,method='first')
         # result.groupby(categorical[0]).rank(ascending=False,method='first') 
+        print(result)
         return result.reset_index().to_json(orient='records')  
 
 
@@ -155,15 +176,18 @@ class HierachyData():
         # print(each)
         # if sid, also include cause
         print(categorical)
-        
-        if(categorical[0] == 'sid'):
-            each = each.reset_index()
-            # print(each)
-            # print(self.data.reset_index()[["sid", "cause"]])
-            each = each.merge(self.data.reset_index()[["sid","year", "cause"]])
-            print(each)
 
-            return each
+        try:
+            if(categorical[0] == 'sid'):
+                each = each.reset_index()
+                # print(each)
+                # print(self.data.reset_index()[["sid", "cause"]])
+                each = each.merge(self.data.reset_index()[["sid","year", "cause"]])
+                print(each)
+
+                return each
+        except:
+            pass
         
         return each.reset_index()
 
@@ -247,6 +271,8 @@ class HierachyData():
 def getRegionExplanation(region, year, aggOriginal, complained_agg, com_too_small):
     RegionData = DataStore.copy()
     aggs = ["count","std","mean"]
+
+    # this gets region district mapping lost
     RegionData["year"] = pd.Categorical(RegionData["year"] ) 
     RegionData["region"] = pd.Categorical(RegionData["region"] ) 
     RegionData["district"] = pd.Categorical(RegionData["district"] ) 
@@ -258,6 +284,11 @@ def getRegionExplanation(region, year, aggOriginal, complained_agg, com_too_smal
     explanations = []
     
     selected = aggg.loc[(region,year)]
+    # print("++++++++++++++++++")
+    # print(region)
+    # print(aggg)
+    # print("++++++++++++++++++")
+    # print(selected)
     pmean = selected["mean"].mean()
     pstd = selected["std"].mean()
     pcount = selected["count"].mean()
@@ -268,20 +299,20 @@ def getRegionExplanation(region, year, aggOriginal, complained_agg, com_too_smal
         for agg in aggs:
             aggOld[agg] = row[agg]
         aggNew= {'mean': pmean, 'std': pstd, 'count': pcount}
-
+        print(index)
         # introuce a mean 0 with count doesn't help
         if(not com_too_small and complained_agg == 'mean' and aggOld['count'] == 0 and (aggNew['count'] < 1 or aggNew['mean'] < 1 )):
             continue
         print(aggOld)
         print(aggNew)
         aggAfterRepair = add(remove(aggOriginal,aggOld),aggNew)
-        
+        print(aggOriginal)
         print(aggAfterRepair)
         if((com_too_small and aggAfterRepair[complained_agg] > aggOriginal[complained_agg] + 0.01) or
          (not com_too_small and aggAfterRepair[complained_agg] < aggOriginal[complained_agg] - 0.01)) :
             
             explanation = {}
-            print(row)
+            # print(row)
             explanation["district"] = row.name
             explanation["year"] = year
             explanation["aggNew"] = aggNew

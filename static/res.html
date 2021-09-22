@@ -1747,6 +1747,23 @@ class Explanation{
                             .attr("id", "worstname")
 
             shelf_group = s.append("div")
+                .classed('shelf-group',true)
+
+            shelf = shelf_group.append("div")
+                                .classed('shelf',true) 
+            
+            shelf.append("div")
+                 .classed('shelf-label',true) 
+                 .text('password')
+            
+            select = shelf.append("div")
+                            .classed('field-drop',true)
+                            .append("input")
+                            .classed('placeholder',true)
+                            .attr("value","password")
+                            .attr("id", "password")
+
+            shelf_group = s.append("div")
                             .classed('shelf-group',true)
                                 
             shelf = shelf_group.append("div")
@@ -2361,6 +2378,13 @@ function submitRec(sidvalue){
     // result["q2"] = q2
     // result["q3"] = q3
     // result["q4"] = q4
+
+    if(d3.select("#password").property("value") != "R4Zambia"){
+        alert("Wrong password!")
+        return
+    }
+
+    
     SendRec(result).then(()=>{
         alert("We have received your submission!")
         SendSub(result)

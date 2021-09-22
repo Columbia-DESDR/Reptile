@@ -79,14 +79,25 @@
 // ];
 
 // ************** Generate the tree diagram	 *****************
-var margin = {top: 40, right: 120, bottom: 20, left: 120},
-	width = 3960 - margin.right - margin.left,
+var margin = {top: 40, right: 220, bottom: 20, left: 4020},
+	width = 8960 - margin.right - margin.left,
 	height = 3500 - margin.top - margin.bottom;
 	
 var i = 0;
 
+var nodeWidth = 5;
+var nodeHeight = 75;
+var horizontalSeparationBetweenNodes = 5;
+var verticalSeparationBetweenNodes = 128;
+
 var tree = d3.layout.tree()
-	.size([height, width]);
+    .nodeSize([nodeWidth + horizontalSeparationBetweenNodes, nodeHeight + verticalSeparationBetweenNodes])
+    .separation(function(a, b) {
+        return a.parent == b.parent ? 1 : 1.25;
+    });
+
+// var tree = d3.layout.tree()
+// 	.size([height, 6000]);
 
 var diagonal = d3.svg.diagonal()
 	.projection(function(d) { return [d.x, d.y]; });
@@ -158,7 +169,7 @@ function update(source) {
 
   nodeEnter.append("text")
 	  .attr("y", function(d) { 
-		  return d.children || d._children ? -18 : 18; })
+		  return d.children || d._children ? -18 : -18; })
 	  .attr("dy", ".35em")
 	//   .attr("text-anchor", "middle")
 	  .text(function(d) { return d.name; })
@@ -185,38 +196,16 @@ function update(source) {
 
 let reversemap = new Map()
 
-let filename1 = "badyears_drought_ethiopia_compiled_clean_forms"
+let filename1 = "badyears_drought_zambia_visit_aug2020_form"
 const url = window.location.origin + '/';
 
-GetSummary(filename1,['region','district','village','sid'], 'year')
+GetSummary(filename1,['province','district','camp','_index'], 'year')
 	.then((data)=>{
+		
 		var treeData = [
 		{
-			"name": "Ethiopia",
+			"name": "Zambia",
 			"children": [
-			// {
-			// 	"name": "Level 2: A",
-			// 	"children": [
-			// 	{
-			// 		"name": "Son of A",
-			// 	},
-			// 	{
-			// 		"name": "Daughter of A",
-			// 	}
-			// 	,
-			// 	{
-			// 		"name": "Daughter of A",
-			// 	}
-			// 	,
-			// 	{
-			// 		"name": "Daughter of A",
-			// 	}
-				
-			// 	]
-			// },
-			// {
-			// 	"name": "Level 2: B",
-			// }
 			]
 		}
 		];
@@ -224,9 +213,9 @@ GetSummary(filename1,['region','district','village','sid'], 'year')
 		let key = Object.keys(data)[0]
 		let value = data[key]
 		let keys =  Object.keys(data)[0].split("'")
+		
 		let regionName = key.split("'")[1]
 		let districtName = key.split("'")[3]
-		let villageName = key.split("'")[5]
 
 		treeData[0]["children"].push(new Map)
 		let region = treeData[0]["children"][treeData[0]["children"].length - 1]
@@ -237,26 +226,23 @@ GetSummary(filename1,['region','district','village','sid'], 'year')
 		let district = region["children"][region["children"].length - 1]
 		district["name"] = districtName
 		district["children"] = new Array()
+		reversemap[districtName] = district
 		
-		district["children"].push(new Map)
-		let village = district["children"][district["children"].length - 1]
-		village["name"] = villageName
-		village["children"] = new Array()
-		
-		
-		value["('sid', 'unique')"].forEach((sidName)=>{
-			village["children"].push(new Map)
-			let sid = village["children"][village["children"].length - 1]
-			sid["sid"] = sidName
-			reversemap[sidName] = sid
-		})
-		
-		for(let i = 0; i < Object.keys(data).length; i++){
+		for(let i = 1; i < Object.keys(data).length; i++){
+			
 			let key = Object.keys(data)[i]
+			key[0] = '['
+			key[-1] = ']'
+			key.replace('\'', '\"')
+			// console.log(key)
 			let value = data[key]
+			let keysplits = key.split("'")
 			let regionName = key.split("'")[1]
-			let districtName = key.split("'")[3]
-			let villageName = key.split("'")[5]
+			// if(key.split("'")[3] == districtName){
+			// 	continue;
+			// }
+			districtName = key.split("'")[3]
+			let villageName = keysplits[keysplits.length - 2]
 
 			let invalid = false
 
@@ -265,39 +251,36 @@ GetSummary(filename1,['region','district','village','sid'], 'year')
 				region = treeData[0]["children"][treeData[0]["children"].length - 1]
 				region["name"] = regionName
 				region["children"] = new Array()
-				
+
 				invalid = true
 			}
 
+	
 			if(invalid || district["name"] != districtName){
 				region["children"].push(new Map)
 				district = region["children"][region["children"].length - 1]
 				district["name"] = districtName
-				district["children"] = new Array()
+				reversemap[districtName] = district
+				
+				if(! ("children" in district)){
+					
+					district["children"] = new Array()
+				}
 
 				invalid = true
 			}
 
-			if(invalid || village["name"] != villageName){
-				district["children"].push(new Map)
-				village = district["children"][district["children"].length - 1]
-				village["name"] = villageName
-				village["children"] = new Array()
 
-				invalid = true
-			}
-
-			value["('sid', 'unique')"].forEach((sidName)=>{
-				village["children"].push(new Map)
-				let sid = village["children"][village["children"].length - 1]
-				sid["sid"] = sidName
-				reversemap[sidName] = sid
-			})
-
+			district["children"].push(new Map)
+			village = district["children"][district["children"].length - 1]
+			village["name"] = villageName
+			
 
 		}
 
-		fetch(url + "api/getrec").then(function(response) {
+
+		
+		fetch(url + "api/getrec2").then(function(response) {
             if (response.ok) {
                 return response.json();
             } else {
@@ -309,7 +292,9 @@ GetSummary(filename1,['region','district','village','sid'], 'year')
 			data.forEach((submission)=>{
 
 				let sidName = submission["other"]["sid"]
+				// console.log(sidName)
 				let name = submission["other"]["name"]
+				// console.log(reversemap)
 				let sid = reversemap[sidName]
 				sid["Name"] = name
 			})

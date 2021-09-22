@@ -1,0 +1,8 @@
+first enter virtual env
+.\Scripts\activate
+Then set flask env
+set FLASK_ENV=development
+set FLASK_APP=app.py
+Then run
+flask run
+open index.html to see how API works

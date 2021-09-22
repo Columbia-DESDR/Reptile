@@ -36,6 +36,10 @@ app.config["DEBUG"] = True
 def view_rec():
     return  app.send_static_file('filled.html')
 
+@app.route('/viewrec2', methods=['GET'])
+def view_rec2():
+    return  app.send_static_file('filled2.html')
+
 @app.route('/com', methods=['GET'])
 def com():
     return  app.send_static_file('res.html')
@@ -104,7 +108,12 @@ def get_rec():
     resp = Response(js, status=200, mimetype='application/json')
     return resp
 
-
+@app.route('/api/getrec2', methods=['GET'])
+def get_rec2():
+    arr = readcsv.readsub2()
+    js = json.dumps(arr)
+    resp = Response(js, status=200, mimetype='application/json')
+    return resp
 
 
 @app.route('/api/getlog', methods=['GET'])
@@ -301,29 +310,30 @@ def api_data():
 
 @app.route('/api/data2', methods=['POST'])
 def api_data2():
-    try:
-        filename = request.json['filename']
-        hiearchy = request.json['hiearchy']
-        hierchy_values = request.json['hierchy_values']
-        if 'category' in request.json:
-            category = request.json['category']
-        else:
-            category = None
-        if (filename, tuple(hiearchy),category) in data_cache:
-            d = data_cache[(filename, tuple(hiearchy),category)]
-        else:
-            d = readcsv.HierachyData(filename,hiearchy)
-            if not category is None:
-                d.categorize_attribute(category)
-            data_cache[(filename, tuple(hiearchy),category)] = d
-        result = d.get_data2(hierchy_values)
-        js = json.dumps(result)
-        resp = Response(js, status=200, mimetype='application/json')
-        return resp
-    except Exception as e:
-        print(e)
-        resp = Response(status=400)
-        return resp
+    # try:
+    filename = request.json['filename']
+    hiearchy = request.json['hiearchy']
+    hierchy_values = request.json['hierchy_values']
+    if 'category' in request.json:
+        category = request.json['category']
+    else:
+        category = None
+    if (filename, tuple(hiearchy),category) in data_cache:
+        d = data_cache[(filename, tuple(hiearchy),category)]
+    else:
+        d = readcsv.HierachyData(filename,hiearchy)
+        if not category is None:
+            d.categorize_attribute(category)
+        data_cache[(filename, tuple(hiearchy),category)] = d
+    result = d.get_data2(hierchy_values)
+    # print(result)
+    js = json.dumps(result)
+    resp = Response(js, status=200, mimetype='application/json')
+    return resp
+    # except Exception as e:
+    #     print(e)
+    #     resp = Response(status=400)
+    #     return resp
 
 explanations = [
     {'name': 'explan', 'type': 'radio', 'display': 'The rank is wrong', 'value': "0"},
@@ -510,7 +520,6 @@ def api_load():
 @app.route('/api/sub', methods=['POST'])
 def api_sub():
 
-
     rec = request.json
     
     rec['type'] = 'submission'
@@ -523,6 +532,20 @@ def api_sub():
     resp = Response(js, status=200, mimetype='application/json')
     return resp
  
+@app.route('/api/subzambia', methods=['POST'])
+def api_subzambia():
+
+    rec = request.json
+    
+    rec['type'] = 'submission'
+    print(rec)
+    readcsv.writeLogzambia("submission", rec['time'],json.dumps(rec))
+    data =  "good"
+    # print(data)
+    js = json.dumps(data)
+    # # print(js)
+    resp = Response(js, status=200, mimetype='application/json')
+    return resp
 
 # just to get around Cors
 @app.after_request
