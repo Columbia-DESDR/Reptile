@@ -9,9 +9,8 @@ tasks:
       export FLASK_DEBUG=1
       export FLASK_ENV=development
       pip install -r requirements.txt
-      flask init-db
-  - command: |
       flask run
+      
 
 vscode:
   extensions:
