@@ -2,73 +2,23 @@ import pandas as pd
 import numpy as np  
 from queue import PriorityQueue
 import json
-import statsmodels.api as sm
-import statsmodels.formula.api as smf
-
-try:
-    import psycopg2
-    con = psycopg2.connect(host = 'pgdb12.iri.columbia.edu',
-        database = 'DesignEngine',
-        user = 'fist',
-        password = 'MonellIRI')
-except:
-    pass
 
 DataStore = None
-# dataFrame = pd.read_sql("select * from bad1years_drought_ethiopia_compiled_forms", con)
 
 def writeLog(typ, time, data):
-    cursor = con.cursor()
-    cursor.execute("INSERT INTO  clean_log (id, type, time, data ) VALUES(DEFAULT,%s, %s, %s)", (typ, time, data)) 
-    con.commit()
+    pass
 
 def writeLogzambia(typ, time, data):
-    cursor = con.cursor()
-    cursor.execute("INSERT INTO  clean_log_zambia (id, type, time, data ) VALUES(DEFAULT,%s, %s, %s)", (typ, time, data)) 
-    con.commit()    
+    pass
 
 def readLog():
-    df = pd.read_sql("select * from clean_log", con) 
-    arr = []
-    for index, row in df.iterrows():
-        try:
-            # print(row['data'])
-            arr.append(json.loads(row['data']))
-        except Exception as e:
-            print(e)
-            continue
-    # print(arr)
-    return arr
+    pass
 
 def readsub():
-    df = pd.read_sql("select * from clean_log", con) 
-    arr = []
-    for index, row in df.iterrows():
-        if(row['type']!= 'submission'):
-            continue
-        try:
-            # print(row['data'])
-            arr.append(json.loads(row['data']))
-        except Exception as e:
-            print(e)
-            continue
-    # print(arr)
-    return arr
+    pass
 
 def readsub2():
-    df = pd.read_sql("select * from clean_log_zambia", con) 
-    arr = []
-    for index, row in df.iterrows():
-        if(row['type']!= 'submission'):
-            continue
-        try:
-            # print(row['data'])
-            arr.append(json.loads(row['data']))
-        except Exception as e:
-            print(e)
-            continue
-    # print(arr)
-    return arr
+    pass
 
 class HierachyData():
     # filename is the file to be read 
