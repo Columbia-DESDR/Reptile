@@ -31,7 +31,6 @@ class HierachyData():
         for attr in hiearchy:
             if attr not in self.data.columns:
                 self.data[attr] = ""
-        print(self.data)
         global DataStore
         DataStore  = self.data.copy()
         self.data = self.data.set_index(hiearchy)
@@ -69,7 +68,6 @@ class HierachyData():
                 pass
         result["rank"] = result.groupby("District")["value"].rank(ascending=True,method='first')
         # result.groupby(categorical[0]).rank(ascending=False,method='first') 
-        print(result)
         return result.reset_index().to_json(orient='records')  
 
 
@@ -94,7 +92,6 @@ class HierachyData():
         agg = agg.groupby(categorical[-1])[numerical].agg(aggregation)
         agg = agg.replace(np.nan, 0)
    
-        # print(agg)
         agg.columns = ['mean','std','count']
         agg[categorical[0]] = 'total'
         # agg["rank"]  = (agg["mean"]*agg["count"]).rank(ascending=True)
@@ -104,11 +101,9 @@ class HierachyData():
         else:
             each = self.data.loc[tuple(hierchy_values)]
         each = each.groupby(categorical)[numerical].agg(aggregation)
-        # print(each)
         each.columns = ['mean','std','count']
         each = each.replace(np.nan, 0)
         each["rank"]  = (each["mean"]*each["count"]).groupby(categorical[0]).rank(ascending=False,method='first') 
-        # print(each)
         return pd.concat([agg.reset_index(),each.reset_index()])
 
     def get_heatmap(self,hierchy_values,categorical,numerical,aggragation):
@@ -119,22 +114,14 @@ class HierachyData():
         else:
             each = self.data.loc[tuple(hierchy_values)]
         each = each.groupby(categorical)[numerical].agg(aggregation)
-        # print(each)
         each.columns = ['mean','std','count']
         each = each.replace(np.nan, 0)
         each["rank"]  = (each["mean"]*each["count"]).groupby(categorical[0]).rank(ascending=False,method='first') 
-        # print(each)
-        # if sid, also include cause
-        print(categorical)
 
         try:
             if(categorical[0] == 'sid'):
                 each = each.reset_index()
-                # print(each)
-                # print(self.data.reset_index()[["sid", "cause"]])
                 each = each.merge(self.data.reset_index()[["sid","year", "cause"]])
-                print(each)
-
                 return each
         except:
             pass
@@ -146,30 +133,24 @@ class HierachyData():
         #              .groupby(categorical)[numerical].agg(aggragation).reset_index().to_json(orient='records')   
         aggregation = ['mean','std','count']
         each = self.data.loc[tuple(hierchy_values)].groupby(categorical).agg(aggregation)
-        # print(each)
         each.columns = ['mean','std','count']
         each["rank"]  = (each["mean"]/each["count"]).groupby(categorical[0]).rank(ascending=True) 
-        # print(each)
         return each.reset_index()
     
     def complaint(self,hierchy_values,categorical,numerical,aggragation,year,de_mean):
         df_all = self.get_heatmap_withoutagg(hierchy_values,categorical,numerical,aggragation)
-        # print(df_all)
         df_all = df_all.replace(np.nan, 0)
-        # print(df_all)
         all_mean = df_all['mean'].median()
         all_count = df_all['count'].median() 
         df = df_all[df_all.year == year]
         year_mean = df['mean'].median()
         year_count = df['count'].median()
-        # print(df)
         total_count = df['count'].sum()
         total = (df['count']*df['mean']).sum()
         cur_mean = total/total_count
         q = PriorityQueue()
         cur_dif = abs(de_mean - cur_mean)
-        # print(cur_mean)
-        # print(df.size)
+
         for i in range(df.shape[0]):
             
             geo = df[categorical[0]].iloc[i]
@@ -201,7 +182,6 @@ class HierachyData():
             if(cur_dif > abs(de_mean - new_mean)):
                 q.put((abs(de_mean - new_mean),geo, est_mean ,est_count))
 
-            # print(geo,count,mean,est_mean,est_count,new_mean )
         result = []
         top = 4
         while not q.empty() and (top > 0):
@@ -234,11 +214,6 @@ def getRegionExplanation(region, year, aggOriginal, complained_agg, com_too_smal
     explanations = []
     
     selected = aggg.loc[(region,year)]
-    # print("++++++++++++++++++")
-    # print(region)
-    # print(aggg)
-    # print("++++++++++++++++++")
-    # print(selected)
     pmean = selected["mean"].mean()
     pstd = selected["std"].mean()
     pcount = selected["count"].mean()
@@ -249,20 +224,14 @@ def getRegionExplanation(region, year, aggOriginal, complained_agg, com_too_smal
         for agg in aggs:
             aggOld[agg] = row[agg]
         aggNew= {'mean': pmean, 'std': pstd, 'count': pcount}
-        print(index)
         # introuce a mean 0 with count doesn't help
         if(not com_too_small and complained_agg == 'mean' and aggOld['count'] == 0 and (aggNew['count'] < 1 or aggNew['mean'] < 1 )):
             continue
-        print(aggOld)
-        print(aggNew)
         aggAfterRepair = add(remove(aggOriginal,aggOld),aggNew)
-        print(aggOriginal)
-        print(aggAfterRepair)
         if((com_too_small and aggAfterRepair[complained_agg] > aggOriginal[complained_agg] + 0.01) or
          (not com_too_small and aggAfterRepair[complained_agg] < aggOriginal[complained_agg] - 0.01)) :
             
             explanation = {}
-            # print(row)
             explanation["district"] = row.name
             explanation["year"] = year
             explanation["aggNew"] = aggNew
@@ -368,32 +337,3 @@ def remove(agg1, agg2):
     agg3["std"] = var**(0.5)
     return agg3
 
-# d = HierachyData("./db/heatmap_data_lineage.csv",['Region','District','Village','_index'])
-# d.categorize_attribute('year')
-# print(d.get_heatmap_data(['Tigray','Medebay-Zana','Adibearj'],['_index','year'],['rank'],'mean'))
-# print(d.get_heatmap_data(['Amhara'],['_index','year'],['rank'],'mean'))
-
-# print(d.get_summary())
-
-# import readcsv
-
-# d = HierachyData("./db/heatmap_data_lineage.csv",['Region','District','Village','_index'])
-# d.categorize_attribute('year')
-# q = d.complaint(["Amhara"],["District", "year"],['rank'],'mean',1983,2)
-# print(q)
-# d.get_heatmap_withoutagg(["Tigray", "Medebay-Zana"],[ "Village", "year"],['rank'],'mean')
-
-# d = HierachyData("./db/intitiate_cleaned2.csv",['Region','District','Village','_index'])
-# df = pd.read_csv("./db/intitiate_cleaned2.csv")
-# print(d.get_data(['Tigray','Medebay-Zana','Adibearj']))
-
-# d = HierachyData("./db/enactsmean.csv",['year','gid'])
-# print(d.get_data([1997]))
-
-# df = HierachyData("./db/enactsr.csv",['Region','District'])  
-# df.categorize_attribute('year') 
-
-# df.get_heatmap_data(['Amhara'],['District','year'],['rank'],'mean')
-
-# d = HierachyData("db/0-SubregionYearRanksEarlyARC.csv",['Village'])
-# print(d.get_data2(['AbaBikila','Ziha']))  

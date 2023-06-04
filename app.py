@@ -1,71 +1,19 @@
 import flask
-from flask import request, jsonify, Response, json, render_template
+from flask import request, Response, json
 import db
-import os
 import readcsv
-import getExplanation
 import json
 
-
 df = None
+
 
 app = flask.Flask(__name__,static_url_path='')
 app.config["DEBUG"] = True
 
 
-@app.route('/viewrec', methods=['GET'])
-def view_rec():
-    return  app.send_static_file('filled.html')
-
-@app.route('/viewrec2', methods=['GET'])
-def view_rec2():
-    return  app.send_static_file('filled2.html')
-
-@app.route('/com', methods=['GET'])
+@app.route('/', methods=['GET'])
 def com():
     return  app.send_static_file('res.html')
-
-@app.route('/comzambia', methods=['GET'])
-def comzambia():
-    return  app.send_static_file('res_zambia.html')
-
-@app.route('/', methods=['GET'])
-def home():
-    return  app.send_static_file('heatmap.html')
-
-@app.route('/gambia', methods=['GET'])
-def gam():
-    return  app.send_static_file('heatmap gambia.html')
-
-@app.route('/malawi', methods=['GET'])
-def mala():
-    return  app.send_static_file('heatmap malawi.html')
-
-@app.route('/rec', methods=['GET'])
-def rec():
-    return  app.send_static_file('heatmap copy 4.html')
-
-@app.route('/map', methods=['GET'])
-def map():
-    return  app.send_static_file('map.html')
-
-@app.route('/satellite', methods=['GET'])
-def sate():
-    return  app.send_static_file('heatmap copy.html')
-
-@app.route('/satellite2', methods=['GET'])
-def sate2():
-    return  app.send_static_file('heatmap copy 2.html')
-
-
-@app.route('/satellite3', methods=['GET'])
-def sate3():
-    return  app.send_static_file('heatmap copy 3.html')
-
-
-@app.route('/recmega', methods=['GET'])
-def recmega():
-    return  app.send_static_file('heatmap mega.html')
 
 # A route to return all of the available entries in our catalog.
 @app.route('/api/zones', methods=['GET'])
@@ -112,24 +60,17 @@ def get_load():
 
 @app.route('/api/db', methods=['POST'])
 def api_db():
-    try:
-        df = db.query_db(request.json['sql'])
-        js = json.dumps(df.dtypes.to_json())
-        print(df)
-        print(js)
-        # print(js)
-        resp = Response(js, status=200, mimetype='application/json')
-        return resp
-    except Exception as e:
-        resp = Response(status=400)
-        
-        return resp
-
+    df = db.query_db(request.json['sql'])
+    js = json.dumps(df.dtypes.to_json())
+    print(df)
+    print(js)
+    # print(js)
+    resp = Response(js, status=200, mimetype='application/json')
+    return resp
 data_cache = dict()
  
 @app.route('/api/summary', methods=['POST'])
 def api_summary():
-    # try:
     print(request.json)
     filename = request.json['filename']
     hiearchy = request.json['hiearchy']
@@ -151,75 +92,61 @@ def api_summary():
     # print(js)
     resp = Response(js, status=200, mimetype='application/json')
     return resp
-    # except Exception as e:
-    #     print(e)
-    #     resp = Response(status=400)
-    #     return resp
 
 @app.route('/api/summary2', methods=['POST'])
 def api_summary2():
-    try:
-        # print(request.json)
-        filename = request.json['filename']
-        hiearchy = request.json['hiearchy']
-        if 'category' in request.json:
-            category = request.json['category']
-        else:
-            category = None
-        # print((tuple(filename), tuple(hiearchy)))
-        # data_cache[(filename, tuple(hiearchy))] = 'hi'
-        if (filename, tuple(hiearchy),category) in data_cache:
-            # print("Cached!")
-            d = data_cache[(filename, tuple(hiearchy),category)]
-        else:
-            d = readcsv.HierachyData(filename,hiearchy)
-            if not category is None:
-                d.categorize_attribute(category)
-            data_cache[(filename, tuple(hiearchy),category)] = d
-        js = json.dumps(d.get_summary2())
-        # print(js)
-        resp = Response(js, status=200, mimetype='application/json')
-        return resp
-    except Exception as e:
-        print(e)
-        resp = Response(status=400)
-        return resp
+    # print(request.json)
+    filename = request.json['filename']
+    hiearchy = request.json['hiearchy']
+    if 'category' in request.json:
+        category = request.json['category']
+    else:
+        category = None
+    # print((tuple(filename), tuple(hiearchy)))
+    # data_cache[(filename, tuple(hiearchy))] = 'hi'
+    if (filename, tuple(hiearchy),category) in data_cache:
+        # print("Cached!")
+        d = data_cache[(filename, tuple(hiearchy),category)]
+    else:
+        d = readcsv.HierachyData(filename,hiearchy)
+        if not category is None:
+            d.categorize_attribute(category)
+        data_cache[(filename, tuple(hiearchy),category)] = d
+    js = json.dumps(d.get_summary2())
+    # print(js)
+    resp = Response(js, status=200, mimetype='application/json')
+    return resp
 
 
 @app.route('/api/unique', methods=['POST'])
 def api_unique():
-    try:
-        # print(request.json)
-        filename = request.json['filename']
-        hiearchy = request.json['hiearchy']
-        hierchy_values = request.json['hierchy_values']
-        if 'category' in request.json:
-            category = request.json['category']
-        else:
-            category = None
-        # print((tuple(filename), tuple(hiearchy)))
-        # data_cache[(filename, tuple(hiearchy))] = 'hi'
-        if (filename, tuple(hiearchy),category) in data_cache:
-            # print("Cached!")
-            d = data_cache[(filename, tuple(hiearchy),category)]
-        else:
-            d = readcsv.HierachyData(filename,hiearchy)
-            if not category is None:
-                d.categorize_attribute(category)
-            data_cache[(filename, tuple(hiearchy),category)] = d
-        # print(d.get_unique(hierchy_values))
-        js = json.dumps(d.get_unique(hierchy_values))
-        # print(js)
-        resp = Response(js, status=200, mimetype='application/json')
-        return resp
-    except Exception as e:
-        print(e)
-        resp = Response(status=400)
-        return resp
+    # print(request.json)
+    filename = request.json['filename']
+    hiearchy = request.json['hiearchy']
+    hierchy_values = request.json['hierchy_values']
+    if 'category' in request.json:
+        category = request.json['category']
+    else:
+        category = None
+    # print((tuple(filename), tuple(hiearchy)))
+    # data_cache[(filename, tuple(hiearchy))] = 'hi'
+    if (filename, tuple(hiearchy),category) in data_cache:
+        # print("Cached!")
+        d = data_cache[(filename, tuple(hiearchy),category)]
+    else:
+        d = readcsv.HierachyData(filename,hiearchy)
+        if not category is None:
+            d.categorize_attribute(category)
+        data_cache[(filename, tuple(hiearchy),category)] = d
+    # print(d.get_unique(hierchy_values))
+    js = json.dumps(d.get_unique(hierchy_values))
+    # print(js)
+    resp = Response(js, status=200, mimetype='application/json')
+    return resp
+
 
 @app.route('/api/heatmapdata', methods=['POST'])
 def api_heatmapdata():
-    # try:
     rec = request.json
     rec['type'] = 'drilldown'
     loads.append(rec)
@@ -250,47 +177,36 @@ def api_heatmapdata():
     # print(js)
     resp = Response(js, status=200, mimetype='application/json')
     return resp
-    # except Exception as e:
-    #     print(e)
-    #     resp = Response(status=400)
-    #     return resp
 
 @app.route('/api/data', methods=['POST'])
 def api_data():
-    try:
-        filename = request.json['filename']
-        hiearchy = request.json['hiearchy']
-        hierchy_values = request.json['hierchy_values']
-        if 'category' in request.json:
-            category = request.json['category']
-        else:
-            category = None
-        # print((tuple(filename), tuple(hiearchy)))
-        # data_cache[(filename, tuple(hiearchy))] = 'hi'
-        if (filename, tuple(hiearchy),category) in data_cache:
-            # print("Cached!")
-            d = data_cache[(filename, tuple(hiearchy),category)]
-        else:
-            d = readcsv.HierachyData(filename,hiearchy)
-            if not category is None:
-                d.categorize_attribute(category)
-            data_cache[(filename, tuple(hiearchy),category)] = d
-        result = d.get_data(hierchy_values)
-        # print(result)
-        # print(d.get_heatmap_data(['Tigray','Emba-Alaje'],['Village','year'],['rank'],'mean'))
-        js = json.dumps(result)
-        # print(js)
-        resp = Response(js, status=200, mimetype='application/json')
-        return resp
-    except Exception as e:
-        print(e)
-        resp = Response(status=400)
-        return resp
-
+    filename = request.json['filename']
+    hiearchy = request.json['hiearchy']
+    hierchy_values = request.json['hierchy_values']
+    if 'category' in request.json:
+        category = request.json['category']
+    else:
+        category = None
+    # print((tuple(filename), tuple(hiearchy)))
+    # data_cache[(filename, tuple(hiearchy))] = 'hi'
+    if (filename, tuple(hiearchy),category) in data_cache:
+        # print("Cached!")
+        d = data_cache[(filename, tuple(hiearchy),category)]
+    else:
+        d = readcsv.HierachyData(filename,hiearchy)
+        if not category is None:
+            d.categorize_attribute(category)
+        data_cache[(filename, tuple(hiearchy),category)] = d
+    result = d.get_data(hierchy_values)
+    # print(result)
+    # print(d.get_heatmap_data(['Tigray','Emba-Alaje'],['Village','year'],['rank'],'mean'))
+    js = json.dumps(result)
+    # print(js)
+    resp = Response(js, status=200, mimetype='application/json')
+    return resp
 
 @app.route('/api/data2', methods=['POST'])
 def api_data2():
-    # try:
     filename = request.json['filename']
     hiearchy = request.json['hiearchy']
     hierchy_values = request.json['hierchy_values']
@@ -310,10 +226,6 @@ def api_data2():
     js = json.dumps(result)
     resp = Response(js, status=200, mimetype='application/json')
     return resp
-    # except Exception as e:
-    #     print(e)
-    #     resp = Response(status=400)
-    #     return resp
 
 explanations = [
     {'name': 'explan', 'type': 'radio', 'display': 'The rank is wrong', 'value': "0"},
@@ -396,103 +308,61 @@ def api_explan2():
 
 @app.route('/api/sol', methods=['POST'])
 def api_sol():
-    try:
-        print(request.json)
-        filename = request.json['visual']['filename']
-        hiearchy = request.json['visual']['hiearchy']
-        hierchy_values = request.json['visual']['hierchy_values']
-        categorical = request.json['visual']['categorical']
-        numerical = request.json['visual']['numerical']
-        aggragation = request.json['visual']['aggragation']
-        if 'category' in request.json['visual']:
-            category = request.json['visual']['category']
-        else:
-            category = None
-        if (filename, tuple(hiearchy),category) in data_cache:
-            # print("Cached!")
-            d = data_cache[(filename, tuple(hiearchy),category)]
-        else:
-            d = readcsv.HierachyData(filename,hiearchy)
-            if not category is None:
-                d.categorize_attribute(category)
-            data_cache[(filename, tuple(hiearchy),category)] = d
-        year = request.json['des']['year']
-        de_mean = request.json['des']['mean']
-        
-        data =  d.complaint(hierchy_values,categorical,numerical,aggragation,year,de_mean)
-        # print(data)
-        js = json.dumps(data)
-        # # print(js)
-        resp = Response(js, status=200, mimetype='application/json')
-        return resp
-    except Exception as e:
-        print(e)
-        resp = Response(status=400)
-        return resp
+    print(request.json)
+    filename = request.json['visual']['filename']
+    hiearchy = request.json['visual']['hiearchy']
+    hierchy_values = request.json['visual']['hierchy_values']
+    categorical = request.json['visual']['categorical']
+    numerical = request.json['visual']['numerical']
+    aggragation = request.json['visual']['aggragation']
+    if 'category' in request.json['visual']:
+        category = request.json['visual']['category']
+    else:
+        category = None
+    if (filename, tuple(hiearchy),category) in data_cache:
+        # print("Cached!")
+        d = data_cache[(filename, tuple(hiearchy),category)]
+    else:
+        d = readcsv.HierachyData(filename,hiearchy)
+        if not category is None:
+            d.categorize_attribute(category)
+        data_cache[(filename, tuple(hiearchy),category)] = d
+    year = request.json['des']['year']
+    de_mean = request.json['des']['mean']
+    
+    data =  d.complaint(hierchy_values,categorical,numerical,aggragation,year,de_mean)
+    # print(data)
+    js = json.dumps(data)
+    # # print(js)
+    resp = Response(js, status=200, mimetype='application/json')
+    return resp
 
 
 
 @app.route('/api/rec', methods=['POST'])
 def api_rec():
-    try:
-        
-        rec = request.json
-        # rec['filename'] = request.json['visual']['filename']
-        # rec['hiearchy'] = request.json['visual']['hiearchy']
-        # rec['hierchy_values'] = request.json['visual']['hierchy_values']
-        # rec['curr_value'] = request.json['comp'][request.json['visual']['categorical'][0]]
-        recs.append(rec)
-        # filename = request.json['visual']['filename']
-        # hiearchy = request.json['visual']['hiearchy']
-        # hierchy_values = request.json['visual']['hierchy_values']
-        # categorical = request.json['visual']['categorical']
-        # numerical = request.json['visual']['numerical']
-        # aggragation = request.json['visual']['aggragation']
-        # if 'category' in request.json['visual']:
-        #     category = request.json['visual']['category']
-        # else:
-        #     category = None
-        # if (filename, tuple(hiearchy),category) in data_cache:
-        #     # print("Cached!")
-        #     d = data_cache[(filename, tuple(hiearchy),category)]
-        # else:
-        #     d = readcsv.HierachyData(filename,hiearchy)
-        #     if not category is None:
-        #         d.categorize_attribute(category)
-        #     data_cache[(filename, tuple(hiearchy),category)] = d
-        # year = request.json['des']['year']
-        # de_mean = request.json['des']['mean']
-        
-        data =  "good"
-        # print(data)
-        js = json.dumps(data)
-        # # print(js)
-        resp = Response(js, status=200, mimetype='application/json')
-        return resp
-    except Exception as e:
-        print(e)
-        resp = Response(status=400)
-        return resp
+    rec = request.json
+    recs.append(rec)
+    
+    data =  "good"
+    # print(data)
+    js = json.dumps(data)
+    # # print(js)
+    resp = Response(js, status=200, mimetype='application/json')
+    return resp
 
 @app.route('/api/load', methods=['POST'])
 def api_load():
-    try:
-        
-        rec = request.json
-        rec['type'] = 'load'
-        loads.append(rec)
-        
-        data =  "good"
-        # print(data)
-        js = json.dumps(data)
-        # # print(js)
-        resp = Response(js, status=200, mimetype='application/json')
-        return resp
-    except Exception as e:
-        print(e)
-        resp = Response(status=400)
-        return resp
-
+    rec = request.json
+    rec['type'] = 'load'
+    loads.append(rec)
+    
+    data =  "good"
+    # print(data)
+    js = json.dumps(data)
+    # # print(js)
+    resp = Response(js, status=200, mimetype='application/json')
+    return resp
 
 @app.route('/api/sub', methods=['POST'])
 def api_sub():
