@@ -1,4 +1,4 @@
-# FIST
+# Reptile
 
 ## Dependencies
 python3.6
