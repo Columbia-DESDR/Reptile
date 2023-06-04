@@ -11,7 +11,7 @@ tasks:
       pip install -r requirements.txt
       flask init-db
   - command: |
-      flask run
+      python app.py
 
 vscode:
   extensions:
