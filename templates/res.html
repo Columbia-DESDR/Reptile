@@ -1042,7 +1042,7 @@
             let x_column = [...new Set(data.map(d => d[this.schema.categorical[0]]))].sort()
 
             // generate all the years (hard coded)
-            let y_column = Array.from({ length: 36 }, (x, i) => i + 1983)
+            let y_column = Array.from({ length: {{length}} }, (x, i) => i + {{start}})
 
             // generate color according to option
             let Color = d3.scaleLinear()
@@ -1220,7 +1220,7 @@
             let x_column = [...new Set(data.map(d => d[this.schema.categorical[0]]))].sort()
 
             // generate all the years (hard coded)
-            let y_column = Array.from({ length: 36 }, (x, i) => i + 1983)
+            let y_column = Array.from({ length: {{length}} }, (x, i) => i + {{start}})
 
 
             let minRank = data[0].value;
@@ -1273,7 +1273,7 @@
 
         process(data) {
             // generate all the years (hard coded)
-            let y_column = Array.from({ length: 36 }, (x, i) => i + 1983)
+            let y_column = Array.from({ length: {{length}} }, (x, i) => i + {{start}})
 
             //for the legend
             let key = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -1316,7 +1316,7 @@
             s.select("#y_axis").remove()
             s.append("g")
                 .attr("id", "y_axis")
-                .call(d3.axisLeft(y).ticks(36).tickFormat(d3.format("d")));
+                .call(d3.axisLeft(y).ticks({{length}}).tickFormat(d3.format("d")));
 
             s.append("text")
                 .attr("transform",
@@ -1434,7 +1434,7 @@
 
         process(data) {
             // generate all the years (hard coded)
-            let y_column = Array.from({ length: 36 }, (x, i) => i + 1983)
+            let y_column = Array.from({ length: {{length}} }, (x, i) => i + {{start}})
 
             //for the legend
             let key = [1, 2, 3, 4, 5, 6, 7, 8]
@@ -1635,7 +1635,7 @@
                         .attr("id", "worst" + i)
 
 
-                    let years = Array.from({ length: 36 }, (x, i) => i + 1983)
+                    let years = Array.from({ length: {{length}} }, (x, i) => i + {{start}})
                     years.unshift("missing")
                     let options = select.selectAll("option")
                     options.remove()
@@ -2163,7 +2163,7 @@
 
     function submitRec(sidvalue) {
         result = {
-            "sid": {{fourth_level_name}}value,
+            "sid": sidvalue,
             "w1": d3.select("#worst1").property("value"),
             "w2": d3.select("#worst2").property("value"),
             "w3": d3.select("#worst3").property("value"),

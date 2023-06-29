@@ -6,6 +6,7 @@ import json
 DataStore = None
 
 def writeLog(typ, time, data):
+    print(typ, time, data)
     pass
 
 def writeLogzambia(typ, time, data):

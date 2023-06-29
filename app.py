@@ -27,6 +27,9 @@ fourth_level_name = "survey_id"
 time_name = "year"
 numerical_name = "rank"
 comment_name = "comments"
+start = 1983
+end = 2018
+length = end - start + 1
 
 
 @app.route('/', methods=['GET'])
@@ -38,7 +41,9 @@ def com():
                            fourth_level_name=fourth_level_name, 
                            time_name=time_name, 
                            numerical_name=numerical_name,
-                           comment_name=comment_name)
+                           comment_name=comment_name,
+                           start=start,
+                           length=length)
 
 # A route to return all of the available entries in our catalog.
 
@@ -390,11 +395,10 @@ def api_sol():
 def api_rec():
     rec = request.json
     recs.append(rec)
+    print(rec)
 
     data = "good"
-    # print(data)
     js = json.dumps(data)
-    # # print(js)
     resp = Response(js, status=200, mimetype='application/json')
     return resp
 
