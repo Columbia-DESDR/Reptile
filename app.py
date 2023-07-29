@@ -192,6 +192,8 @@ def api_heatmapdata():
     rec['type'] = 'drilldown'
     loads.append(rec)
 
+    print(request.json)
+
     filename = request.json['filename']
     hiearchy = request.json['hiearchy']
     hierchy_values = request.json['hierchy_values']
@@ -250,9 +252,11 @@ def api_data():
 
 @app.route('/api/data2', methods=['POST'])
 def api_data2():
+    print(request.json)
     filename = request.json['filename']
     hiearchy = request.json['hiearchy']
     hierchy_values = request.json['hierchy_values']
+
     if 'category' in request.json:
         category = request.json['category']
     else:
