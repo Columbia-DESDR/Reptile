@@ -1740,16 +1740,26 @@
                     .style("color", "red")
                 // let sidData = LocalData.getData("{{fourth_level_name}}")
                 let level_name = second_level_name
-                let sidData = LocalData.getData(level_name)
-                sidData = sidData.filter(sidData => sidData[level_name] == data[level_name])
+                let level_data = LocalData.getData(level_name)
+                level_data = level_data.filter(sidData => sidData[level_name] == data[level_name])
                 let worstMap = new Map();
                 let causeMap = new Map()
-                Object.entries(sidData).forEach(function (sidD) {
+                
+                Object.entries(level_data).forEach(function (sidD) {
+                    // compue the sum based on mean * count
+                    sidD[1]['sum'] = sidD[1]['mean'] * sidD[1]['count']
                     if (sidD[1]['mean'] != 0) {
                         worstMap[9 - sidD[1]['mean']] = sidD[1]['year']
                         // causeMap[9 - sidD[1]['mean']] = sidD[1][comment_name]
                     }
                 })
+
+                // sort the level_data based on sum
+                level_data.sort(function (a, b) {
+                    return b['sum'] - a['sum']
+                })
+
+                console.log(level_data)
 
                 shelf_group = s.append("div")
                     .classed('shelf-group', true)
@@ -1768,57 +1778,98 @@
                     .text(data[level_name])
                     // .text(data[fourth_level_name].substring(0, 8) + "...")
 
-                for (let i = 1; i <= 8; i++) {
-                    let shelf_group = s.append("div")
-                        .classed('shelf-group', true)
+                // for each level_data
+                for (let i = 0; i < level_data.length; i++) {
+                    // get the Year and Sum
+                    let year = level_data[i]['year']
+                    let sum = level_data[i]['sum']
+
+                    shelf_group = s.append("div")
+                    .classed('shelf-group', true)
 
                     let shelf = shelf_group.append("div")
                         .classed('shelf', true)
 
                     shelf.append("div")
                         .classed('shelf-label', true)
-                        .text(i == 1 ? "1st" : (i == 2 ? "2nd" : (i == 3 ? "3rd" : i + "th")))
+                        .text(year)
 
                     let select = shelf.append("div")
                         .classed('field-drop', true)
-                        .append("select")
+                        .append("span")
                         .classed('placeholder', true)
-                        .style('height', "20px")
-                        .style("width", "120px")
-                        .attr("id", "worst" + i)
+                        .text(sum)
 
+                    shelf_group = s.append("div")
+                    .classed('shelf-group', true)
 
-                    let years = Array.from({ length: {{length}} }, (x, i) => i + {{start}})
-                    years.unshift("missing")
-                    let options = select.selectAll("option")
-                    options.remove()
-                    options.data(years).enter().append("option")
-                        .attr("value", function (d) { return d; })
-                        .text(function (d) { return d; })
-                        .property("selected", function (d) {
-                            return d == worstMap[i];
-                        })
+                    shelf = shelf_group.append("div")
+                        .classed('shelf', true)
 
-                    console.log(causeMap)
-                    if (i in causeMap) {
-                        let content = shelf_group.append("div")
-                            .classed('content', true)
+                    shelf.append("div")
+                        .classed('shelf-label', true)
+                        .text("feedback")
 
-
-                        let comp_shelf = content.append("div")
-                            .classed('shelf', true)
-                            .classed('comp-shelf', true)
-                            .style("height", "40px")
-
-                        comp_shelf.append("span")
-                            .classed('placeholder', true)
-                            .text(causeMap[i])
-                            .style("overflow-y", "scroll")
-                            .style("width", "140px")
-                    }
-
-
+                    select = shelf.append("div")
+                        .classed('field-drop', true)
+                        .append("input")
+                        .classed('placeholder', true)
+                        .attr("value", "your feedback")
+                        .attr("id", year + "feedback")
                 }
+                
+
+                // for (let i = 1; i <= 8; i++) {
+                //     let shelf_group = s.append("div")
+                //         .classed('shelf-group', true)
+
+                //     let shelf = shelf_group.append("div")
+                //         .classed('shelf', true)
+
+                //     shelf.append("div")
+                //         .classed('shelf-label', true)
+                //         .text(i == 1 ? "1st" : (i == 2 ? "2nd" : (i == 3 ? "3rd" : i + "th")))
+
+                //     let select = shelf.append("div")
+                //         .classed('field-drop', true)
+                //         .append("select")
+                //         .classed('placeholder', true)
+                //         .style('height', "20px")
+                //         .style("width", "120px")
+                //         .attr("id", "worst" + i)
+
+
+                //     let years = Array.from({ length: {{length}} }, (x, i) => i + {{start}})
+                //     years.unshift("missing")
+                //     let options = select.selectAll("option")
+                //     options.remove()
+                //     options.data(years).enter().append("option")
+                //         .attr("value", function (d) { return d; })
+                //         .text(function (d) { return d; })
+                //         .property("selected", function (d) {
+                //             return d == worstMap[i];
+                //         })
+
+                //     // console.log(causeMap)
+                //     if (i in causeMap) {
+                //         let content = shelf_group.append("div")
+                //             .classed('content', true)
+
+
+                //         let comp_shelf = content.append("div")
+                //             .classed('shelf', true)
+                //             .classed('comp-shelf', true)
+                //             .style("height", "40px")
+
+                //         comp_shelf.append("span")
+                //             .classed('placeholder', true)
+                //             .text(causeMap[i])
+                //             .style("overflow-y", "scroll")
+                //             .style("width", "140px")
+                //     }
+
+
+                // }
 
                 shelf_group = s.append("div")
                     .classed('shelf-group', true)
@@ -1906,37 +1957,37 @@
 
 
 
-                shelf_group = s.append("div")
-                    .text("How helpful is this complaint-explanation framework to find meaningful problems?")
+                // shelf_group = s.append("div")
+                //     .text("How helpful is this complaint-explanation framework to find meaningful problems?")
 
-                select = s.append("select")
-                    .attr("id", "q5")
-                select.append("option")
-                    .text("5 (very helpful)")
-                select.append("option")
-                    .text("4")
-                select.append("option")
-                    .text("3")
-                select.append("option")
-                    .text("2")
-                select.append("option")
-                    .text("1 (very unhelpful)")
+                // select = s.append("select")
+                //     .attr("id", "q5")
+                // select.append("option")
+                //     .text("5 (very helpful)")
+                // select.append("option")
+                //     .text("4")
+                // select.append("option")
+                //     .text("3")
+                // select.append("option")
+                //     .text("2")
+                // select.append("option")
+                //     .text("1 (very unhelpful)")
 
-                shelf_group = s.append("div")
-                    .text("How helpful is this complaint-explanation framework to find problems faster?")
+                // shelf_group = s.append("div")
+                //     .text("How helpful is this complaint-explanation framework to find problems faster?")
 
-                select = s.append("select")
-                    .attr("id", "q6")
-                select.append("option")
-                    .text("5 (very helpful)")
-                select.append("option")
-                    .text("4")
-                select.append("option")
-                    .text("3")
-                select.append("option")
-                    .text("2")
-                select.append("option")
-                    .text("1 (very unhelpful)")
+                // select = s.append("select")
+                //     .attr("id", "q6")
+                // select.append("option")
+                //     .text("5 (very helpful)")
+                // select.append("option")
+                //     .text("4")
+                // select.append("option")
+                //     .text("3")
+                // select.append("option")
+                //     .text("2")
+                // select.append("option")
+                //     .text("1 (very unhelpful)")
 
                 shelf_group = s.append("div")
                     .text("I have reviewed the bad years reported for this village to the best of my knowledge and approve their use for index design.")
