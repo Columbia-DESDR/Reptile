@@ -1459,7 +1459,7 @@
             let y = d3.scaleLinear()
                 .range([height, 0])
                 // hard code this part for year we need some padding
-                .domain([1982.5, 2018.5])
+                .domain([1989.5, 2023.5])
             // .domain(spec.encoding.y.range)
 
             s.select("#y_axis").remove()
@@ -1815,7 +1815,7 @@
                         .append("input")
                         .classed('placeholder', true)
                         .attr("value", "your feedback")
-                        .attr("id", year + "feedback")
+                        .attr("id", "feedback"+year)
                 }
                 
 
@@ -2000,9 +2000,18 @@
                 // select.append("option")
                 //       .text("no")
 
-
-
-
+                s.append("div")
+                    .classed('shelf-group', true)
+                    .style("width", "40%")
+                    .append("div")
+                    .classed('shelf', true)
+                    .classed('submit', true)
+                    .append("span")
+                    .style("margin", "auto")
+                    .text("Submit")
+                    .on('click', function () {
+                        submitRec(data[level_name])
+                    })
             }
             if (this.allowdrillDown) {
                 // can also use data enter
@@ -2044,20 +2053,6 @@
                     .text("Drill down")
                     .on('click', function () {
                         callerClass.drillDown(Object.entries(data)[0])
-                    })
-            } else {
-
-                s.append("div")
-                    .classed('shelf-group', true)
-                    .style("width", "40%")
-                    .append("div")
-                    .classed('shelf', true)
-                    .classed('submit', true)
-                    .append("span")
-                    .style("margin", "auto")
-                    .text("Submit")
-                    .on('click', function () {
-                        submitRec(data[fourth_level_name])
                     })
             }
 
@@ -2438,26 +2433,74 @@
 
 
     function submitRec(sidvalue) {
+        console.log("submit")
+        // result = {
+        //     "sid": sidvalue,
+        //     "w1": d3.select("#worst1").property("value"),
+        //     "w2": d3.select("#worst2").property("value"),
+        //     "w3": d3.select("#worst3").property("value"),
+        //     "w4": d3.select("#worst4").property("value"),
+        //     "w5": d3.select("#worst5").property("value"),
+        //     "w6": d3.select("#worst6").property("value"),
+        //     "w7": d3.select("#worst7").property("value"),
+        //     "w8": d3.select("#worst8").property("value"),
+        //     "q1": d3.select("#q1").property("value"),
+        //     "q2": d3.select("#q2").property("value"),
+        //     "q3": d3.select("#q3").property("value"),
+        //     "q4": d3.select("#q4").property("checked"),
+        //     "q5": d3.select("#q5").property("value"),
+        //     "q6": d3.select("#q6").property("value"),
+        //     "name": d3.select("#worstname").property("value"),
+        //     "comment": d3.select("#worstcomment").property("value"),
+
+        // }
+
         result = {
             "sid": sidvalue,
-            "w1": d3.select("#worst1").property("value"),
-            "w2": d3.select("#worst2").property("value"),
-            "w3": d3.select("#worst3").property("value"),
-            "w4": d3.select("#worst4").property("value"),
-            "w5": d3.select("#worst5").property("value"),
-            "w6": d3.select("#worst6").property("value"),
-            "w7": d3.select("#worst7").property("value"),
-            "w8": d3.select("#worst8").property("value"),
+            "1990feedback": d3.select("#feedback1990").property("value"),
+            "1992feedback": d3.select("#feedback1992").property("value"),
+            "1993feedback": d3.select("#feedback1993").property("value"),
+            "1994feedback": d3.select("#feedback1994").property("value"),
+            "1995feedback": d3.select("#feedback1995").property("value"),
+            "1996feedback": d3.select("#feedback1996").property("value"),
+            "1997feedback": d3.select("#feedback1997").property("value"),
+            "1998feedback": d3.select("#feedback1998").property("value"),
+            "1999feedback": d3.select("#feedback1999").property("value"),
+            "2000feedback": d3.select("#feedback2000").property("value"),
+            "2001feedback": d3.select("#feedback2001").property("value"),
+            "2002feedback": d3.select("#feedback2002").property("value"),
+            "2003feedback": d3.select("#feedback2003").property("value"),
+            "2004feedback": d3.select("#feedback2004").property("value"),
+            "2005feedback": d3.select("#feedback2005").property("value"),
+            "2006feedback": d3.select("#feedback2006").property("value"),
+            "2007feedback": d3.select("#feedback2007").property("value"),
+            "2008feedback": d3.select("#feedback2008").property("value"),
+            "2009feedback": d3.select("#feedback2009").property("value"),
+            "2010feedback": d3.select("#feedback2010").property("value"),
+            "2011feedback": d3.select("#feedback2011").property("value"),
+            "2012feedback": d3.select("#feedback2012").property("value"),
+            "2013feedback": d3.select("#feedback2013").property("value"),
+            "2014feedback": d3.select("#feedback2014").property("value"),
+            "2015feedback": d3.select("#feedback2015").property("value"),
+            "2016feedback": d3.select("#feedback2016").property("value"),
+            "2017feedback": d3.select("#feedback2017").property("value"),
+            "2018feedback": d3.select("#feedback2018").property("value"),
+            "2019feedback": d3.select("#feedback2019").property("value"),
+            "2020feedback": d3.select("#feedback2020").property("value"),
+            "2021feedback": d3.select("#feedback2021").property("value"),
+            "2022feedback": d3.select("#feedback2022").property("value"),
+            "2023feedback": d3.select("#feedback2023").property("value"),
+
             "q1": d3.select("#q1").property("value"),
             "q2": d3.select("#q2").property("value"),
             "q3": d3.select("#q3").property("value"),
             "q4": d3.select("#q4").property("checked"),
-            "q5": d3.select("#q5").property("value"),
-            "q6": d3.select("#q6").property("value"),
             "name": d3.select("#worstname").property("value"),
             "comment": d3.select("#worstcomment").property("value"),
-
         }
+
+
+        
         if (result["name"] == "your name") {
             alert("Please enter your name!")
             return
@@ -2476,15 +2519,9 @@
         // result["q3"] = q3
         // result["q4"] = q4
 
-        if (d3.select("#password").property("value") != "R4Zambia") {
-            alert("Wrong password!")
-            return
-        }
-
 
         SendRec(result).then(() => {
             alert("We have received your submission!")
-            SendSub(result)
         })
 
 

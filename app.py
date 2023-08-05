@@ -1,8 +1,11 @@
 import flask
-from flask import request, Response, json, render_template
+from flask import request, Response, json, render_template,send_file
 import db
 import readcsv
 import json
+import pandas as pd
+from io import StringIO
+
 
 df = None
 app = flask.Flask(__name__, static_url_path='')
@@ -27,8 +30,8 @@ fourth_level_name = "survey_id"
 time_name = "year"
 numerical_name = "rank"
 comment_name = "comments"
-start = 1983
-end = 2018
+start = 1990
+end = 2023
 length = end - start + 1
 
 
@@ -398,8 +401,9 @@ def api_sol():
 @app.route('/api/rec', methods=['POST'])
 def api_rec():
     rec = request.json
-    recs.append(rec)
+
     print(rec)
+    db.insert_data(rec['data'])
 
     data = "good"
     js = json.dumps(data)
@@ -427,13 +431,33 @@ def api_sub():
     rec = request.json
 
     rec['type'] = 'submission'
-    print(rec)
+    
+
     data = "good"
-    # print(data)
     js = json.dumps(data)
     # # print(js)
     resp = Response(js, status=200, mimetype='application/json')
     return resp
+
+
+@app.route('/api/download', methods=['GET'])
+def download():
+    
+    df = db.read_data()
+    
+    # Create an in-memory text stream
+    str_io = StringIO()
+    df.to_csv(str_io)
+
+    # Seek to start so the content can be read from the beginning
+    str_io.seek(0)
+
+    return Response(
+        str_io.getvalue(),
+        mimetype='text/csv',
+        headers={
+            "Content-disposition": 
+                 "attachment; filename=feedback.csv"})
 
 
 @app.route('/api/subzambia', methods=['POST'])
