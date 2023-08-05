@@ -2,10 +2,11 @@ import duckdb
 import pandas as pd
 import sys
 
-# Initialize DuckDB
-conn = duckdb.connect('./db/feedback.db')
+
 
 try:
+    # Initialize DuckDB
+    conn = duckdb.connect('./db/feedback.db')
     # Create a table
     conn.execute("""
     CREATE TABLE feedback (
@@ -51,11 +52,13 @@ try:
         comment VARCHAR
     )
     """)
+    conn.close()
 except:
     pass
 
 def insert_data(data):
-
+    
+    conn = duckdb.connect('./db/feedback.db')
     # Manually specify the order of columns in your database
     columns_order = ['sid'] + [f'{year}feedback' for year in range(1990, 2024) if year != 1991] + ['q1', 'q2', 'q3', 'q4', 'name', 'comment']
 
@@ -70,6 +73,10 @@ def insert_data(data):
     # Execute the statement
     conn.execute(sql)
     conn.commit()
+    conn.close()
 
 def read_data():
-    return conn.execute("SELECT * FROM feedback").fetch_df()
+    conn = duckdb.connect('./db/feedback.db')
+    df = conn.execute("SELECT * FROM feedback").fetch_df()
+    conn.close()
+    return df
