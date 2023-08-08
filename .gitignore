@@ -1,3 +1,7 @@
 __pycache__/
 Lib/
 tcl/
+env/*
+
+db/feedback.db
+db/feedback.db.wal
