@@ -9,7 +9,7 @@ from io import StringIO
 
 df = None
 app = flask.Flask(__name__, static_url_path='')
-app.config["DEBUG"] = True
+# app.config["DEBUG"] = True
 
 # config
 # filename = "./db/heatmap_data_lineage.csv"
