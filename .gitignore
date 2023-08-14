@@ -1,7 +1,9 @@
 __pycache__/
 Lib/
 tcl/
-env/*
+/env/
 
-db/feedback.db
-db/feedback.db.wal
+/db/feedback.db
+/db/feedback.db.wal
+/.idea/
+config.py
