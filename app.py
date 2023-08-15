@@ -5,6 +5,7 @@ import readcsv
 import json
 import pandas as pd
 from io import StringIO
+from config import Config
 
 
 df = None
@@ -401,13 +402,16 @@ def api_sol():
 @app.route('/api/rec', methods=['POST'])
 def api_rec():
     rec = request.json
-
-    print(rec)
-    db.insert_data(rec['data'])
-
-    data = "good"
-    js = json.dumps(data)
-    resp = Response(js, status=200, mimetype='application/json')
+    if 'data' in rec and 'password' in rec['data'] and rec['data']['password'] == Config.PASSWORD:
+        print(rec)
+        db.insert_data(rec['data'])
+        data = "good"
+        js = json.dumps(data)
+        resp = Response(js, status=200, mimetype='application/json')
+    else:
+        data = "wrong password"
+        js = json.dumps(data)
+        resp = Response(js, status=401, mimetype='application/json')
     return resp
 
 

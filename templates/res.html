@@ -2497,6 +2497,7 @@
             "q4": d3.select("#q4").property("checked"),
             "name": d3.select("#worstname").property("value"),
             "comment": d3.select("#worstcomment").property("value"),
+            "password": d3.select("#password").property("value"),
         }
 
 
@@ -2544,6 +2545,9 @@
                 if (response.ok) {
                     return response.json();
                 } else {
+                    if (response.status === 401) {
+                        alert('Please check the password!')
+                    }
                     throw new Error("Could not reach the API: " + response.statusText);
                 }
             }).then(function (data) {
