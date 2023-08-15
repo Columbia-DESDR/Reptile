@@ -5,3 +5,4 @@ env/*
 
 db/feedback.db
 db/feedback.db.wal
+config.py

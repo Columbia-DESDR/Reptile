@@ -2,7 +2,7 @@
 <meta charset="utf-8">
 
 <head>
-    <title>Complaint Driven Drill Down</title>
+    <title>Analyse approfondie axée sur les plaintes</title>
     <style>
         html {
             font-family: sans-serif;
@@ -456,7 +456,7 @@
                     <div class="hflex">
                         <div class="pane">
                             <div class="controls">
-                                <h1>Complaint Driven Drill Down</h1>
+                                <h1>Analyse approfondie axée sur les plaintes</h1>
                             </div>
                         </div>
                     </div>
@@ -467,36 +467,31 @@
                 <div class="pane data-pane noselect">
                     <div class="card no-top-margin data-card abs-100  scroll-y" style="color: white;">
                         <h2>Guide</h2>
-                        <b>Data:</b>
+                        <b>Données:</b>
                         <br>
-                        Data contains location hiearchy: {{first_level_name}}, {{second_level_name}}, {{third_level_name}}. <br>
-                        <!-- At submission level, each submission rperesents each tuple inside of database <br> -->
-                        <!-- Originally, the value represents the rank of severity in each village. Only top ten most severe village is recorded. So the rank is from 1 to 10. 1 means most severe and 10 means 10th severe.<br> -->
-                        <!-- Before visualization, the value is transformed by 11 - rank.  -->
-                        For the value of data, 8 means most severe and 1 means 8th severe.<br>
-                        <br>
-                        <b>Exploration:</b> <br>
-                        <!-- You are first presented with the heatmap at the given hiearchy.<br> -->
-                        You can click on any ractangle inside of the heatmap. <br>
-                        The details of selected location will be presented in the scatterplot, barchart and detail
-                        panels. <br>
+                        Cet outil affiche toutes les données de mauvaise année signalées. Pour voir plus de détails (différentes présentations des données)
+                        il suffit de cliquer sur un rectangle dans la heatmap. Une fois choisi, un nuage de points, un histogramme et des panneaux de détails
+                        apparaîtront avec plus d'informations pour le niveau de la province. Pour la valeur des données, 8 signifie le plus grave et 1 signifie le 8e grave.
 
                         <br>
-                        <b>Drill Down:</b> <br>
-                        To drill down the next level of the seleted location, click on "Drill Down" button in the detail
-                        panel. <br>
+                        <br>
+
+                        <b>Drill down/ détails: </b> <br>
+                        S'il y a une anomalie dans les données, en appuyant sur "drill down", l'outil présente les données au niveau du secteur. Ainsi, le validateur
+                        de données peut explorer les données plus en détail pour comprendre pourquoi il peut y avoir des valeurs inattendues.  <br>
 
                         <br>
-                        <b>Complaint:</b> <br>
-                        To make complaints, click on the aggregation value in the detail panel.<br>
-                        Currently, we support two complaint options: too small or too large.<br>
-                        After you make complaint, you can check explanations in the next level section. <br>
+                        <b>Plainte:</b> <br>
+                        C'est au niveau du secteur que les "plaintes" peuvent être soumises pour un examen plus approfondi. Une plainte est déposée en reclassant les pires années du secteur avec des commentaires expliquant cette anomalie perçue.
+                        <br>
+                        Actuellement, nous prenons en charge deux options de plainte : trop petit ou trop grand.
+                        <br>
                         <!-- You can click on explanation, which will highlight the location.<br>
                         Currently, satellite data and data under district level can't be complained. <br> -->
 
                         <br>
                         <b>Contact:</b> <br>
-                        For any problem, contact Zachary Huang zh2408 AT columbia.edu.<br>
+                        Pour tout problème, contactez Zachary Huang zh2408 AT columbia.edu<br>
                     </div>
                 </div>
 
@@ -504,7 +499,7 @@
                     <div class="vis-pane-container abs-100 scroll-y">
                         <div class="alternatives-pane card no-top-margin ng-scope">
                             <div class="alternatives-header">
-                                <h2>Country</h2>
+                                <h2>Pays</h2>
 
                             </div>
                             <div class="alternatives-content ng-scope">
@@ -517,7 +512,8 @@
                                             class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
                                             <div class="vl-plot-group-header no-shrink">
                                                 <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    HeatMap: Mean value at {{first_level_name}} level
+                                                    Carte thermique: valeur moyenne au
+                                                    <br> niveau de la {{first_level_name}}
                                                 </span>
                                             </div>
                                             <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
@@ -532,7 +528,8 @@
                                                 
 
                                                 <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    HeatMap: Mean value at {{first_level_name}} level (satellite)
+                                                    Carte thermique: valeur moyenne au niveau
+                                                    <br>de la {{first_level_name}} (satellite)
                                                 </span>
                                                 <div class="right">
                                                     <select id="CountrySate" class="markselect">
@@ -551,7 +548,8 @@
                                             class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
                                             <div class="vl-plot-group-header no-shrink">
                                                 <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    Scatterplot: Mean and Std of selected {{first_level_name}}
+                                                    Nuage de points: moyenne et écart-type de la
+                                                    <br>{{first_level_name}} sélectionnée
                                                 </span>
                                             </div>
                                             <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
@@ -565,7 +563,8 @@
                                             class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
                                             <div class="vl-plot-group-header no-shrink">
                                                 <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    Bar Chart: Mean and Count of selected {{first_level_name}}
+                                                    Histogramme: moyenne et nombre de la
+                                                    <br> {{first_level_name}} sélectionnée
                                                 </span>
                                             </div>
                                             <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
@@ -579,7 +578,7 @@
                                             class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
                                             <div class="vl-plot-group-header no-shrink">
                                                 <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    Detail
+                                                    Détail
                                                 </span>
                                             </div>
                                             <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
@@ -634,7 +633,7 @@
                                             class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
                                             <div class="vl-plot-group-header no-shrink">
                                                 <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    HeatMap: Mean value at {{second_level_name}} level
+                                                    Carte thermique: valeur moyenne au niveau du {{second_level_name}}
                                                 </span>
                                             </div>
                                             <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
@@ -668,7 +667,7 @@
                                             class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
                                             <div class="vl-plot-group-header no-shrink">
                                                 <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    Scatterplot: Mean and Std of selected {{second_level_name}}
+                                                    Nuage de points: moyenne et écart-type du {{second_level_name}} sélectionné
                                                 </span>
                                             </div>
                                             <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
@@ -682,7 +681,7 @@
                                             class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
                                             <div class="vl-plot-group-header no-shrink">
                                                 <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    Bar Chart: Mean and Count of selected {{second_level_name}}
+                                                    Histogramme: moyenne et nombre du {{second_level_name}} sélectionné
                                                 </span>
                                             </div>
                                             <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
@@ -696,7 +695,7 @@
                                             class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
                                             <div class="vl-plot-group-header no-shrink">
                                                 <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    Detail
+                                                    Détail
                                                 </span>
                                             </div>
                                             <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
@@ -753,7 +752,7 @@
                                             class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
                                             <div class="vl-plot-group-header no-shrink">
                                                 <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    HeatMap: Mean value at {{third_level_name}} level
+                                                    Carte thermique: valeur moyenne au niveau de la {{third_level_name}}
                                                 </span>
                                             </div>
                                             <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
@@ -789,7 +788,7 @@
                                             class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
                                             <div class="vl-plot-group-header no-shrink">
                                                 <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    Scatterplot: Mean and Std of selected {{third_level_name}}
+                                                    Nuage de points: moyenne et écart-type de la {{third_level_name}} sélectionnée
                                                 </span>
                                             </div>
                                             <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
@@ -803,7 +802,7 @@
                                             class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
                                             <div class="vl-plot-group-header no-shrink">
                                                 <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    Bar Chart: Mean and Count of selected {{third_level_name}}
+                                                    Histogramme: moyenne et nombre de la {{third_level_name}} sélectionnée
                                                 </span>
                                             </div>
                                             <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
@@ -817,7 +816,7 @@
                                             class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
                                             <div class="vl-plot-group-header no-shrink">
                                                 <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    Detail
+                                                    Détail
                                                 </span>
                                             </div>
                                             <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
@@ -848,7 +847,7 @@
                                             class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
                                             <div class="vl-plot-group-header no-shrink">
                                                 <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    HeatMap: Mean value at Submission level
+                                                    Carte thermique: valeur moyenne au niveau de la Submission
                                                 </span>
                                             </div>
                                             <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
@@ -862,7 +861,7 @@
                                             class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
                                             <div class="vl-plot-group-header no-shrink">
                                                 <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    Scatterplot: Mean and Std of selected Submission
+                                                    Nuage de points: moyenne et écart-type de la Submission sélectionnée
                                                 </span>
                                             </div>
                                             <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
@@ -876,7 +875,7 @@
                                             class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
                                             <div class="vl-plot-group-header no-shrink">
                                                 <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    Bar Chart: Mean and Count of selected Submission
+                                                    Histogramme: moyenne et nombre de la Submission sélectionnée
                                                 </span>
                                             </div>
                                             <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
@@ -890,7 +889,7 @@
                                             class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
                                             <div class="vl-plot-group-header no-shrink">
                                                 <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    Detail
+                                                    Détail
                                                 </span>
                                             </div>
                                             <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
@@ -1736,7 +1735,7 @@
 
             if (this.allowsurvey) {
                 let shelf_group = s.append("div")
-                    .text("Please fill in your name and click on \"submit\" after filling in the form.")
+                    .text("Veuillez saisir votre nom et cliquer sur \"Submit\" après avoir rempli le formulaire.")
                     .style("color", "red")
                 // let sidData = LocalData.getData("{{fourth_level_name}}")
                 let level_name = second_level_name
@@ -1878,13 +1877,13 @@
 
                 shelf.append("div")
                     .classed('shelf-label', true)
-                    .text('name')
+                    .text('nom')
 
                 select = shelf.append("div")
                     .classed('field-drop', true)
                     .append("input")
                     .classed('placeholder', true)
-                    .attr("value", "your name")
+                    .attr("value", "Votre nom")
                     .attr("id", "worstname")
 
                 shelf_group = s.append("div")
@@ -1895,13 +1894,13 @@
 
                 shelf.append("div")
                     .classed('shelf-label', true)
-                    .text('password')
+                    .text('Mot de passe')
 
                 select = shelf.append("div")
                     .classed('field-drop', true)
                     .append("input")
                     .classed('placeholder', true)
-                    .attr("value", "password")
+                    .attr("value", "Mot de passe")
                     .attr("id", "password")
 
                 shelf_group = s.append("div")
@@ -1912,20 +1911,20 @@
 
                 shelf.append("div")
                     .classed('shelf-label', true)
-                    .text('comment')
+                    .text('Commentaire')
 
                 select = shelf.append("div")
                     .classed('field-drop', true)
                     .append("input")
                     .classed('placeholder', true)
-                    .attr("value", "your comment")
+                    .attr("value", "Votre Commentaire")
                     .attr("id", "worstcomment")
 
 
 
 
                 shelf_group = s.append("div")
-                    .text("Were the bad years reported for this village similar to other neighboring villages in the woreda?")
+                    .text("Les mauvaises années signalées pour ce sector étaient-elles similar à d'autre sectors voisins de la province?")
 
                 select = s.append("select")
                     .attr("id", "q1")
@@ -1935,7 +1934,7 @@
                     .text("no")
 
                 shelf_group = s.append("div")
-                    .text("Do you have any reason to believe that some of the bad years reported for this village are erroneous? (e.g. some of the bad years reported were flood years)")
+                    .text("Avez-vous des raisons de croire que certaines des mauvaises années signalées pour ce secteur sont erronées ? (par exemple, certaines des mauvaises années signalées étaient des années d'inondation)")
 
                 select = s.append("select")
                     .attr("id", "q2")
@@ -1945,7 +1944,7 @@
                     .text("no")
 
                 shelf_group = s.append("div")
-                    .text("Did you submit improvements for this village?")
+                    .text("Avez-vous proposé des améliorations pour ce secteur ?")
 
                 select = s.append("select")
                     .attr("id", "q3")
@@ -1989,7 +1988,7 @@
                 //     .text("1 (very unhelpful)")
 
                 shelf_group = s.append("div")
-                    .text("I have reviewed the bad years reported for this village to the best of my knowledge and approve their use for index design.")
+                    .text("J'ai examiné les mauvaises années signalées pour ce secteur au meilleur de ma connaissance et j'approuve leur utilisation pour la conception de l'index.")
 
                 select = s.append("input")
                     .attr("type", "checkbox")
@@ -2510,14 +2509,6 @@
             alert("Please click on the checkbox to verify that \"I have reviewed the bad years reported for this village to the best of my knowledge and approve their use for index design.\"!")
             return
         }
-        // let q1 = confirm("Were the bad years reported for this village similar to other neighboring villages in the woreda?")
-        // let q2 = confirm("Do you have any reason to believe that some of the bad years reported for this village are erroneous? (e.g. some of the bad years reported were flood years)")
-        // let q3 = confirm("Did you submit improvements for this village?")
-        // let q4 = confirm("I have reviewed the bad years reported for this village to the best of my knowledge and approve their use for index design.")
-        // result["q1"] = q1
-        // result["q2"] = q2
-        // result["q3"] = q3
-        // result["q4"] = q4
 
 
         SendRec(result).then(() => {

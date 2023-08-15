@@ -25,7 +25,7 @@ app = flask.Flask(__name__, static_url_path='')
 
 filename = "./db/DRC_badyears_forzach.csv"
 first_level_name = "province"
-second_level_name = "sector"
+second_level_name = "secteur"
 third_level_name = "village"
 fourth_level_name = "survey_id"
 time_name = "year"
