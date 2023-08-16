@@ -1779,6 +1779,7 @@
                     // .text(data[fourth_level_name].substring(0, 8) + "...")
 
                 // for each level_data
+                let rank = 8
                 for (let i = 0; i < level_data.length; i++) {
                     // get the Year and Sum
                     let year = level_data[i]['year']
@@ -1794,28 +1795,26 @@
                         .classed('shelf-label', true)
                         .text(year)
 
-                    let select = shelf.append("div")
-                        .classed('field-drop', true)
-                        .append("span")
-                        .classed('placeholder', true)
-                        .text(sum)
-
-                    shelf_group = s.append("div")
-                    .classed('shelf-group', true)
-
-                    shelf = shelf_group.append("div")
-                        .classed('shelf', true)
-
-                    shelf.append("div")
-                        .classed('shelf-label', true)
-                        .text("feedback")
-
                     select = shelf.append("div")
                         .classed('field-drop', true)
                         .append("input")
                         .classed('placeholder', true)
-                        .attr("value", "your feedback")
+                        .attr("value", rank)
+                        .attr("type", "number")
+                        .attr("max", 8)
+                        .attr("min", 0)
                         .attr("id", "feedback"+year)
+                        .on("change", function () {
+                            if (d3.event.target.value > 8) {
+                                this.value = 8
+                            } else if (d3.event.target.value < 0) {
+                                this.value = 0
+                            }
+                        })
+
+                    if (rank !== 0) {
+                        rank -= 1
+                    }
                 }
                 
 
