@@ -2500,19 +2500,19 @@
 
 
         
-        if (result["name"] == "your name") {
-            alert("Please enter your name!")
+        if (result["name"] == "Votre nom") {
+            alert("S'il vous plaît entrez votre nom!")
             return
         }
 
         if (result["q4"] == false) {
-            alert("Please click on the checkbox to verify that \"I have reviewed the bad years reported for this village to the best of my knowledge and approve their use for index design.\"!")
+            alert("Veuillez cliquer sur la case à cocher pour vérifier: \"J'ai examiné les mauvaises années signalées pour ce secteur au meilleur de ma connaissance et j'approuve leur utilisation pour la conception de l'index.\"!")
             return
         }
 
 
         SendRec(result).then(() => {
-            alert("We have received your submission!")
+            alert("Nous avons reçu votre soumission!")
         })
 
 
@@ -2536,9 +2536,9 @@
                     return response.json();
                 } else {
                     if (response.status === 401) {
-                        alert('Please check the password!')
+                        alert('Veuillez vérifier le mot de passe!')
                     }
-                    throw new Error("Could not reach the API: " + response.statusText);
+                    throw new Error("Impossible d'accéder à l'API: " + response.statusText);
                 }
             }).then(function (data) {
                 // obj = JSON.parse(data)
