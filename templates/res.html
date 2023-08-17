@@ -1717,7 +1717,9 @@
         }
         highlight(schema, explanable) {
             this.clear()
-            this.addDetail(schema, explanable)
+            if (Object.entries(schema)[0][0] != fourth_level_name) {
+                this.addDetail(schema, explanable)
+            }
             // this.svg.append("p").merge(explanations)
             // this.
         }
