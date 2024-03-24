@@ -1,8 +1,7 @@
-    function myFunc(vars) {
-        // https://stackoverflow.com/questions/37259740/passing-variables-from-flask-to-javascript
-        // hack to pass flask variables to javascript while keeping js in separate file
-        return vars
-    }
+    console.log("FLASK VARIABLES", FLASK_VARIABLES);
+
+    const YEAR_START = FLASK_VARIABLES.start
+    const YEAR_LENGTH = FLASK_VARIABLES.length
 
     // url to this page (and infer server address)
     const url = window.location.origin + '/';
@@ -1348,18 +1347,17 @@
     m1.registerLinks([s1, b1, e1])
     sate1.registerLinks([])
 
-    let filename = "{{filename}}"
-    let first_level_name = "{{first_level_name}}"
-    let second_level_name = "{{second_level_name}}"
-    let third_level_name = "{{third_level_name}}"
-    let fourth_level_name = "{{fourth_level_name}}"
-    let time_name = "{{time_name}}"
-    let numerical_name = "{{numerical_name}}"
-    let comment_name = "{{comment_name}}"
-
     let season_a = "./db/season_a.csv"
     let season_b = "./db/season_b.csv"
-    
+
+    let filename = FLASK_VARIABLES.filename
+    let first_level_name = FLASK_VARIABLES.first_level_name
+    let second_level_name = FLASK_VARIABLES.second_level_name
+    let third_level_name = FLASK_VARIABLES.third_level_name
+    let fourth_level_name = FLASK_VARIABLES.fourth_level_name
+    let time_name = FLASK_VARIABLES.time_name
+    let numerical_name = FLASK_VARIABLES.numerical_name
+    let comment_name = FLASK_VARIABLES.comment_name
 
     let SateToFile ={
         season_a: season_a,
@@ -1369,7 +1367,6 @@
     let CountrySate = ["season_a","season_b"]
     let RegionSate = []
     let DistrictSate = []
-
 
     let schemaSate = {
         hiearchy: [first_level_name, second_level_name, third_level_name, fourth_level_name],

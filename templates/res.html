@@ -916,8 +916,36 @@
 </body>
 <script src="https://d3js.org/d3.v4.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 <script type="text/javascript">
-    YEAR_START = myFunc({{start|tojson}})
-    YEAR_LENGTH = myFunc({{length|tojson}})
+    function myFunc(vars) {
+        // https://stackoverflow.com/questions/37259740/passing-variables-from-flask-to-javascript
+        // hack to pass flask variables to javascript while keeping js in separate file
+        return vars
+    }
+
+    // YEAR_START = myFunc({{start|tojson}})
+    // YEAR_LENGTH = myFunc({{length|tojson}})
+
+    // filename = myFunc({{filename|tojson}})
+    // first_level_name = myFunc({{first_level_name|tojson}})
+    // second_level_name = myFunc({{second_level_name|tojson}})
+    // third_level_name = myFunc({{third_level_name|tojson}})
+    // fourth_level_name = myFunc({{fourth_level_name|tojson}})
+    // time_name = myFunc({{time_name|tojson}})
+    // numerical_name = myFunc({{numerical_name|tojson}})
+    // comment_name = myFunc({{comment_name|tojson}})
+
+    FLASK_VARIABLES = {
+        start: myFunc({{start|tojson}}),
+        length: myFunc({{length|tojson}}),
+        filename: myFunc({{filename|tojson}}),
+        first_level_name: myFunc({{first_level_name|tojson}}),
+        second_level_name: myFunc({{second_level_name|tojson}}),
+        third_level_name: myFunc({{third_level_name|tojson}}),
+        fourth_level_name: myFunc({{fourth_level_name|tojson}}),
+        time_name: myFunc({{time_name|tojson}}),
+        numerical_name: myFunc({{numerical_name|tojson}}),
+        comment_name: myFunc({{comment_name|tojson}})
+    };
  </script>
+ <script src="{{ url_for('static', filename='js/script.js') }}"></script>
