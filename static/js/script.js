@@ -5,12 +5,10 @@ const YEAR_LENGTH = FLASK_VARIABLES.length
 
 // url to this page (and infer server address)
 const url = window.location.origin + '/';
-console.log("URL", url)
 
 // margin.right_short is for no lengend
 let margin = { top: 10, right: 100, bottom: 100, left: 60, right_short: 20 },
     height = 600 - margin.top - margin.bottom;
-
 
 function GetHeatMap(schema) {
     var x, text;
