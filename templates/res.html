@@ -917,3 +917,7 @@
 <script src="https://d3js.org/d3.v4.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script type="text/javascript">
+    YEAR_START = myFunc({{start|tojson}})
+    YEAR_LENGTH = myFunc({{length|tojson}})
+ </script>

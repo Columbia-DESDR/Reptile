@@ -1,6 +1,12 @@
+    function myFunc(vars) {
+        // https://stackoverflow.com/questions/37259740/passing-variables-from-flask-to-javascript
+        // hack to pass flask variables to javascript while keeping js in separate file
+        return vars
+    }
 
     // url to this page (and infer server address)
     const url = window.location.origin + '/';
+    console.log("URL", url)
 
     // margin.right_short is for no lengend
     let margin = { top: 10, right: 100, bottom: 100, left: 60, right_short: 20 },
@@ -182,8 +188,10 @@
             // get all the names as x
             let x_column = [...new Set(data.map(d => d[this.schema.categorical[0]]))].sort()
 
+            console.log('year start', YEAR_START, YEAR_LENGTH)
+
             // generate all the years (hard coded)
-            let y_column = Array.from({ length: {{length}} }, (x, i) => i + {{start}})
+            let y_column = Array.from({ length: YEAR_LENGTH }, (x, i) => i + YEAR_START)
 
             // generate color according to option
             let Color = d3.scaleLinear()
@@ -503,7 +511,7 @@
 
         process(data) {
             // generate all the years (hard coded)
-            let y_column = Array.from({ length: {{length}} }, (x, i) => i + {{start}})
+            let y_column = Array.from({ length: YEAR_LENGTH }, (x, i) => i + YEAR_START)
 
             //for the legend
             let key = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -546,7 +554,7 @@
             s.select("#y_axis").remove()
             s.append("g")
                 .attr("id", "y_axis")
-                .call(d3.axisLeft(y).ticks({{length}}).tickFormat(d3.format("d")));
+                .call(d3.axisLeft(y).ticks(YEAR_LENGTH).tickFormat(d3.format("d")));
 
             s.append("text")
                 .attr("transform",
@@ -664,7 +672,7 @@
 
         process(data) {
             // generate all the years (hard coded)
-            let y_column = Array.from({ length: {{length}} }, (x, i) => i + {{start}})
+            let y_column = Array.from({ length: YEAR_LENGTH }, (x, i) => i + YEAR_START)
 
             //for the legend
             let key = [1, 2, 3, 4, 5, 6, 7, 8]
