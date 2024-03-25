@@ -1,14 +1,19 @@
+"""
+Establishes a connection to a DuckDB database
+Manages the creation of a feedback table with error handling
+Provides functions for inserting and retrieving records.
+"""
+
 import duckdb
-import pandas as pd
-import sys
 
 
-
+# == 1. DuckDB Connection ==
 try:
-    # Initialize DuckDB
-    conn = duckdb.connect('./db/feedback.db')
-    # Create a table
-    conn.execute("""
+    conn = duckdb.connect("./db/feedback.db")
+
+    # creates a table for storing feedback data
+    conn.execute(
+        """
     CREATE TABLE feedback (
         sid VARCHAR,
         feedback_1990 VARCHAR,
@@ -51,32 +56,40 @@ try:
         name VARCHAR,
         comment VARCHAR
     )
-    """)
+    """
+    )
     conn.close()
+
 except:
     pass
 
+
+# == 2. Data Insertion ==
 def insert_data(data):
-    
-    conn = duckdb.connect('./db/feedback.db')
+    conn = duckdb.connect("./db/feedback.db")
+
     # Manually specify the order of columns in your database
-    columns_order = ['sid'] + [f'{year}feedback' for year in range(1990, 2024) if year != 1991] + ['q1', 'q2', 'q3', 'q4', 'name', 'comment']
+    columns_order = (
+        ["sid"]
+        + [f"{year}feedback" for year in range(1990, 2024) if year != 1991]
+        + ["q1", "q2", "q3", "q4", "name", "comment"]
+    )
 
     # Prepare values
-    values = ', '.join("'" + str(data.get(key, '')) + "'" for key in columns_order)
+    values = ", ".join("'" + str(data.get(key, "")) + "'" for key in columns_order)
 
     # Prepare SQL statement
-    sql = f"""
-    INSERT INTO feedback VALUES ({values})
-    """
+    sql = f"INSERT INTO feedback VALUES ({values})"
 
     # Execute the statement
     conn.execute(sql)
     conn.commit()
     conn.close()
 
+
+# == 3. Data Retrieval ==
 def read_data():
-    conn = duckdb.connect('./db/feedback.db')
+    conn = duckdb.connect("./db/feedback.db")
     df = conn.execute("SELECT * FROM feedback").fetch_df()
     conn.close()
     return df
