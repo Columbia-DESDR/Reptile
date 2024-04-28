@@ -821,7 +821,8 @@ class Explanation {
         if (this.allowsurvey) {
             let shelf_group = s.append("div")
                 .text("Please fill in your name and click on \"submit\" after filling in the form.")
-                .style("color", "red")
+                .classed("note", true)
+
             // let sidData = LocalData.getData("{{fourth_level_name}}")
             let level_name = second_level_name
             let level_data = LocalData.getData(level_name)
@@ -852,34 +853,36 @@ class Explanation {
                 .classed('shelf', true)
 
             shelf.append("div")
-                .classed('shelf-label', true)
+                .classed('shelf-key', true)
                 .text(level_name)
 
             let select = shelf.append("div")
-                .classed('field-drop', true)
+                .classed('shelf-val', true)
                 .append("span")
                 .classed('placeholder', true)
                 .text(data[level_name])
-                // .text(data[fourth_level_name].substring(0, 8) + "...")
+
+
 
             // for each level_data
             for (let i = 0; i < level_data.length; i++) {
+
                 // get the Year and Sum
                 let year = level_data[i]['year']
                 let sum = level_data[i]['sum']
 
                 shelf_group = s.append("div")
-                .classed('shelf-group', true)
+                    .classed('shelf-group', true)
 
                 let shelf = shelf_group.append("div")
                     .classed('shelf', true)
 
                 shelf.append("div")
-                    .classed('shelf-label', true)
+                    .classed('shelf-key', true)
                     .text(year)
 
                 let select = shelf.append("div")
-                    .classed('field-drop', true)
+                    .classed('shelf-val', true)
                     .append("span")
                     .classed('placeholder', true)
                     .text(sum)
@@ -890,16 +893,11 @@ class Explanation {
                 shelf = shelf_group.append("div")
                     .classed('shelf', true)
 
-                shelf.append("div")
-                    .classed('shelf-label', true)
-                    .text("feedback")
-
                 select = shelf.append("div")
-                    .classed('field-drop', true)
                     .append("input")
-                    .classed('placeholder', true)
-                    .attr("value", "your feedback")
-                    .attr("id", "feedback"+year)
+                    .classed('input-comment', true)
+                    .attr("value", "your feedback here")
+                    .attr("id", "feedback" + year)
             }
             
 
@@ -911,11 +909,11 @@ class Explanation {
             //         .classed('shelf', true)
 
             //     shelf.append("div")
-            //         .classed('shelf-label', true)
+            //         .classed('shelf-key', true)
             //         .text(i == 1 ? "1st" : (i == 2 ? "2nd" : (i == 3 ? "3rd" : i + "th")))
 
             //     let select = shelf.append("div")
-            //         .classed('field-drop', true)
+            //         .classed('shelf-val', true)
             //         .append("select")
             //         .classed('placeholder', true)
             //         .style('height', "20px")
@@ -955,85 +953,124 @@ class Explanation {
 
             // }
 
+            // ### NAME
             shelf_group = s.append("div")
                 .classed('shelf-group', true)
 
             shelf = shelf_group.append("div")
                 .classed('shelf', true)
 
-            shelf.append("div")
-                .classed('shelf-label', true)
-                .text('name')
-
             select = shelf.append("div")
-                .classed('field-drop', true)
+                .classed('shelf-val', true)
                 .append("input")
-                .classed('placeholder', true)
+                .classed('input-comment', true)
                 .attr("value", "your name")
                 .attr("id", "worstname")
 
+            // ### PASSWORD
             shelf_group = s.append("div")
                 .classed('shelf-group', true)
 
             shelf = shelf_group.append("div")
                 .classed('shelf', true)
 
-            shelf.append("div")
-                .classed('shelf-label', true)
-                .text('password')
-
             select = shelf.append("div")
-                .classed('field-drop', true)
+                .classed('shelf-val', true)
                 .append("input")
-                .classed('placeholder', true)
-                .attr("value", "password")
+                .classed('input-comment', true)
+                .attr("value", "your password")
                 .attr("id", "password")
 
+            // ### COMMENT
             shelf_group = s.append("div")
                 .classed('shelf-group', true)
 
             shelf = shelf_group.append("div")
                 .classed('shelf', true)
 
-            shelf.append("div")
-                .classed('shelf-label', true)
-                .text('comment')
-
             select = shelf.append("div")
-                .classed('field-drop', true)
+                .classed('shelf-val', true)
                 .append("input")
-                .classed('placeholder', true)
+                .classed('input-comment', true)
                 .attr("value", "your comment")
                 .attr("id", "worstcomment")
 
+            // shelf.append("div")
+            //     .classed('shelf-key', true)
+            //     .text('name')
 
+            // select = shelf.append("div")
+            //     .classed('shelf-val', true)
+            //     .append("input")
+            //     .classed('placeholder', true)
+            //     .attr("value", "your name")
+            //     .attr("id", "worstname")
 
+            // shelf_group = s.append("div")
+            //     .classed('shelf-group', true)
 
+            // shelf = shelf_group.append("div")
+            //     .classed('shelf', true)
+
+            // shelf.append("div")
+            //     .classed('shelf-key', true)
+            //     .text('password')
+
+            // select = shelf.append("div")
+            //     .classed('shelf-val', true)
+            //     .append("input")
+            //     .classed('placeholder', true)
+            //     .attr("value", "password")
+            //     .attr("id", "password")
+
+            // shelf_group = s.append("div")
+            //     .classed('shelf-group', true)
+
+            // shelf = shelf_group.append("div")
+            //     .classed('shelf', true)
+
+            // shelf.append("div")
+            //     .classed('shelf-key', true)
+            //     .text('comment')
+
+            // select = shelf.append("div")
+            //     .classed('shelf-val', true)
+            //     .append("input")
+            //     .classed('placeholder', true)
+            //     .attr("value", "your comment")
+            //     .attr("id", "worstcomment")
+
+            // ### DROPDOWN 1
             shelf_group = s.append("div")
                 .text("Were the bad years reported for this village similar to other neighboring villages in the woreda?")
-
+                .classed('que-text', true)
             select = s.append("select")
                 .attr("id", "q1")
+                .classed('subtitle-select', true)
             select.append("option")
                 .text("yes")
             select.append("option")
                 .text("no")
 
+            // ### DROPDOWN 2
             shelf_group = s.append("div")
                 .text("Do you have any reason to believe that some of the bad years reported for this village are erroneous? (e.g. some of the bad years reported were flood years)")
-
+                .classed('que-text', true)
             select = s.append("select")
                 .attr("id", "q2")
+                .classed('subtitle-select', true)
             select.append("option")
                 .text("yes")
             select.append("option")
                 .text("no")
 
+            // ### DROPDOWN 3
             shelf_group = s.append("div")
                 .text("Did you submit improvements for this village?")
-
+                .classed('que-text', true)
             select = s.append("select")
                 .attr("id", "q3")
+                .classed('subtitle-select', true)
             select.append("option")
                 .text("yes")
             select.append("option")
@@ -1073,12 +1110,14 @@ class Explanation {
             // select.append("option")
             //     .text("1 (very unhelpful)")
 
+            // ### CHECKBOX
             shelf_group = s.append("div")
                 .text("I have reviewed the bad years reported for this village to the best of my knowledge and approve their use for index design.")
-
+                .classed('que-text', true)
             select = s.append("input")
                 .attr("type", "checkbox")
                 .attr("id", "q4")
+                
             // select.append("option")
             //       .text("yes")
             // select.append("option")
@@ -1086,7 +1125,6 @@ class Explanation {
 
             s.append("div")
                 .classed('shelf-group', true)
-                .style("width", "40%")
                 .append("div")
                 .classed('shelf', true)
                 .classed('submit', true)
@@ -1112,7 +1150,7 @@ class Explanation {
                     .text(attribute[0])
 
                 shelf.append("div")
-                    .classed('field-val', true)
+                    .classed('shelf-val', true)
                     .text(attribute[1])
             })
 

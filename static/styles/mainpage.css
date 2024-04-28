@@ -89,6 +89,27 @@ body {
     width: 60%;
 }
 
+.input-comment {
+    margin-bottom: 1rem;
+    padding: 3px 6px;
+    color: #7a7a7a;
+    border: 2px solid #a8a8a8;
+}
+
+.input-comment:focus {
+    outline: none;
+    border: 2px solid #404040;
+}
+
+.note {
+    color: #b54787;
+    margin-bottom: 1rem;
+}
+
+.que-text {
+    margin-top: 1rem;
+}
+
 /* BUTTON */
 
 .submit {
