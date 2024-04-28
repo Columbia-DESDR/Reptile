@@ -1,5 +1,5 @@
 html {
-    font-family: sans-serif;
+    font-family: "Manrope", sans-serif;
     -webkit-text-size-adjust: 100%;
 }
 
@@ -12,6 +12,33 @@ body {
     font-size: 12px;
     line-height: 18px;
 }
+
+/* NAVBAR */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* GUIDE */
+
+.guide-container {
+    padding: 1.5rem !important;
+}
+
+.guide-container ol {
+    padding-left: 10px;
+}
+
+.guide-container ol li {
+    margin-left: 5px;
+}
+
+
+
+
+
+
 
 .abs-100 {
     left: 0;
@@ -79,16 +106,6 @@ body {
 
 .no-top-margin {
     margin-top: 0 !important;
-}
-
-.pane {
-    padding: 0;
-    position: relative;
-}
-
-.controls {
-    margin-left: 33px;
-    margin-top: 7px;
 }
 
 .grow-1 {

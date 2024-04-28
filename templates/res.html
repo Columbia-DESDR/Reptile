@@ -2,7 +2,12 @@
 <meta charset="utf-8">
 
 <head>
-    <title>Complaint Driven Drill Down</title>
+    <title>Reptile</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mainpage.css') }}">
 </head>
 
@@ -11,50 +16,46 @@
         <div class="flex-root vflex full-width full-height ng-scope">
             <div class="full-width no-shrink">
                 <div class="card top-card no-right-margin no-top-margin">
-                    <div class="hflex">
-                        <div class="pane">
-                            <div class="controls">
-                                <h1>Complaint Driven Drill Down</h1>
-                            </div>
-                        </div>
+                    <div class="navbar">
+                        <h1>Reptile - Farmer Feedback Portal</h1>
+                        <h2>Africa - Democratic Republic of the Congo</h2>
                     </div>
                 </div>
             </div>
 
             <div class="hflex full-width main-panel grow-1">
                 <div class="pane data-pane noselect">
-                    <div class="card no-top-margin data-card abs-100  scroll-y" style="color: white;">
-                        <h2>Guide</h2>
-                        <b>Data:</b>
-                        <br>
-                        Data contains location hiearchy: {{first_level_name}}, {{second_level_name}}, {{third_level_name}}. <br>
-                        <!-- At submission level, each submission rperesents each tuple inside of database <br> -->
-                        <!-- Originally, the value represents the rank of severity in each village. Only top ten most severe village is recorded. So the rank is from 1 to 10. 1 means most severe and 10 means 10th severe.<br> -->
-                        <!-- Before visualization, the value is transformed by 11 - rank.  -->
-                        For the value of data, 8 means most severe and 1 means 8th severe.<br>
-                        <br>
-                        <b>Exploration:</b> <br>
-                        <!-- You are first presented with the heatmap at the given hiearchy.<br> -->
-                        You can click on any ractangle inside of the heatmap. <br>
-                        The details of selected location will be presented in the scatterplot, barchart and detail
-                        panels. <br>
+                    <div class="card no-top-margin data-card abs-100 scroll-y guide-container" style="color: white;">
 
-                        <br>
-                        <b>Drill Down:</b> <br>
-                        To drill down the next level of the seleted location, click on "Drill Down" button in the detail
-                        panel. <br>
+                        <h2>Understanding Data</h2>
+                        <ol>
+                            <li>Data is <u>organized by location hierarchy:</u> {{first_level_name}},
+                                {{second_level_name}},
+                                {{third_level_name}}</li>
+                            <li>The <u>severity of conditions in each camp</u> is ranked from 1 (least severe) to 8
+                                (most severe)</li>
+                        </ol>
+                        <br/>
 
-                        <br>
-                        <b>Complaint:</b> <br>
-                        To make complaints, click on the aggregation value in the detail panel.<br>
-                        Currently, we support two complaint options: too small or too large.<br>
-                        After you make complaint, you can check explanations in the next level section. <br>
-                        <!-- You can click on explanation, which will highlight the location.<br>
-                        Currently, satellite data and data under district level can't be complained. <br> -->
+                        <h2>What I can do in the App</h2>
+                        <ol>
+                            <li><u>Exploration:</u> Click on any rectangle in the heatmap to see detailed information
+                                about
+                                that location, displayed through scatterplots, barcharts, and detail panels.
+                            </li>
+                            <li><u>Drill Down:</u> To explore data at a more detailed level for a selected location,
+                                click the
+                                "Drill Down" button found in the detail panel.
+                            </li>
+                            <li><u>Reporting Issues:</u> If you find an issue with the data, such as values being too
+                                high or
+                                too low, you can report this by clicking on the value in the detail panel. There are two
+                                complaint options available: "too small" or "too large".</li>
+                        </ol>
 
-                        <br>
-                        <b>Contact:</b> <br>
-                        For any problem, contact Zachary Huang zh2408 AT columbia.edu.<br>
+                        <br/>
+
+                        <p style="text-align: center;">Contact Zachary Hyang (zh2408@columbia.edu)</p>
                     </div>
                 </div>
 
@@ -63,7 +64,6 @@
                         <div class="alternatives-pane card no-top-margin ng-scope">
                             <div class="alternatives-header">
                                 <h2>Country</h2>
-
                             </div>
                             <div class="alternatives-content ng-scope">
                                 <div class="vl-plot-group-list-container ng-scope ng-isolate-scope">
