@@ -331,76 +331,70 @@
                         </div>
 
 
-                        
 
                         <div id="{{third_level_name}}Start" class="alternatives-pane card ng-scope hidden">
                             <div class="alternatives-header">
-                                <h2>{{third_level_name}}</h2>
-                                <h3 id="{{third_level_name}}Name" class="ng-binding">name</h3>
-
+                                <div class="title-name">
+                                    <span>Submission Level</span>
+                                    <span>
+                                        (in <span id="{{third_level_name}}Name" class="ng-binding">name</span> {{third_level_name}})
+                                    </span>
+                                </div>
                             </div>
+
+
                             <div class="alternatives-content ng-scope">
                                 <div class="vl-plot-group-list-container ng-scope ng-isolate-scope">
 
                                     <div class="vis-list hflex flex-wrap">
-                                        <div
-                                            class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
-                                            <div class="vl-plot-group-header no-shrink">
-                                                <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    HeatMap: Mean value at Submission level
-                                                </span>
-                                            </div>
-                                            <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
-                                                <div class="vega" style="position: relative;">
-                                                    <svg id="v_1" width="383" height="500">
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div
-                                            class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
-                                            <div class="vl-plot-group-header no-shrink">
-                                                <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    Scatterplot: Mean and Std of selected Submission
-                                                </span>
-                                            </div>
-                                            <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
-                                                <div class="vega" style="position: relative;">
-                                                    <svg id="v_2" width="300" height="500">
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div
-                                            class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
-                                            <div class="vl-plot-group-header no-shrink">
-                                                <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    Bar Chart: Mean and Count of selected Submission
-                                                </span>
-                                            </div>
-                                            <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
-                                                <div class="vega" style="position: relative;">
-                                                    <svg id="v_3" width="300" height="500">
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div
-                                            class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
-                                            <div class="vl-plot-group-header no-shrink">
-                                                <span class="field-info ng-scope ng-isolate-scope enumerated-channel">
-                                                    Detail
-                                                </span>
-                                            </div>
-                                            <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
-                                                <div class="vega" style="position: relative;">
 
-                                                    <div id="v_4" class="comp card">
-
-                                                    </div>
+                                        <div
+                                            class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
+                                            <h2 class="subtitle-name">Heatmap (farmers)</h2>
+                                            <p class="subtitle-desc">Mean value at Submission level by farmers</p>
+                                            <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
+                                                <div class="vega" style="position: relative;">
+                                                    <svg id="v_1" width="383" height="500"></svg>
                                                 </div>
                                             </div>
                                         </div>
+
+
+                                        <div
+                                            class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
+                                            <h2 class="subtitle-name">IQR of mean for </h2>
+                                            <p class="subtitle-desc">the Selected Submission</p>
+                                            <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
+                                                <div class="vega" style="position: relative;">
+                                                    <svg id="v_2" width="300" height="500"></svg>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div
+                                            class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
+                                            <h2 class="subtitle-name">Mean (color) and count of</h2>
+                                            <p class="subtitle-desc">the Selected Submission</p>
+                                            <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
+                                                <div class="vega" style="position: relative;">
+                                                    <svg id="v_3" width="300" height="500"></svg>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div
+                                            class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
+                                            <h2 class="subtitle-name">Detail on selected camp</h2>
+                                            <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
+                                                <div class="vega" style="position: relative;">
+                                                    <div id="v_4" class="comp card"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
                                     </div>
                                 </div>
                             </div>
