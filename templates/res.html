@@ -93,9 +93,9 @@
                                         </div>
                                         <div
                                             class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
-                                            <h2 class="subtitle-name">Kasaï-Central</h2>
-                                            <p class="subtitle-desc">IQR of mean for the selected {{first_level_name}}</p>
-                                            <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
+                                            <h2 class="subtitle-name">IQR of mean for </h2>
+                                                <p class="subtitle-desc">the Selected {{first_level_name}}</p>
+                                                <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
                                                 <div class="vega" style="position: relative;">
                                                     <svg id="c_2" width="300" height="500"></svg>
                                                 </div>
@@ -103,9 +103,9 @@
                                         </div>
                                         <div
                                             class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
-                                            <h2 class="subtitle-name">Kasaï-Central</h2>
-                                            <p class="subtitle-desc">Mean (color) and count of the selected {{first_level_name}}</p>
-                                            <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
+                                            <h2 class="subtitle-name">Mean (color) and count of</h2>
+                                                <p class="subtitle-desc">the Selected {{first_level_name}}</p>
+                                                <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
                                                 <div class="vega" style="position: relative;">
                                                     <svg id="c_3" width="300" height="500"></svg>
                                                 </div>
@@ -113,8 +113,7 @@
                                         </div>
                                         <div
                                             class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
-                                            <h2 class="subtitle-name">Kasaï-Central</h2>
-                                            <p class="subtitle-desc">Detail on selected camp</p>
+                                            <h2 class="subtitle-name">Detail on selected camp</h2>
                                             <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
                                                 <div class="vega" style="position: relative;">
                                                     <div id="c_4" class="comp card"></div>
@@ -129,12 +128,21 @@
 
 
 
-                        
+
 
                         <div id="{{first_level_name}}Start" class="alternatives-pane card ng-scope hidden">
                             <div class="alternatives-header">
-                                <h2>{{first_level_name}}</h2>
-                                <h3 id="{{first_level_name}}Name" class="ng-binding">name</h3>
+
+                                <div class="title-name">
+                                    <span>{{second_level_name}} Level</span>
+                                    <span>
+                                        (in <span id="{{first_level_name}}Name" class="ng-binding">name</span> Province)
+                                    </span>
+                                </div>
+
+                                
+
+
                                 <div class="field-info  enumerated-channel" id="{{first_level_name}}CompBox">
                                     <div id="{{first_level_name}}Comp" style="color:#f36528">Complaint: {{first_level_name}} value too high</div>
                                     <div id="{{first_level_name}}CompButton" class="shelf comp-shelf" style="justify-content: normal">

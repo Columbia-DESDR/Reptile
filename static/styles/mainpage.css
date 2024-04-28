@@ -38,6 +38,8 @@ body {
 .title-name {
     font-weight: 500;
     text-transform: capitalize;
+    font-size: 1.5rem;
+    margin: 0.8rem 0;
 }
 
 .subtitle-name {
