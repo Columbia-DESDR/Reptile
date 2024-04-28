@@ -1101,23 +1101,18 @@ class Explanation {
             // can also use data enter
             // however some logics are hard to write like staggering shelf and content
             Object.entries(data).forEach(function (attribute) {
-                // console.log(attribute)
-
                 let shelf_group = s.append("div")
                     .classed('shelf-group', true)
 
                 let shelf = shelf_group.append("div")
                     .classed('shelf', true)
-
                     
                 shelf.append("div")
-                    .classed('shelf-label', true)
+                    .classed('shelf-key', true)
                     .text(attribute[0])
 
                 shelf.append("div")
-                    .classed('field-drop', true)
-                    .append("span")
-                    .classed('placeholder', true)
+                    .classed('field-val', true)
                     .text(attribute[1])
             })
 
@@ -1125,15 +1120,8 @@ class Explanation {
 
         // drill down to next level
         if (Object.entries(data)[0][0] != fourth_level_name) {
-
-            s.append("div")
-                .classed('shelf-group', true)
-                .style("width", "40%")
-                .append("div")
-                .classed('shelf', true)
-                .classed('submit', true)
-                .append("span")
-                .style("margin", "auto")
+            s.append("button")
+                .classed('submit-btn', true)
                 .text("Drill down")
                 .on('click', function () {
                     callerClass.drillDown(Object.entries(data)[0])
