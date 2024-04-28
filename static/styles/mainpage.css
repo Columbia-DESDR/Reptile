@@ -89,17 +89,17 @@ body {
 
 /* BUTTON */
 
-.submit-btn {
+.submit {
     background-color: #fff;
     border: 2px solid #FF6AC2;
     color: #FF6AC2;
-    width: 100%;
+    width: 90%;
     padding: 5px 10px;
     cursor: pointer;
     margin-top: 1rem;
 }
 
-.submit-btn:hover {
+.submit:hover {
     background-color: #FF6AC2;
     color: #fff;
 }

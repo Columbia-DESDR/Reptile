@@ -1120,8 +1120,12 @@ class Explanation {
 
         // drill down to next level
         if (Object.entries(data)[0][0] != fourth_level_name) {
-            s.append("button")
-                .classed('submit-btn', true)
+            s.append("div")
+                .classed('shelf-group', true)
+                .append("div")
+                .classed('shelf', true)
+                .classed('submit', true)
+                .append("span")
                 .text("Drill down")
                 .on('click', function () {
                     callerClass.drillDown(Object.entries(data)[0])
