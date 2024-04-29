@@ -364,12 +364,6 @@ class CountrySatelliteHeatMap extends HeatMap {
             this.process(d)
         })
     }
-
-    // for now, don't do anything
-    // highlight(schema) {
-        
-    // }
-
 }
 
 class RegionSatelliteHeatMap extends HeatMap {
@@ -398,12 +392,6 @@ class RegionSatelliteHeatMap extends HeatMap {
             this.process(d)
         })
     }
-
-    // for now, don't do anything
-    // highlight(schema) {
-        
-    // }
-
 }
 
 class DistrictSatelliteHeatMap extends HeatMap {
@@ -1419,7 +1407,6 @@ function SendRec(schema) {
                 throw new Error("Could not reach the API: " + response.statusText);
             }
         }).then(function (data) {
-            // obj = JSON.parse(data)
             return data
         })
 }
@@ -1446,7 +1433,6 @@ function SendSub(schema) {
                 throw new Error("Could not reach the API: " + response.statusText);
             }
         }).then(function (data) {
-            // obj = JSON.parse(data)
             return data
         })
 }
@@ -1474,7 +1460,6 @@ function SendLoad(result = "") {
                 throw new Error("Could not reach the API: " + response.statusText);
             }
         }).then(function (data) {
-            // obj = JSON.parse(data)
             return data
         })
 }
