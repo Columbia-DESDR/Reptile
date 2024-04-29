@@ -22,6 +22,9 @@ app.config["DEBUG"] = True
 # comment_name = "comment"
 
 
+season_a = "./db/season_a.csv"
+season_b = "./db/season_b.csv"
+
 filename = "./db/DRC_badyears_forzach.csv"
 first_level_name = "province"
 second_level_name = "sector"
@@ -46,7 +49,9 @@ def com():
                            numerical_name=numerical_name,
                            comment_name=comment_name,
                            start=start,
-                           length=length)
+                           length=length,
+                           season_a=season_a,
+                           season_b=season_b)
 
 # A route to return all of the available entries in our catalog.
 
