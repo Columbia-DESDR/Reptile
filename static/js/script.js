@@ -364,12 +364,6 @@ class CountrySatelliteHeatMap extends HeatMap {
             this.process(d)
         })
     }
-
-    // for now, don't do anything
-    // highlight(schema) {
-        
-    // }
-
 }
 
 class RegionSatelliteHeatMap extends HeatMap {
@@ -398,12 +392,6 @@ class RegionSatelliteHeatMap extends HeatMap {
             this.process(d)
         })
     }
-
-    // for now, don't do anything
-    // highlight(schema) {
-        
-    // }
-
 }
 
 class DistrictSatelliteHeatMap extends HeatMap {
@@ -411,89 +399,15 @@ class DistrictSatelliteHeatMap extends HeatMap {
         super(svg_id, options)
         this.explanable = false
     }
+
     // when plot, need to first get satellite data
     // when put sate, first filter values
-    plot(schema) {
-        // // can pass nothing when changing satellite
-        // if(schema){
-        //     this.schema = schema
-        // }
-        
-        // let level = "District"
-        // let sate = d3.select("#" + level +"Sate").property("value")
-        // // hard link to m3
-        // let Sateschema = {
-        //         filename : SateToFile[sate],
-        //         hiearchy : ['Village'],
-        //         categorical : ['Village','Year'],
-        //         hierchy_values : m3.spec.encoding.x.range}
+    plot(schema) {  }
 
-        // GetData2(Sateschema).then((d)=>{
-        //     // console.log(d)
-        //         d.forEach(e => {
-        //             e['year'] = e['Year']
-        //             delete e['Year']
-
-        //         })
-                
-        //         // filter out our of bound years
-        //         this.process(d.filter((d) => 
-        //             m3.spec.encoding.y.range.includes(d['year'])))
-
-        //     })
-    }
-
-    process(data) {
-        // // get all the names as x
-        // let x_column = [...new Set(data.map(d => d[this.schema.categorical[0]]))].sort()
-
-        // // generate all the years (hard coded)
-        // let y_column = Array.from({ length: {{length}} }, (x, i) => i + {{start}})
-
-
-        // let minRank = data[0].value;
-        // let maxRank = data[0].value;
-
-        // data.forEach(d => {
-        //     maxRank = Math.max(maxRank, d["value"])
-        //     minRank = Math.min(minRank, d["value"])
-        // });
-
-        // // generate color according to option
-        // let Color = d3.scaleLinear()
-        //     .range(this.options.color)
-        //     .domain([minRank, maxRank])
-
-        // //for the legend
-        // let key = range(minRank, maxRank, 10)
-        // let size = 15
-
-
-        // let spec = {
-        //     data: data,
-        //     encoding: {
-        //         x: { range: x_column, field: this.schema.categorical[0] },
-        //         y: { range: y_column, field: this.schema.categorical[1] },
-        //         rect: { color: Color, field: "value" }
-        //     },
-        //     legend: {
-        //         size: size,
-        //         key: key
-        //     },
-        //     tooltip: {
-        //         mouseover: heatmap_tooptip_mouseover
-        //     },
-        //     svg: this.svg
-        // };
-        // this.spec = spec
-        // this.render(this.spec)
-    }
+    process(data) {  }
 
     // for now, don't do anything
-    highlight(schema) {
-        
-    }
-
+    highlight(schema) {}
 }
 
 class ScatterPlot extends Visualization {
@@ -727,7 +641,6 @@ class BarChart extends Visualization {
         s.append("g")
             .attr("transform", "translate(0," + height + ")")
             .attr("id", "x_axis")
-            // .attr('transform', 'rotate(45 -10 10)')
             .call(d3.axisBottom(x))
             .selectAll("text")
             .style("text-anchor", "end")
@@ -803,8 +716,6 @@ class Explanation {
     highlight(schema, explanable) {
         this.clear()
         this.addDetail(schema, explanable)
-        // this.svg.append("p").merge(explanations)
-        // this.
     }
     clear() {
         this.svg.selectAll("div").remove()
@@ -822,10 +733,11 @@ class Explanation {
             let shelf_group = s.append("div")
                 .text("Please fill in your name and click on \"submit\" after filling in the form.")
                 .style("color", "red")
-            // let sidData = LocalData.getData("{{fourth_level_name}}")
+
             let level_name = second_level_name
             let level_data = LocalData.getData(level_name)
             level_data = level_data.filter(sidData => sidData[level_name] == data[level_name])
+
             let worstMap = new Map();
             let causeMap = new Map()
             
@@ -834,7 +746,6 @@ class Explanation {
                 sidD[1]['sum'] = sidD[1]['mean'] * sidD[1]['count']
                 if (sidD[1]['mean'] != 0) {
                     worstMap[9 - sidD[1]['mean']] = sidD[1]['year']
-                    // causeMap[9 - sidD[1]['mean']] = sidD[1][comment_name]
                 }
             })
 
@@ -860,7 +771,6 @@ class Explanation {
                 .append("span")
                 .classed('placeholder', true)
                 .text(data[level_name])
-                // .text(data[fourth_level_name].substring(0, 8) + "...")
 
             // for each level_data
             for (let i = 0; i < level_data.length; i++) {
@@ -901,59 +811,6 @@ class Explanation {
                     .attr("value", "your feedback")
                     .attr("id", "feedback"+year)
             }
-            
-
-            // for (let i = 1; i <= 8; i++) {
-            //     let shelf_group = s.append("div")
-            //         .classed('shelf-group', true)
-
-            //     let shelf = shelf_group.append("div")
-            //         .classed('shelf', true)
-
-            //     shelf.append("div")
-            //         .classed('shelf-label', true)
-            //         .text(i == 1 ? "1st" : (i == 2 ? "2nd" : (i == 3 ? "3rd" : i + "th")))
-
-            //     let select = shelf.append("div")
-            //         .classed('field-drop', true)
-            //         .append("select")
-            //         .classed('placeholder', true)
-            //         .style('height', "20px")
-            //         .style("width", "120px")
-            //         .attr("id", "worst" + i)
-
-
-            //     let years = Array.from({ length: {{length}} }, (x, i) => i + {{start}})
-            //     years.unshift("missing")
-            //     let options = select.selectAll("option")
-            //     options.remove()
-            //     options.data(years).enter().append("option")
-            //         .attr("value", function (d) { return d; })
-            //         .text(function (d) { return d; })
-            //         .property("selected", function (d) {
-            //             return d == worstMap[i];
-            //         })
-
-            //     // console.log(causeMap)
-            //     if (i in causeMap) {
-            //         let content = shelf_group.append("div")
-            //             .classed('content', true)
-
-
-            //         let comp_shelf = content.append("div")
-            //             .classed('shelf', true)
-            //             .classed('comp-shelf', true)
-            //             .style("height", "40px")
-
-            //         comp_shelf.append("span")
-            //             .classed('placeholder', true)
-            //             .text(causeMap[i])
-            //             .style("overflow-y", "scroll")
-            //             .style("width", "140px")
-            //     }
-
-
-            // }
 
             shelf_group = s.append("div")
                 .classed('shelf-group', true)
@@ -1039,50 +896,12 @@ class Explanation {
             select.append("option")
                 .text("no")
 
-
-
-            // shelf_group = s.append("div")
-            //     .text("How helpful is this complaint-explanation framework to find meaningful problems?")
-
-            // select = s.append("select")
-            //     .attr("id", "q5")
-            // select.append("option")
-            //     .text("5 (very helpful)")
-            // select.append("option")
-            //     .text("4")
-            // select.append("option")
-            //     .text("3")
-            // select.append("option")
-            //     .text("2")
-            // select.append("option")
-            //     .text("1 (very unhelpful)")
-
-            // shelf_group = s.append("div")
-            //     .text("How helpful is this complaint-explanation framework to find problems faster?")
-
-            // select = s.append("select")
-            //     .attr("id", "q6")
-            // select.append("option")
-            //     .text("5 (very helpful)")
-            // select.append("option")
-            //     .text("4")
-            // select.append("option")
-            //     .text("3")
-            // select.append("option")
-            //     .text("2")
-            // select.append("option")
-            //     .text("1 (very unhelpful)")
-
             shelf_group = s.append("div")
                 .text("I have reviewed the bad years reported for this village to the best of my knowledge and approve their use for index design.")
 
             select = s.append("input")
                 .attr("type", "checkbox")
                 .attr("id", "q4")
-            // select.append("option")
-            //       .text("yes")
-            // select.append("option")
-            //       .text("no")
 
             s.append("div")
                 .classed('shelf-group', true)
@@ -1101,8 +920,6 @@ class Explanation {
             // can also use data enter
             // however some logics are hard to write like staggering shelf and content
             Object.entries(data).forEach(function (attribute) {
-                // console.log(attribute)
-
                 let shelf_group = s.append("div")
                     .classed('shelf-group', true)
 
@@ -1308,36 +1125,28 @@ let s3 = new ScatterPlot("#d_2", {})
 let b3 = new BarChart("#d_3", { color: ["#ffffff", "#ff0097"] })
 let e3 = new Explanation("#d_4", [m4], false, false, true)
 let m3 = new HeatMap("#d_1", { color: ["#ffffff", "#ff0097"] })
-// let sate3 = new DistrictSatelliteHeatMap("#d_5",{color:["#ffffff","#0056da"]})
-// s3.registerLinks([b3,e3,m3,sate3])
-// b3.registerLinks([e3,s3,m3,sate3])
-// m3.registerLinks([s3,b3,e3,sate3])
-// sate3.registerLinks([s3,b3,m3,e3])
+
 s3.registerLinks([b3,e3,m3])
 b3.registerLinks([e3,s3,m3])
 m3.registerLinks([s3,b3,e3])
 
 let s2 = new ScatterPlot("#r_2",{})
 let b2 = new BarChart("#r_3", {color:["#ffffff","#ff0097"]})
-// let e2 = new Explanation("#r_4",[m3, sate3],true)
+
 let e2 = new Explanation("#r_4",[m3],true, true, false)
 let m2 = new HeatMap("#r_1",{color:["#ffffff","#ff0097"]})
-// let sate2 = new RegionSatelliteHeatMap("#r_5",{color:["#ffffff","#ff0097"]})
-// s2.registerLinks([b2,e2,m2,sate2])
-// b2.registerLinks([e2,s2,m2,sate2])
-// m2.registerLinks([s2,b2,e2,sate2])
-// sate2.registerLinks([s2,b2,m2,e2])
+
 s2.registerLinks([b2,e2,m2])
 b2.registerLinks([e2,s2,m2])
 m2.registerLinks([s2,b2,e2])
-// sate2.registerLinks([s2,b2,m2,e2])
 
 let s1 = new ScatterPlot("#c_2", {})
 let b1 = new BarChart("#c_3", { color: ["#ffffff", "#ff0097"] })
-// let e1 = new Explanation("#c_4", [m2, sate2], true)
+
 let e1 = new Explanation("#c_4", [m2], true, false, true)
 let m1 = new HeatMap("#c_1", { color: ["#ffffff", "#ff0097"] })
 let sate1 = new CountrySatelliteHeatMap("#r_6",{color:["#ffffff","#ff0097"]})
+
 s1.registerLinks([b1, e1, m1])
 b1.registerLinks([e1, s1, m1])
 m1.registerLinks([s1, b1, e1])
@@ -1516,26 +1325,6 @@ function showComp(level) {
 
 function submitRec(sidvalue) {
     console.log("submit")
-    // result = {
-    //     "sid": sidvalue,
-    //     "w1": d3.select("#worst1").property("value"),
-    //     "w2": d3.select("#worst2").property("value"),
-    //     "w3": d3.select("#worst3").property("value"),
-    //     "w4": d3.select("#worst4").property("value"),
-    //     "w5": d3.select("#worst5").property("value"),
-    //     "w6": d3.select("#worst6").property("value"),
-    //     "w7": d3.select("#worst7").property("value"),
-    //     "w8": d3.select("#worst8").property("value"),
-    //     "q1": d3.select("#q1").property("value"),
-    //     "q2": d3.select("#q2").property("value"),
-    //     "q3": d3.select("#q3").property("value"),
-    //     "q4": d3.select("#q4").property("checked"),
-    //     "q5": d3.select("#q5").property("value"),
-    //     "q6": d3.select("#q6").property("value"),
-    //     "name": d3.select("#worstname").property("value"),
-    //     "comment": d3.select("#worstcomment").property("value"),
-
-    // }
 
     result = {
         "sid": sidvalue,
@@ -1592,21 +1381,10 @@ function submitRec(sidvalue) {
         alert("Please click on the checkbox to verify that \"I have reviewed the bad years reported for this village to the best of my knowledge and approve their use for index design.\"!")
         return
     }
-    // let q1 = confirm("Were the bad years reported for this village similar to other neighboring villages in the woreda?")
-    // let q2 = confirm("Do you have any reason to believe that some of the bad years reported for this village are erroneous? (e.g. some of the bad years reported were flood years)")
-    // let q3 = confirm("Did you submit improvements for this village?")
-    // let q4 = confirm("I have reviewed the bad years reported for this village to the best of my knowledge and approve their use for index design.")
-    // result["q1"] = q1
-    // result["q2"] = q2
-    // result["q3"] = q3
-    // result["q4"] = q4
-
 
     SendRec(result).then(() => {
         alert("We have received your submission!")
     })
-
-
 }
 
 function SendRec(schema) {
@@ -1629,7 +1407,6 @@ function SendRec(schema) {
                 throw new Error("Could not reach the API: " + response.statusText);
             }
         }).then(function (data) {
-            // obj = JSON.parse(data)
             return data
         })
 }
@@ -1656,7 +1433,6 @@ function SendSub(schema) {
                 throw new Error("Could not reach the API: " + response.statusText);
             }
         }).then(function (data) {
-            // obj = JSON.parse(data)
             return data
         })
 }
@@ -1684,7 +1460,6 @@ function SendLoad(result = "") {
                 throw new Error("Could not reach the API: " + response.statusText);
             }
         }).then(function (data) {
-            // obj = JSON.parse(data)
             return data
         })
 }
