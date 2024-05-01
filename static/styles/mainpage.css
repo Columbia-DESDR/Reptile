@@ -1,5 +1,5 @@
 html {
-    font-family: sans-serif;
+    font-family: "Manrope", sans-serif;
     -webkit-text-size-adjust: 100%;
 }
 
@@ -12,6 +12,137 @@ body {
     font-size: 12px;
     line-height: 18px;
 }
+
+/* ############ */
+/* ## NAVBAR ## */
+/* ############ */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* ################### */
+/* ## GUIDE SECTION ## */
+/* ################### */
+
+.guide-container {
+    padding: 1.5rem !important;
+}
+
+.guide-container ol {
+    padding-left: 10px;
+}
+
+.guide-container ol li {
+    margin-left: 5px;
+}
+
+/* ############# */
+/* ## SECTION ## */
+/* ############# */
+
+.title-name {
+    font-weight: 500;
+    text-transform: capitalize;
+    font-size: 1.5rem;
+    margin: 0.8rem 0;
+}
+
+.subtitle-name {
+    margin: 0;
+    margin-bottom: 0.4rem;
+}
+
+.subtitle-desc {
+    margin: 0;
+    color: #7a7a7a;
+    margin-bottom: 1rem;
+}
+
+/* ################################# */
+/* ## HEATMAP (SATELLITE) SECTION ## */
+/* ################################# */
+
+.subtitle-select-align {
+    display: flex;
+    align-items: center; 
+    justify-content: flex-end; 
+    padding: 10px; 
+}
+
+.subtitle-select {
+    padding: 3px 6px;
+    border-radius: 1rem;
+}
+
+/* #################### */
+/* ## DETAIL SECTION ## */
+/* #################### */
+
+.shelf-group {
+    margin-bottom: 0.5rem;
+}
+
+.shelf {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.shelf .shelf-key {
+    display: block;
+    width: 40%;
+    font-weight: 600;
+}
+
+.shelf .shelf-val {
+    width: 60%;
+}
+
+.input-comment {
+    margin-bottom: 1rem;
+    padding: 3px 6px;
+    color: #7a7a7a;
+    border: 2px solid #a8a8a8;
+}
+
+.input-comment:focus {
+    outline: none;
+    border: 2px solid #404040;
+}
+
+.note {
+    color: #b54787;
+    margin-bottom: 1rem;
+}
+
+.que-text {
+    margin-top: 1rem;
+}
+
+/* ############ */
+/* ## BUTTON ## */
+/* ############ */
+
+.submit {
+    background-color: #fff;
+    border: 2px solid #FF6AC2;
+    color: #FF6AC2;
+    width: 90%;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.submit:hover {
+    background-color: #FF6AC2;
+    color: #fff;
+}
+
+/* ################## */
+/* ## REUSABLE CSS ## */
+/* ################## */
 
 .abs-100 {
     left: 0;
@@ -62,6 +193,24 @@ body {
     flex-shrink: 0;
 }
 
+.no-right-margin {
+    margin-right: 0 !important;
+}
+
+.no-top-margin {
+    margin-top: 0 !important;
+}
+
+.grow-1 {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+}
+
+/* ########## */
+/* ## CARD ## */
+/* ########## */
+
 .card {
     margin: 3px 3px 0 0;
     padding: 8px;
@@ -73,29 +222,9 @@ body {
     background-color: #fcfdfe;
 }
 
-.no-right-margin {
-    margin-right: 0 !important;
-}
-
-.no-top-margin {
-    margin-top: 0 !important;
-}
-
-.pane {
-    padding: 0;
-    position: relative;
-}
-
-.controls {
-    margin-left: 33px;
-    margin-top: 7px;
-}
-
-.grow-1 {
-    -webkit-box-flex: 1;
-    -ms-flex-positive: 1;
-    flex-grow: 1;
-}
+/* ########### */
+/* ## PANEL ## */
+/* ########### */
 
 .main-panel {
     min-height: 250px;
@@ -120,6 +249,10 @@ body {
     padding: 0;
     position: relative;
 }
+
+/* ################## */
+/* ## REUSABLE CSS ## */
+/* ################## */
 
 .noselect,
 .shelf .shelf-label,
@@ -214,8 +347,8 @@ h4 {
     -webkit-box-flex: 1;
     -ms-flex-positive: 1;
     flex-grow: 1;
-    padding-right: 11px;
-    padding-bottom: 11px;
+    padding: 1rem;
+
 }
 
 .field-info.enumerated-channel,
@@ -290,37 +423,10 @@ div.tooltip {
     padding-left: 20px;
 }
 
-.shelf {
-    border-radius: 3px;
-    background-color: #dda7f8;
-    width: 100%;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    height: 22px;
-}
 
 .collapsible:hover,
 .active {
     background-color: #9115e3;
-    color: white;
-}
-
-.shelf .shelf-label {
-    display: block;
-    width: 45px;
-    margin: 0 .2rem;
-    line-height: 22px;
-    -ms-flex-negative: 0;
-    flex-shrink: 0;
-}
-
-.submit {
-    background-color: #d5d5d5;
-}
-
-.submit:hover {
-    background-color: #5f5f5f;
     color: white;
 }
 
@@ -356,30 +462,6 @@ h4 {
     -ms-user-select: none;
     user-select: none;
     cursor: default;
-}
-
-.shelf-group {
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    margin-bottom: 4px;
-    font-size: 11px;
-}
-
-.shelf .field-drop {
-    width: 60%;
-}
-
-.shelf .field-drop .placeholder {
-    display: block;
-    width: 100%;
-    padding: 0 .5em;
-    border: 1px solid rgba(77, 77, 77, .1);
-    background-color: #fff;
-    line-height: 20px;
-    border-radius: 3px;
-    text-overflow: ellipsis;
-    font-weight: 400;
-    color: #000;
 }
 
 .comp-shelf {
@@ -420,22 +502,4 @@ textarea {
     color: inherit;
     font: inherit;
     margin: 0;
-}
-
-button,
-select {
-    text-transform: none;
-}
-
-select.markselect {
-    background: #f8f8f8;
-    color: #333;
-    border: #888 1px solid;
-    display: inline-block;
-}
-
-select.markselect.auto {
-    background: #e3f9fd;
-    color: #5798a5;
-    border: #9bc4cc 1px solid;
 }
