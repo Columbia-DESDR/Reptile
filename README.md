@@ -1,15 +1,18 @@
 # Reptile
+Reptile is a software tool designed to enhance survey data quality by addressing and correcting data errors reported by users.
 
-https://gitpod.io/#https://github.com/zachary62/Reptile
+# Getting Started
+Follow these instructions to set up Reptile on your local machine.
 
-## Getting Started
+## Prerequisites
+Before you begin, ensure you have met the following requirements:
+1. Python 3.x installed on your system
 
-### Installing
-
-* Install dependencies:
-    * `pip install -r requirements.txt`
-* Set up flask environment::
-    * Windows: `set FLASK_APP=app.py`, `set FLASK_ENV=development`
-    * Mac/Linux: `export FLASK_APP=app.py`, `export FLASK_ENV=development`
-* Start the site:
-    * `flask run`
+## Installing
+1. Install dependencies:
+   - `pip install -r requirements.txt`
+2. Set up flask environment::
+   - Windows: `set FLASK_APP=app.py`, `set FLASK_ENV=development`
+   - Mac/Linux: `export FLASK_APP=app.py`, `export FLASK_ENV=development`
+3. Start the site:
+   - `flask run` or `python3 app.py`
