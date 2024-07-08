@@ -13,6 +13,14 @@ body {
     line-height: 18px;
 }
 
+/* ######################## */
+/* ## VARIABLES - COLORS ## */
+/* ######################## */
+:root {
+    --color-main: #00950d;
+    --color-dark: #00950d;
+}
+
 /* ############ */
 /* ## NAVBAR ## */
 /* ############ */
@@ -113,7 +121,7 @@ body {
 }
 
 .note {
-    color: #b54787;
+    color: var(--color-dark);
     margin-bottom: 1rem;
 }
 
@@ -127,8 +135,8 @@ body {
 
 .submit {
     background-color: #fff;
-    border: 2px solid #FF6AC2;
-    color: #FF6AC2;
+    border: 2px solid var(--color-main);
+    color: var(--color-main);
     width: 90%;
     padding: 5px 10px;
     cursor: pointer;
@@ -136,7 +144,7 @@ body {
 }
 
 .submit:hover {
-    background-color: #FF6AC2;
+    background-color: var(--color-main);
     color: #fff;
 }
 
