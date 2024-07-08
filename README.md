@@ -19,7 +19,7 @@ Before you begin, ensure you have met the following requirements:
 
 ## Current Deployments
 
-| Name              | Description | Link |
-| :---------------- | :------: | ----: |
-| DRC               |   TODO   | http://ec2-18-117-152-17.us-east-2.compute.amazonaws.com/ |
-| Nigeria           |   TODO  | http://ec2-18-190-217-53.us-east-2.compute.amazonaws.com:8000/ |
+| Name              | Description | Git Branch | Link |
+| :---------------- | :------: | :------: | ----: |
+| DRC               |   TODO   | testing | http://ec2-18-117-152-17.us-east-2.compute.amazonaws.com/ |
+| Nigeria           |   TODO  | master | http://ec2-18-190-217-53.us-east-2.compute.amazonaws.com:8000/ |
