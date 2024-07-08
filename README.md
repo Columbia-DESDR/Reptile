@@ -16,3 +16,10 @@ Before you begin, ensure you have met the following requirements:
    - Mac/Linux: `export FLASK_APP=app.py`, `export FLASK_ENV=development`
 3. Start the site:
    - `flask run` or `python3 app.py`
+
+## Current Deployments
+
+| Name              | Description | Link |
+| :---------------- | :------: | ----: |
+| DRC               |   TODO   | http://ec2-18-117-152-17.us-east-2.compute.amazonaws.com/ |
+| Nigeria           |   TODO  | http://ec2-18-190-217-53.us-east-2.compute.amazonaws.com:8000/ |
