@@ -903,12 +903,13 @@ class Explanation {
                 .append("div")
                 .classed('shelf', true)
                 .classed('submit', true)
-                .append("span")
-                .style("margin", "auto")
-                .text("Submit")
                 .on('click', function () {
                     submitRec(data[level_name])
                 })
+                .append("span")
+                .style("margin", "auto")
+                .text("Submit")
+
         }
         if (this.allowdrillDown) {
             // can also use data enter
@@ -939,11 +940,11 @@ class Explanation {
                 .append("div")
                 .classed('shelf', true)
                 .classed('submit', true)
-                .append("span")
-                .text("Drill down")
                 .on('click', function () {
                     callerClass.drillDown(Object.entries(data)[0])
                 })
+                .append("span")
+                .text("Drill down")
         }
 
     }
