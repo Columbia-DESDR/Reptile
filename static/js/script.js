@@ -1140,9 +1140,9 @@ s1.registerLinks([b1, e1, m1])
 b1.registerLinks([e1, s1, m1])
 m1.registerLinks([s1, b1, e1])
 sate1.registerLinks([])
-let season_a = "./db/season_a.csv"
-let season_b = "./db/season_b.csv"
 
+let season_a = FLASK_VARIABLES.season_a
+let season_b = FLASK_VARIABLES.season_b
 let filename = FLASK_VARIABLES.filename
 let first_level_name = FLASK_VARIABLES.first_level_name
 let second_level_name = FLASK_VARIABLES.second_level_name
