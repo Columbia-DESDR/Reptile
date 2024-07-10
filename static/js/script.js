@@ -3,6 +3,11 @@ console.log("FLASK VARIABLES", FLASK_VARIABLES);
 const YEAR_START = FLASK_VARIABLES.start
 const YEAR_LENGTH = FLASK_VARIABLES.length
 
+// Color
+const mainColorBarChart = '#CA0D0D'
+const mainColorHeatmapFarmers = '#079A0D'
+const mainColorHeatmapSatellite = '#077F9A'
+
 // url to this page (and infer server address)
 const url = window.location.origin + '/';
 
@@ -732,12 +737,12 @@ class Explanation {
         if (this.allowsurvey) {
             let shelf_group = s.append("div")
                 .text("Please fill in your name and click on \"submit\" after filling in the form.")
-                .style("color", "red")
+                .classed("note", true)
 
             let level_name = second_level_name
             let level_data = LocalData.getData(level_name)
             level_data = level_data.filter(sidData => sidData[level_name] == data[level_name])
-
+            
             let worstMap = new Map();
             let causeMap = new Map()
             
@@ -763,11 +768,11 @@ class Explanation {
                 .classed('shelf', true)
 
             shelf.append("div")
-                .classed('shelf-label', true)
+                .classed('shelf-key', true)
                 .text(level_name)
 
             let select = shelf.append("div")
-                .classed('field-drop', true)
+                .classed('shelf-val', true)
                 .append("span")
                 .classed('placeholder', true)
                 .text(data[level_name])
@@ -779,17 +784,17 @@ class Explanation {
                 let sum = level_data[i]['sum']
 
                 shelf_group = s.append("div")
-                .classed('shelf-group', true)
+                    .classed('shelf-group', true)
 
                 let shelf = shelf_group.append("div")
                     .classed('shelf', true)
 
                 shelf.append("div")
-                    .classed('shelf-label', true)
+                    .classed('shelf-key', true)
                     .text(year)
 
                 let select = shelf.append("div")
-                    .classed('field-drop', true)
+                    .classed('shelf-val', true)
                     .append("span")
                     .classed('placeholder', true)
                     .text(sum)
@@ -800,121 +805,111 @@ class Explanation {
                 shelf = shelf_group.append("div")
                     .classed('shelf', true)
 
-                shelf.append("div")
-                    .classed('shelf-label', true)
-                    .text("feedback")
-
                 select = shelf.append("div")
-                    .classed('field-drop', true)
                     .append("input")
-                    .classed('placeholder', true)
-                    .attr("value", "your feedback")
-                    .attr("id", "feedback"+year)
+                    .classed('input-comment', true)
+                    .attr("value", "your feedback here")
+                    .attr("id", "feedback" + year)
             }
-
+            
+            // ### NAME
             shelf_group = s.append("div")
                 .classed('shelf-group', true)
 
             shelf = shelf_group.append("div")
                 .classed('shelf', true)
 
-            shelf.append("div")
-                .classed('shelf-label', true)
-                .text('name')
-
             select = shelf.append("div")
-                .classed('field-drop', true)
+                .classed('shelf-val', true)
                 .append("input")
-                .classed('placeholder', true)
+                .classed('input-comment', true)
                 .attr("value", "your name")
                 .attr("id", "worstname")
 
+            // ### PASSWORD
             shelf_group = s.append("div")
                 .classed('shelf-group', true)
 
             shelf = shelf_group.append("div")
                 .classed('shelf', true)
 
-            shelf.append("div")
-                .classed('shelf-label', true)
-                .text('password')
-
             select = shelf.append("div")
-                .classed('field-drop', true)
+                .classed('shelf-val', true)
                 .append("input")
-                .classed('placeholder', true)
-                .attr("value", "password")
+                .classed('input-comment', true)
+                .attr("value", "your password")
                 .attr("id", "password")
 
+            // ### COMMENT
             shelf_group = s.append("div")
                 .classed('shelf-group', true)
 
             shelf = shelf_group.append("div")
                 .classed('shelf', true)
 
-            shelf.append("div")
-                .classed('shelf-label', true)
-                .text('comment')
-
             select = shelf.append("div")
-                .classed('field-drop', true)
+                .classed('shelf-val', true)
                 .append("input")
-                .classed('placeholder', true)
+                .classed('input-comment', true)
                 .attr("value", "your comment")
                 .attr("id", "worstcomment")
 
-
-
-
+            // ### DROPDOWN 1
             shelf_group = s.append("div")
                 .text("Were the bad years reported for this village similar to other neighboring villages in the woreda?")
-
+                .classed('que-text', true)
             select = s.append("select")
                 .attr("id", "q1")
+                .classed('subtitle-select', true)
             select.append("option")
                 .text("yes")
             select.append("option")
                 .text("no")
 
+            // ### DROPDOWN 2
             shelf_group = s.append("div")
                 .text("Do you have any reason to believe that some of the bad years reported for this village are erroneous? (e.g. some of the bad years reported were flood years)")
-
+                .classed('que-text', true)
             select = s.append("select")
                 .attr("id", "q2")
+                .classed('subtitle-select', true)
             select.append("option")
                 .text("yes")
             select.append("option")
                 .text("no")
 
+            // ### DROPDOWN 3
             shelf_group = s.append("div")
                 .text("Did you submit improvements for this village?")
-
+                .classed('que-text', true)
             select = s.append("select")
                 .attr("id", "q3")
+                .classed('subtitle-select', true)
             select.append("option")
                 .text("yes")
             select.append("option")
                 .text("no")
 
+            // ### CHECKBOX
             shelf_group = s.append("div")
                 .text("I have reviewed the bad years reported for this village to the best of my knowledge and approve their use for index design.")
-
+                .classed('que-text', true)
             select = s.append("input")
                 .attr("type", "checkbox")
                 .attr("id", "q4")
-
+                
             s.append("div")
                 .classed('shelf-group', true)
-                .style("width", "40%")
                 .append("div")
                 .classed('shelf', true)
                 .classed('submit', true)
-                .append("span")
-                .style("margin", "auto")
-                .text("Submit")
                 .on('click', function () {
                     submitRec(data[level_name])
                 })
+                .append("span")
+                .style("margin", "auto")
+                .text("Submit")
+
         }
         if (this.allowdrillDown) {
             // can also use data enter
@@ -925,16 +920,14 @@ class Explanation {
 
                 let shelf = shelf_group.append("div")
                     .classed('shelf', true)
-
+                    
                     
                 shelf.append("div")
-                    .classed('shelf-label', true)
+                    .classed('shelf-key', true)
                     .text(attribute[0])
 
                 shelf.append("div")
-                    .classed('field-drop', true)
-                    .append("span")
-                    .classed('placeholder', true)
+                    .classed('shelf-val', true)
                     .text(attribute[1])
             })
 
@@ -942,19 +935,16 @@ class Explanation {
 
         // drill down to next level
         if (Object.entries(data)[0][0] != fourth_level_name) {
-
             s.append("div")
                 .classed('shelf-group', true)
-                .style("width", "40%")
                 .append("div")
                 .classed('shelf', true)
                 .classed('submit', true)
-                .append("span")
-                .style("margin", "auto")
-                .text("Drill down")
                 .on('click', function () {
                     callerClass.drillDown(Object.entries(data)[0])
                 })
+                .append("span")
+                .text("Drill down")
         }
 
     }
@@ -1114,38 +1104,38 @@ class Explanation {
 }
 
 let s4 = new ScatterPlot("#v_2", {})
-let b4 = new BarChart("#v_3", { color: ["#ffffff", "#ff0097"] })
+let b4 = new BarChart("#v_3", { color: ["#ffffff", mainColorBarChart] })
 let e4 = new Explanation("#v_4", [], false, true, false)
-let m4 = new HeatMap("#v_1", { color: ["#ffffff", "#ff0097"] })
+let m4 = new HeatMap("#v_1", { color: ["#ffffff", mainColorHeatmapFarmers] })
 s4.registerLinks([b4, e4, m4])
 b4.registerLinks([e4, s4, m4])
 m4.registerLinks([s4, b4, e4])
 
 let s3 = new ScatterPlot("#d_2", {})
-let b3 = new BarChart("#d_3", { color: ["#ffffff", "#ff0097"] })
+let b3 = new BarChart("#d_3", { color: ["#ffffff", mainColorBarChart] })
 let e3 = new Explanation("#d_4", [m4], false, false, true)
-let m3 = new HeatMap("#d_1", { color: ["#ffffff", "#ff0097"] })
+let m3 = new HeatMap("#d_1", { color: ["#ffffff", mainColorHeatmapFarmers] })
 
 s3.registerLinks([b3,e3,m3])
 b3.registerLinks([e3,s3,m3])
 m3.registerLinks([s3,b3,e3])
 
 let s2 = new ScatterPlot("#r_2",{})
-let b2 = new BarChart("#r_3", {color:["#ffffff","#ff0097"]})
+let b2 = new BarChart("#r_3", {color:["#ffffff",mainColorBarChart]})
 
 let e2 = new Explanation("#r_4",[m3],true, true, false)
-let m2 = new HeatMap("#r_1",{color:["#ffffff","#ff0097"]})
+let m2 = new HeatMap("#r_1",{color:["#ffffff",mainColorHeatmapFarmers]})
 
 s2.registerLinks([b2,e2,m2])
 b2.registerLinks([e2,s2,m2])
 m2.registerLinks([s2,b2,e2])
 
 let s1 = new ScatterPlot("#c_2", {})
-let b1 = new BarChart("#c_3", { color: ["#ffffff", "#ff0097"] })
+let b1 = new BarChart("#c_3", { color: ["#ffffff", mainColorBarChart] })
 
 let e1 = new Explanation("#c_4", [m2], true, false, true)
-let m1 = new HeatMap("#c_1", { color: ["#ffffff", "#ff0097"] })
-let sate1 = new CountrySatelliteHeatMap("#r_6",{color:["#ffffff","#ff0097"]})
+let m1 = new HeatMap("#c_1", { color: ["#ffffff", mainColorHeatmapFarmers] })
+let sate1 = new CountrySatelliteHeatMap("#r_6",{color:["#ffffff",mainColorHeatmapSatellite]})
 
 s1.registerLinks([b1, e1, m1])
 b1.registerLinks([e1, s1, m1])
@@ -1154,7 +1144,6 @@ sate1.registerLinks([])
 
 let season_a = FLASK_VARIABLES.season_a
 let season_b = FLASK_VARIABLES.season_b
-
 let filename = FLASK_VARIABLES.filename
 let first_level_name = FLASK_VARIABLES.first_level_name
 let second_level_name = FLASK_VARIABLES.second_level_name
