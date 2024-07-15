@@ -1,6 +1,5 @@
 {
     "DEBUG": true,
-    "INSTANCE_TITLE": "Africa - Democratic Republic of the Congo",
     "DATA_SOURCES": {
         "FILENAME": "./db/DRC_badyears_forzach.csv",
         "SEASON_A": "./db/season_a.csv",
@@ -17,6 +16,7 @@
         "END": 2023
     },
     "DISPLAY": {
+        "INSTANCE_TITLE": "Africa - Democratic Republic of the Congo",
         "TIME_NAME": "year",
         "NUMERICAL_NAME": "rank",
         "COMMENT_NAME": "comments"

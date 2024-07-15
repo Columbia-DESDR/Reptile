@@ -26,7 +26,7 @@ length = end - start + 1
 @app.route('/', methods=['GET'])
 def com():
     return render_template('res.html',
-                           instance_title=app.config['INSTANCE_TITLE'],
+                           instance_title=display['INSTANCE_TITLE'],
                            filename=data_sources['FILENAME'],
                            first_level_name=data_levels['FIRST_LEVEL_NAME'],
                            second_level_name=data_levels['SECOND_LEVEL_NAME'],

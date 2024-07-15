@@ -3,7 +3,6 @@ import pandas as pd
 import sys
 
 
-
 try:
     # Initialize DuckDB
     conn = duckdb.connect('./db/feedback.db')
@@ -56,6 +55,7 @@ try:
 except:
     pass
 
+
 def insert_data(data):
     
     conn = duckdb.connect('./db/feedback.db')
@@ -74,6 +74,7 @@ def insert_data(data):
     conn.execute(sql)
     conn.commit()
     conn.close()
+
 
 def read_data():
     conn = duckdb.connect('./db/feedback.db')
