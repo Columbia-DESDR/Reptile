@@ -1,5 +1,6 @@
+import os
 import flask
-from flask import request, Response, json, render_template,send_file
+from flask import request, Response, json, render_template, send_file
 import db
 import readcsv
 import json
@@ -7,55 +8,37 @@ import pandas as pd
 from io import StringIO
 
 
-df = None
 app = flask.Flask(__name__, static_url_path='')
-app.config["DEBUG"] = True
-
-# config
-# filename = "./db/heatmap_data_lineage.csv"
-# first_level_name = "Region"
-# second_level_name = "District"
-# third_level_name = "Village"
-# fourth_level_name = "_index"
-# time_name = "year"
-# numerical_name = "rank"
-# comment_name = "comment"
-
-
-season_a = "./db/season_a.csv"
-season_b = "./db/season_b.csv"
-
-filename = "./db/DRC_badyears_forzach.csv"
-first_level_name = "province"
-second_level_name = "sector"
-third_level_name = "village"
-fourth_level_name = "survey_id"
-time_name = "year"
-numerical_name = "rank"
-comment_name = "comments"
-start = 1990
-end = 2023
-length = end - start + 1
+app.config.from_file("config.json", load=json.load)
 
 
 @app.route('/', methods=['GET'])
 def com():
-    return render_template('res.html', filename=filename,
-                           first_level_name=first_level_name,
-                           second_level_name=second_level_name,
-                           third_level_name=third_level_name, 
-                           fourth_level_name=fourth_level_name, 
-                           time_name=time_name, 
-                           numerical_name=numerical_name,
-                           comment_name=comment_name,
+    data_sources = app.config['DATA_SOURCES']
+    data_levels = app.config['DATA_LEVELS']
+    display = app.config['DISPLAY']
+
+    start = app.config['TIMESPAN']['START']
+    end = app.config['TIMESPAN']['END']
+    length = end - start + 1
+
+    return render_template('res.html',
+                           instance_title=display['INSTANCE_TITLE'],
+                           filename=data_sources['FILENAME'],
+                           first_level_name=data_levels['FIRST_LEVEL_NAME'],
+                           second_level_name=data_levels['SECOND_LEVEL_NAME'],
+                           third_level_name=data_levels['THIRD_LEVEL_NAME'],
+                           fourth_level_name=data_levels['FOURTH_LEVEL_NAME'],
+                           time_name=display['TIME_NAME'],
+                           numerical_name=display['NUMERICAL_NAME'],
+                           comment_name=display['COMMENT_NAME'],
                            start=start,
                            length=length,
-                           season_a=season_a,
-                           season_b=season_b)
+                           season_a=data_sources['SEASON_A'],
+                           season_b=data_sources['SEASON_B'])
+
 
 # A route to return all of the available entries in our catalog.
-
-
 @app.route('/api/zones', methods=['GET'])
 def api_zones():
     with open("./db/eth_woredas_dd.json") as f:
@@ -484,13 +467,12 @@ def api_subzambia():
 
 @app.after_request
 def after_request(response):
-    response.headers.add('Access-Control-Allow-Origisn', '*')
+    response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add('Access-Control-Allow-Headers',
                          'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
     return response
 
 
-# if __name__ == "__main__":
-#     app.run()
-app.run()
+if __name__ == "__main__":
+    app.run()
