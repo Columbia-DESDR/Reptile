@@ -91,9 +91,6 @@ let tooltipdiv = d3.select("body").append("div")
     .style("left", "20px")
     .style("top", "44px");
 
-
-
-
 class DataStorage {
     constructor() {
         this.data = {}
@@ -399,8 +396,6 @@ function submitRec(sidvalue) {
         "comment": d3.select("#worstcomment").property("value"),
     }
 
-
-    
     if (result["name"] == "your name") {
         alert("Please enter your name!")
         return
