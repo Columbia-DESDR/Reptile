@@ -8,23 +8,20 @@ import pandas as pd
 from io import StringIO
 
 
-df = None
-
 app = flask.Flask(__name__, static_url_path='')
 app.config.from_file("config.json", load=json.load)
 
 
-data_sources = app.config['DATA_SOURCES']
-data_levels = app.config['DATA_LEVELS']
-display = app.config['DISPLAY']
-
-start = app.config['TIMESPAN']['START']
-end = app.config['TIMESPAN']['END']
-length = end - start + 1
-
-
 @app.route('/', methods=['GET'])
 def com():
+    data_sources = app.config['DATA_SOURCES']
+    data_levels = app.config['DATA_LEVELS']
+    display = app.config['DISPLAY']
+
+    start = app.config['TIMESPAN']['START']
+    end = app.config['TIMESPAN']['END']
+    length = end - start + 1
+
     return render_template('res.html',
                            instance_title=display['INSTANCE_TITLE'],
                            filename=data_sources['FILENAME'],
@@ -40,9 +37,8 @@ def com():
                            season_a=data_sources['SEASON_A'],
                            season_b=data_sources['SEASON_B'])
 
+
 # A route to return all of the available entries in our catalog.
-
-
 @app.route('/api/zones', methods=['GET'])
 def api_zones():
     with open("./db/eth_woredas_dd.json") as f:
@@ -471,7 +467,7 @@ def api_subzambia():
 
 @app.after_request
 def after_request(response):
-    response.headers.add('Access-Control-Allow-Origisn', '*')
+    response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add('Access-Control-Allow-Headers',
                          'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
