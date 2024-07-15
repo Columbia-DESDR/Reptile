@@ -3,17 +3,15 @@ import numpy as np
 
 RegionData = pd.read_csv("./db/pregion2.csv")
 RegionData = RegionData.set_index(["Region","year"])
-# RegionData.loc[("Tigray",1983)]
 
 DistrictData = pd.read_csv("./db/pvillage3.csv")
 DistrictData = DistrictData.set_index(["District","year"])
-# VillageData.loc[("Ebenat",1983)]
+
 
 def getRegionExplanation(region, year, aggOriginal, complained_agg, com_too_small):
     explanations = []
     aggs = ["count","std","mean"]
     
-
     for index, row in RegionData.loc[(region,year)].iterrows():
         aggOld = {}
         aggNew = {}
@@ -37,7 +35,6 @@ def getRegionExplanation(region, year, aggOriginal, complained_agg, com_too_smal
             explanation["after"] = aggAfterRepair[complained_agg]
             explanations.append(explanation)
                 
-    
     if com_too_small:
         explanations.sort(key=lambda x: -x["after"])
     else:
@@ -60,7 +57,6 @@ def getDistrictExplanation(district, year, aggOriginal, complained_agg, com_too_
 
         aggNew['mean'] = row["pmean"]
 
-        
         aggAfterRepair = add(remove(aggOriginal,aggOld),aggNew)
         
         if((com_too_small and aggAfterRepair[complained_agg] > aggOriginal[complained_agg] + 0.01) or
@@ -73,7 +69,6 @@ def getDistrictExplanation(district, year, aggOriginal, complained_agg, com_too_
             explanation["after"] = aggAfterRepair[complained_agg]
             explanations.append(explanation)
                 
-    
     if com_too_small:
         explanations.sort(key=lambda x: -x["after"])
     else:
@@ -102,6 +97,7 @@ def add(agg1, agg2):
         var = 0
     agg3["std"] = var**(0.5)
     return agg3
+
 
 def remove(agg1, agg2):
     agg3 = {}

@@ -281,9 +281,8 @@ solutions = [
 
 @app.route('/api/explan', methods=['POST'])
 def api_explan():
-
-    # print(request.json)
     data = {'explan': [], 'sol': []}
+
     if (request.json['visual']['filename'] == filename1):
         # the null year rectangle
         if (request.json['comp']['rank'] is None):
@@ -305,11 +304,11 @@ def api_explan():
                     + str(request.json['comp']['year']) + \
                     " and " + str(request.json['des']['year'])
                 data['explan'].append(checked)
-
     elif (request.json['visual']['filename'] == filename2):
         data['explan'].append(explanations[4])
         data['explan'].append(explanations[5])
         data['explan'].append(explanations[6])
+
     if (len(request.json['visual']['hiearchy']) - len(request.json['visual']['hierchy_values']) > 1):
         data['explan'].append(explanations[2])
     data['explan'].append({'name': 'submit_button', 'type': 'button',

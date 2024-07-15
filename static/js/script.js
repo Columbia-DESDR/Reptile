@@ -979,8 +979,6 @@ class Explanation {
     }
 
     writeComplain(data, att, tooLarge) {
-
-
         let callerClass = this;
 
         let level = getLevel(data)
@@ -1425,7 +1423,6 @@ function SendSub(schema) {
             return data
         })
 }
-
 
 function SendLoad(result = "") {
     var x, text;
