@@ -1,5 +1,6 @@
+import os
 import flask
-from flask import request, Response, json, render_template,send_file
+from flask import request, Response, json, render_template, send_file
 import db
 import readcsv
 import json
@@ -8,50 +9,36 @@ from io import StringIO
 
 
 df = None
+
 app = flask.Flask(__name__, static_url_path='')
-app.config["DEBUG"] = True
-
-# config
-# filename = "./db/heatmap_data_lineage.csv"
-# first_level_name = "Region"
-# second_level_name = "District"
-# third_level_name = "Village"
-# fourth_level_name = "_index"
-# time_name = "year"
-# numerical_name = "rank"
-# comment_name = "comment"
+app.config.from_file("config.json", load=json.load)
 
 
-season_a = "./db/season_a.csv"
-season_b = "./db/season_b.csv"
+data_sources = app.config['DATA_SOURCES']
+data_levels = app.config['DATA_LEVELS']
+display = app.config['DISPLAY']
 
-filename = "./db/DRC_badyears_forzach.csv"
-first_level_name = "province"
-second_level_name = "sector"
-third_level_name = "village"
-fourth_level_name = "survey_id"
-time_name = "year"
-numerical_name = "rank"
-comment_name = "comments"
-start = 1990
-end = 2023
+start = app.config['TIMESPAN']['START']
+end = app.config['TIMESPAN']['END']
 length = end - start + 1
 
 
 @app.route('/', methods=['GET'])
 def com():
-    return render_template('res.html', filename=filename,
-                           first_level_name=first_level_name,
-                           second_level_name=second_level_name,
-                           third_level_name=third_level_name, 
-                           fourth_level_name=fourth_level_name, 
-                           time_name=time_name, 
-                           numerical_name=numerical_name,
-                           comment_name=comment_name,
+    return render_template('res.html',
+                           instance_title=app.config['INSTANCE_TITLE'],
+                           filename=data_sources['FILENAME'],
+                           first_level_name=data_levels['FIRST_LEVEL_NAME'],
+                           second_level_name=data_levels['SECOND_LEVEL_NAME'],
+                           third_level_name=data_levels['THIRD_LEVEL_NAME'],
+                           fourth_level_name=data_levels['FOURTH_LEVEL_NAME'],
+                           time_name=display['TIME_NAME'],
+                           numerical_name=display['NUMERICAL_NAME'],
+                           comment_name=display['COMMENT_NAME'],
                            start=start,
                            length=length,
-                           season_a=season_a,
-                           season_b=season_b)
+                           season_a=data_sources['SEASON_A'],
+                           season_b=data_sources['SEASON_B'])
 
 # A route to return all of the available entries in our catalog.
 
@@ -491,6 +478,5 @@ def after_request(response):
     return response
 
 
-# if __name__ == "__main__":
-#     app.run()
-app.run()
+if __name__ == "__main__":
+    app.run()

@@ -1,0 +1,24 @@
+{
+    "DEBUG": true,
+    "INSTANCE_TITLE": "Africa - Democratic Republic of the Congo",
+    "DATA_SOURCES": {
+        "FILENAME": "./db/DRC_badyears_forzach.csv",
+        "SEASON_A": "./db/season_a.csv",
+        "SEASON_B": "./db/season_b.csv"
+    },
+    "DATA_LEVELS": {
+        "FIRST_LEVEL_NAME": "province",
+        "SECOND_LEVEL_NAME": "sector",
+        "THIRD_LEVEL_NAME": "village",
+        "FOURTH_LEVEL_NAME": "survey_id"
+    },
+    "TIMESPAN": {
+        "START": 1990,
+        "END": 2023
+    },
+    "DISPLAY": {
+        "TIME_NAME": "year",
+        "NUMERICAL_NAME": "rank",
+        "COMMENT_NAME": "comments"
+    }
+}
