@@ -4,8 +4,7 @@ class Visualization {
     constructor(svg_id, options) {
         this.svg = d3.select(svg_id)
         this.options = options
-        this.explanable = true
-
+        this.explainable = true
     }
     registerLinks(links) {
         this.links = links
@@ -18,7 +17,7 @@ class Visualization {
     }
     propogate(schema) {
         // highlight other vis linked
-        this.links.forEach(vis => vis.highlight(schema, this.explanable));
+        this.links.forEach(vis => vis.highlight(schema, this.explainable));
     }
     propogateClear() {
         // highlight other vis linked
@@ -174,7 +173,7 @@ class HeatMap extends Visualization {
             .on("mousemove", function () { return tooltipdiv.style("top", (event.pageY) + "px").style("left", (event.pageX) + "px"); })
             .on("mouseout", function () { return tooltipdiv.style("opacity", 0); })
             .on("click", function (d) {
-                callerClass.highlight(d, callerClass.explanable)
+                callerClass.highlight(d, callerClass.explainable)
                 callerClass.propogate(d)
             })
     }
@@ -199,7 +198,7 @@ class HeatMap extends Visualization {
 class CountrySatelliteHeatMap extends HeatMap {
     constructor(svg_id, options) {
         super(svg_id, options)
-        this.explanable = false
+        this.explainable = false
     }
     // when plot, need to first get satellite data
     // when put sate, first filter values
@@ -230,7 +229,7 @@ class CountrySatelliteHeatMap extends HeatMap {
 class RegionSatelliteHeatMap extends HeatMap {
     constructor(svg_id, options) {
         super(svg_id, options)
-        this.explanable = false
+        this.explainable = false
     }
     // when plot, need to first get satellite data
     // when put sate, first filter values
@@ -258,7 +257,7 @@ class RegionSatelliteHeatMap extends HeatMap {
 class DistrictSatelliteHeatMap extends HeatMap {
     constructor(svg_id, options) {
         super(svg_id, options)
-        this.explanable = false
+        this.explainable = false
     }
 
     // when plot, need to first get satellite data
