@@ -18,8 +18,6 @@ let margin = { top: 10, right: 100, bottom: 100, left: 60, right_short: 20 },
     height = 600 - margin.top - margin.bottom;
 
 function GetHeatMap(schema) {
-    var x, text;
-    // Get the value of the input field with id="numb"
     const data = {
         'filename': schema.filename,
         'hierarchy': schema.hierarchy,
@@ -60,8 +58,6 @@ function GetHeatMap(schema) {
 
 // special method for village sate because only village attribute
 function GetData2(schema) {
-    var x, text;
-    // Get the value of the input field with id="numb"
     const data = {
         'filename': schema.filename,
         'hierarchy': schema.hierarchy,
