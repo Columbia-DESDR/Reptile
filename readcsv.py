@@ -23,39 +23,39 @@ def readsub2():
 
 class HierachyData():
     # filename is the file to be read 
-    # hiearchy is a list of hiearchy attributes in descending order
-    def __init__(self, filename, hiearchy):
+    # hierarchy is a list of hierarchy attributes in descending order
+    def __init__(self, filename, hierarchy):
         if(filename.startswith("./") or filename.startswith("/")):
             self.data = pd.read_csv(filename)
         else:
             self.data = pd.read_sql("select * from " + filename, con)
-        for attr in hiearchy:
+        for attr in hierarchy:
             if attr not in self.data.columns:
                 self.data[attr] = ""
         global DataStore
         DataStore  = self.data.copy()
-        self.data = self.data.set_index(hiearchy)
-        self.hiearchy = hiearchy
+        self.data = self.data.set_index(hierarchy)
+        self.hierarchy = hierarchy
 
     def get_summary2(self):
-        self.summary = self.data.reset_index()[self.hiearchy[0:4]].groupby(self.hiearchy[0:3]).agg(['unique']).to_json(orient='index')
+        self.summary = self.data.reset_index()[self.hierarchy[0:4]].groupby(self.hierarchy[0:3]).agg(['unique']).to_json(orient='index')
         return self.summary
 
     def get_summary(self):
-        self.summary = self.data.reset_index()[self.hiearchy[0:2]].groupby(self.hiearchy[0]).agg(['unique']).to_json(orient='index')
+        self.summary = self.data.reset_index()[self.hierarchy[0:2]].groupby(self.hierarchy[0]).agg(['unique']).to_json(orient='index')
         return self.summary
 
     # get unique for header
-    def get_unique(self,hierchy_values):
-        if len(hierchy_values) == 0:
-            return self.data.reset_index()[self.hiearchy[len(hierchy_values)]].unique().tolist()
-        return self.data.loc[tuple(hierchy_values)].reset_index()[self.hiearchy[len(hierchy_values)]].unique().tolist()
+    def get_unique(self,hierarchy_values):
+        if len(hierarchy_values) == 0:
+            return self.data.reset_index()[self.hierarchy[len(hierarchy_values)]].unique().tolist()
+        return self.data.loc[tuple(hierarchy_values)].reset_index()[self.hierarchy[len(hierarchy_values)]].unique().tolist()
 
-    # get data given hierchy_values
-    def get_data(self,hierchy_values):
-        return self.data.loc[tuple(hierchy_values)].reset_index().to_json(orient='records')  
+    # get data given hierarchy_values
+    def get_data(self,hierarchy_values):
+        return self.data.loc[tuple(hierarchy_values)].reset_index().to_json(orient='records')  
 
-    # get data given hierchy_values
+    # get data given hierarchy_values
     def get_data2(self,set_values):
         result = None
         
@@ -72,24 +72,24 @@ class HierachyData():
         return result.reset_index().to_json(orient='records')  
 
 
-    # get data given hierchy_values
+    # get data given hierarchy_values
     # list of two categorical attributes
     # one numerical attribute
-    # and aggragation method
-    def get_heatmap_data(self,hierchy_values,categorical,numerical,aggragation):
+    # and aggregation method
+    def get_heatmap_data(self,hierarchy_values,categorical,numerical,aggregation):
         
-        return self.get_heatmap(hierchy_values,categorical,numerical,aggragation).to_json(orient='records')
-        # return self.data.loc[tuple(hierchy_values)].groupby(categorical).agg(aggragation).reset_index().to_json(orient='records')   
+        return self.get_heatmap(hierarchy_values,categorical,numerical,aggregation).to_json(orient='records')
+        # return self.data.loc[tuple(hierarchy_values)].groupby(categorical).agg(aggregation).reset_index().to_json(orient='records')   
 
-    def get_heatmap_withtotal(self,hierchy_values,categorical,numerical,aggragation):
-        # return self.data.loc[tuple(hierchy_values)][categorical+numerical]\
-        #              .groupby(categorical)[numerical].agg(aggragation).reset_index().to_json(orient='records')   
+    def get_heatmap_withtotal(self,hierarchy_values,categorical,numerical,aggregation):
+        # return self.data.loc[tuple(hierarchy_values)][categorical+numerical]\
+        #              .groupby(categorical)[numerical].agg(aggregation).reset_index().to_json(orient='records')   
         aggregation = ['mean','std','count']
         
-        if len(hierchy_values) == 0:
+        if len(hierarchy_values) == 0:
             agg = self.data
         else:
-            agg = self.data.loc[tuple(hierchy_values)]
+            agg = self.data.loc[tuple(hierarchy_values)]
         agg = agg.groupby(categorical[-1])[numerical].agg(aggregation)
         agg = agg.replace(np.nan, 0)
    
@@ -97,23 +97,23 @@ class HierachyData():
         agg[categorical[0]] = 'total'
         # agg["rank"]  = (agg["mean"]*agg["count"]).rank(ascending=True)
         agg["rank"]  = (agg["mean"]*agg["count"]).rank(ascending=False,method='first')
-        if len(hierchy_values) == 0:
+        if len(hierarchy_values) == 0:
             each = self.data
         else:
-            each = self.data.loc[tuple(hierchy_values)]
+            each = self.data.loc[tuple(hierarchy_values)]
         each = each.groupby(categorical)[numerical].agg(aggregation)
         each.columns = ['mean','std','count']
         each = each.replace(np.nan, 0)
         each["rank"]  = (each["mean"]*each["count"]).groupby(categorical[0]).rank(ascending=False,method='first') 
         return pd.concat([agg.reset_index(),each.reset_index()])
 
-    def get_heatmap(self,hierchy_values,categorical,numerical,aggragation):
+    def get_heatmap(self,hierarchy_values,categorical,numerical,aggregation):
         aggregation = ['mean','std','count']
 
-        if len(hierchy_values) == 0:
+        if len(hierarchy_values) == 0:
             each = self.data
         else:
-            each = self.data.loc[tuple(hierchy_values)]
+            each = self.data.loc[tuple(hierarchy_values)]
         each = each.groupby(categorical)[numerical].agg(aggregation)
         each.columns = ['mean','std','count']
         each = each.replace(np.nan, 0)
@@ -129,17 +129,17 @@ class HierachyData():
         
         return each.reset_index()
 
-    def get_heatmap_withoutagg(self,hierchy_values,categorical,numerical,aggragation):
-        # return self.data.loc[tuple(hierchy_values)][categorical+numerical]\
-        #              .groupby(categorical)[numerical].agg(aggragation).reset_index().to_json(orient='records')   
+    def get_heatmap_withoutagg(self,hierarchy_values,categorical,numerical,aggregation):
+        # return self.data.loc[tuple(hierarchy_values)][categorical+numerical]\
+        #              .groupby(categorical)[numerical].agg(aggregation).reset_index().to_json(orient='records')   
         aggregation = ['mean','std','count']
-        each = self.data.loc[tuple(hierchy_values)].groupby(categorical).agg(aggregation)
+        each = self.data.loc[tuple(hierarchy_values)].groupby(categorical).agg(aggregation)
         each.columns = ['mean','std','count']
         each["rank"]  = (each["mean"]/each["count"]).groupby(categorical[0]).rank(ascending=True) 
         return each.reset_index()
     
-    def complaint(self,hierchy_values,categorical,numerical,aggragation,year,de_mean):
-        df_all = self.get_heatmap_withoutagg(hierchy_values,categorical,numerical,aggragation)
+    def complaint(self,hierarchy_values,categorical,numerical,aggregation,year,de_mean):
+        df_all = self.get_heatmap_withoutagg(hierarchy_values,categorical,numerical,aggregation)
         df_all = df_all.replace(np.nan, 0)
         all_mean = df_all['mean'].median()
         all_count = df_all['count'].median() 
