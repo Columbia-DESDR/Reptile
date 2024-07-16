@@ -4,8 +4,8 @@ const YEAR_START = FLASK_VARIABLES.start
 const YEAR_LENGTH = FLASK_VARIABLES.length
 
 // Color
-const mainColorBarChart = '#CA0D0D'
-const mainColorHeatmapFarmers = '#079A0D'
+const mainColorMeanBarChart = '#079A0D'
+const mainColorHeatmap = '#079A0D'
 const mainColorHeatmapSatellite = '#077F9A'
 
 // url to this page (and infer server address)
@@ -141,37 +141,37 @@ function objToStr(d) {
 }
 
 let s4 = new ScatterPlot("#v_2", {})
-let b4 = new BarChart("#v_3", { color: ["#ffffff", mainColorBarChart] })
+let b4 = new BarChart("#v_3", { color: ["#ffffff", mainColorMeanBarChart] })
 let e4 = new Explanation("#v_4", [], false, true, false)
-let m4 = new HeatMap("#v_1", { color: ["#ffffff", mainColorHeatmapFarmers] })
+let m4 = new HeatMap("#v_1", { color: ["#ffffff", mainColorHeatmap] })
 s4.registerLinks([b4, e4, m4])
 b4.registerLinks([e4, s4, m4])
 m4.registerLinks([s4, b4, e4])
 
 let s3 = new ScatterPlot("#d_2", {})
-let b3 = new BarChart("#d_3", { color: ["#ffffff", mainColorBarChart] })
+let b3 = new BarChart("#d_3", { color: ["#ffffff", mainColorMeanBarChart] })
 let e3 = new Explanation("#d_4", [m4], false, false, true)
-let m3 = new HeatMap("#d_1", { color: ["#ffffff", mainColorHeatmapFarmers] })
+let m3 = new HeatMap("#d_1", { color: ["#ffffff", mainColorHeatmap] })
 
 s3.registerLinks([b3,e3,m3])
 b3.registerLinks([e3,s3,m3])
 m3.registerLinks([s3,b3,e3])
 
 let s2 = new ScatterPlot("#r_2",{})
-let b2 = new BarChart("#r_3", {color:["#ffffff",mainColorBarChart]})
+let b2 = new BarChart("#r_3", {color:["#ffffff",mainColorMeanBarChart]})
 
 let e2 = new Explanation("#r_4",[m3],true, true, false)
-let m2 = new HeatMap("#r_1",{color:["#ffffff",mainColorHeatmapFarmers]})
+let m2 = new HeatMap("#r_1",{color:["#ffffff",mainColorHeatmap]})
 
 s2.registerLinks([b2,e2,m2])
 b2.registerLinks([e2,s2,m2])
 m2.registerLinks([s2,b2,e2])
 
 let s1 = new ScatterPlot("#c_2", {})
-let b1 = new BarChart("#c_3", { color: ["#ffffff", mainColorBarChart] })
+let b1 = new BarChart("#c_3", { color: ["#ffffff", mainColorMeanBarChart] })
 
 let e1 = new Explanation("#c_4", [m2], true, false, true)
-let m1 = new HeatMap("#c_1", { color: ["#ffffff", mainColorHeatmapFarmers] })
+let m1 = new HeatMap("#c_1", { color: ["#ffffff", mainColorHeatmap] })
 let sate1 = new CountrySatelliteHeatMap("#r_6",{color:["#ffffff",mainColorHeatmapSatellite]})
 
 s1.registerLinks([b1, e1, m1])
