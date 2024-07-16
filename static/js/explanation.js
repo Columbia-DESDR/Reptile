@@ -244,7 +244,7 @@ class Explanation {
         // deep copy
         let nextSchema = JSON.parse(JSON.stringify(curSchema));
         nextSchema.categorical[0] = nextLevel(nextLevelData[0])
-        nextSchema.hierchy_values.push(nextLevelData[1])
+        nextSchema.hierarchy_values.push(nextLevelData[1])
         console.log(nextSchema)
         
         // get comment if it's the last level

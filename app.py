@@ -104,20 +104,20 @@ data_cache = dict()
 def api_summary():
     print(request.json)
     filename = request.json['filename']
-    hiearchy = request.json['hiearchy']
+    hierarchy = request.json['hierarchy']
     
     if 'category' in request.json:
         category = request.json['category']
     else:
         category = None
 
-    if (filename, tuple(hiearchy), category) in data_cache:
-        d = data_cache[(filename, tuple(hiearchy), category)]
+    if (filename, tuple(hierarchy), category) in data_cache:
+        d = data_cache[(filename, tuple(hierarchy), category)]
     else:
-        d = readcsv.HierachyData(filename, hiearchy)
+        d = readcsv.HierachyData(filename, hierarchy)
         if not category is None:
             d.categorize_attribute(category)
-        data_cache[(filename, tuple(hiearchy), category)] = d
+        data_cache[(filename, tuple(hierarchy), category)] = d
 
     js = json.dumps(d.get_summary())
     resp = Response(js, status=200, mimetype='application/json')
@@ -127,20 +127,20 @@ def api_summary():
 @app.route('/api/summary2', methods=['POST'])
 def api_summary2():
     filename = request.json['filename']
-    hiearchy = request.json['hiearchy']
+    hierarchy = request.json['hierarchy']
 
     if 'category' in request.json:
         category = request.json['category']
     else:
         category = None
 
-    if (filename, tuple(hiearchy), category) in data_cache:
-        d = data_cache[(filename, tuple(hiearchy), category)]
+    if (filename, tuple(hierarchy), category) in data_cache:
+        d = data_cache[(filename, tuple(hierarchy), category)]
     else:
-        d = readcsv.HierachyData(filename, hiearchy)
+        d = readcsv.HierachyData(filename, hierarchy)
         if not category is None:
             d.categorize_attribute(category)
-        data_cache[(filename, tuple(hiearchy), category)] = d
+        data_cache[(filename, tuple(hierarchy), category)] = d
 
     js = json.dumps(d.get_summary2())
     resp = Response(js, status=200, mimetype='application/json')
@@ -150,23 +150,23 @@ def api_summary2():
 @app.route('/api/unique', methods=['POST'])
 def api_unique():
     filename = request.json['filename']
-    hiearchy = request.json['hiearchy']
-    hierchy_values = request.json['hierchy_values']
+    hierarchy = request.json['hierarchy']
+    hierarchy_values = request.json['hierarchy_values']
 
     if 'category' in request.json:
         category = request.json['category']
     else:
         category = None
 
-    if (filename, tuple(hiearchy), category) in data_cache:
-        d = data_cache[(filename, tuple(hiearchy), category)]
+    if (filename, tuple(hierarchy), category) in data_cache:
+        d = data_cache[(filename, tuple(hierarchy), category)]
     else:
-        d = readcsv.HierachyData(filename, hiearchy)
+        d = readcsv.HierachyData(filename, hierarchy)
         if not category is None:
             d.categorize_attribute(category)
-        data_cache[(filename, tuple(hiearchy), category)] = d
+        data_cache[(filename, tuple(hierarchy), category)] = d
 
-    js = json.dumps(d.get_unique(hierchy_values))
+    js = json.dumps(d.get_unique(hierarchy_values))
     resp = Response(js, status=200, mimetype='application/json')
     return resp
 
@@ -180,24 +180,24 @@ def api_heatmapdata():
     print(request.json)
 
     filename = request.json['filename']
-    hiearchy = request.json['hiearchy']
-    hierchy_values = request.json['hierchy_values']
+    hierarchy = request.json['hierarchy']
+    hierarchy_values = request.json['hierarchy_values']
     categorical = request.json['categorical']
     numerical = request.json['numerical']
-    aggragation = request.json['aggragation']
+    aggregation = request.json['aggregation']
     if 'category' in request.json:
         category = request.json['category']
     else:
         category = None
-    if (filename, tuple(hiearchy), category) in data_cache:
-        d = data_cache[(filename, tuple(hiearchy), category)]
+    if (filename, tuple(hierarchy), category) in data_cache:
+        d = data_cache[(filename, tuple(hierarchy), category)]
     else:
-        d = readcsv.HierachyData(filename, hiearchy)
+        d = readcsv.HierachyData(filename, hierarchy)
         if not category is None:
             d.categorize_attribute(category)
-        data_cache[(filename, tuple(hiearchy), category)] = d
-    result = d.get_heatmap_data(hierchy_values,
-                                categorical, numerical, aggragation)
+        data_cache[(filename, tuple(hierarchy), category)] = d
+    result = d.get_heatmap_data(hierarchy_values,
+                                categorical, numerical, aggregation)
 
     js = json.dumps(result)
     resp = Response(js, status=200, mimetype='application/json')
@@ -207,22 +207,22 @@ def api_heatmapdata():
 @app.route('/api/data', methods=['POST'])
 def api_data():
     filename = request.json['filename']
-    hiearchy = request.json['hiearchy']
-    hierchy_values = request.json['hierchy_values']
+    hierarchy = request.json['hierarchy']
+    hierarchy_values = request.json['hierarchy_values']
     if 'category' in request.json:
         category = request.json['category']
     else:
         category = None
 
-    if (filename, tuple(hiearchy), category) in data_cache:
-        d = data_cache[(filename, tuple(hiearchy), category)]
+    if (filename, tuple(hierarchy), category) in data_cache:
+        d = data_cache[(filename, tuple(hierarchy), category)]
     else:
-        d = readcsv.HierachyData(filename, hiearchy)
+        d = readcsv.HierachyData(filename, hierarchy)
         if not category is None:
             d.categorize_attribute(category)
-        data_cache[(filename, tuple(hiearchy), category)] = d
+        data_cache[(filename, tuple(hierarchy), category)] = d
 
-    result = d.get_data(hierchy_values)
+    result = d.get_data(hierarchy_values)
     js = json.dumps(result)
     resp = Response(js, status=200, mimetype='application/json')
     return resp
@@ -232,21 +232,21 @@ def api_data():
 def api_data2():
     print(request.json)
     filename = request.json['filename']
-    hiearchy = request.json['hiearchy']
-    hierchy_values = request.json['hierchy_values']
+    hierarchy = request.json['hierarchy']
+    hierarchy_values = request.json['hierarchy_values']
 
     if 'category' in request.json:
         category = request.json['category']
     else:
         category = None
-    if (filename, tuple(hiearchy), category) in data_cache:
-        d = data_cache[(filename, tuple(hiearchy), category)]
+    if (filename, tuple(hierarchy), category) in data_cache:
+        d = data_cache[(filename, tuple(hierarchy), category)]
     else:
-        d = readcsv.HierachyData(filename, hiearchy)
+        d = readcsv.HierachyData(filename, hierarchy)
         if not category is None:
             d.categorize_attribute(category)
-        data_cache[(filename, tuple(hiearchy), category)] = d
-    result = d.get_data2(hierchy_values)
+        data_cache[(filename, tuple(hierarchy), category)] = d
+    result = d.get_data2(hierarchy_values)
     # print(result)
     js = json.dumps(result)
     resp = Response(js, status=200, mimetype='application/json')
@@ -309,7 +309,7 @@ def api_explan():
         data['explan'].append(explanations[5])
         data['explan'].append(explanations[6])
 
-    if (len(request.json['visual']['hiearchy']) - len(request.json['visual']['hierchy_values']) > 1):
+    if (len(request.json['visual']['hierarchy']) - len(request.json['visual']['hierarchy_values']) > 1):
         data['explan'].append(explanations[2])
     data['explan'].append({'name': 'submit_button', 'type': 'button',
                           'display': 'Choose the Explanation', 'onclick': "Solution()"})
@@ -341,29 +341,29 @@ def api_explan2():
 def api_sol():
     print(request.json)
     filename = request.json['visual']['filename']
-    hiearchy = request.json['visual']['hiearchy']
-    hierchy_values = request.json['visual']['hierchy_values']
+    hierarchy = request.json['visual']['hierarchy']
+    hierarchy_values = request.json['visual']['hierarchy_values']
     categorical = request.json['visual']['categorical']
     numerical = request.json['visual']['numerical']
-    aggragation = request.json['visual']['aggragation']
+    aggregation = request.json['visual']['aggregation']
 
     if 'category' in request.json['visual']:
         category = request.json['visual']['category']
     else:
         category = None
-    if (filename, tuple(hiearchy), category) in data_cache:
-        d = data_cache[(filename, tuple(hiearchy), category)]
+    if (filename, tuple(hierarchy), category) in data_cache:
+        d = data_cache[(filename, tuple(hierarchy), category)]
     else:
-        d = readcsv.HierachyData(filename, hiearchy)
+        d = readcsv.HierachyData(filename, hierarchy)
         if not category is None:
             d.categorize_attribute(category)
-        data_cache[(filename, tuple(hiearchy), category)] = d
+        data_cache[(filename, tuple(hierarchy), category)] = d
 
     year = request.json['des']['year']
     de_mean = request.json['des']['mean']
 
-    data = d.complaint(hierchy_values, categorical,
-                       numerical, aggragation, year, de_mean)
+    data = d.complaint(hierarchy_values, categorical,
+                       numerical, aggregation, year, de_mean)
     js = json.dumps(data)
     resp = Response(js, status=200, mimetype='application/json')
     return resp

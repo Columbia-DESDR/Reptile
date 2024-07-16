@@ -8,6 +8,8 @@ const mainColorMeanBarChart = '#079A0D'
 const mainColorHeatmap = '#079A0D'
 const mainColorHeatmapSatellite = '#077F9A'
 
+const WHITE = "#ffffff"
+
 // url to this page (and infer server address)
 const url = window.location.origin + '/';
 
@@ -16,15 +18,13 @@ let margin = { top: 10, right: 100, bottom: 100, left: 60, right_short: 20 },
     height = 600 - margin.top - margin.bottom;
 
 function GetHeatMap(schema) {
-    var x, text;
-    // Get the value of the input field with id="numb"
     const data = {
         'filename': schema.filename,
-        'hiearchy': schema.hiearchy,
-        'hierchy_values': schema.hierchy_values,
+        'hierarchy': schema.hierarchy,
+        'hierarchy_values': schema.hierarchy_values,
         'categorical': schema.categorical,
         'numerical': schema.numerical,
-        'aggragation': schema.aggragation,
+        'aggregation': schema.aggregation,
         'category': schema.category,
         'time': Date().toLocaleString()
     };
@@ -58,12 +58,10 @@ function GetHeatMap(schema) {
 
 // special method for village sate because only village attribute
 function GetData2(schema) {
-    var x, text;
-    // Get the value of the input field with id="numb"
     const data = {
         'filename': schema.filename,
-        'hiearchy': schema.hiearchy,
-        'hierchy_values': schema.hierchy_values,
+        'hierarchy': schema.hierarchy,
+        'hierarchy_values': schema.hierarchy_values,
     };
     const other_params = {
         headers: { "content-type": "application/json; charset=UTF-8" },
@@ -141,38 +139,37 @@ function objToStr(d) {
 }
 
 let s4 = new ScatterPlot("#v_2", {})
-let b4 = new BarChart("#v_3", { color: ["#ffffff", mainColorMeanBarChart] })
+let b4 = new BarChart("#v_3", { color: [WHITE, mainColorMeanBarChart] })
 let e4 = new Explanation("#v_4", [], false, true, false)
-let m4 = new HeatMap("#v_1", { color: ["#ffffff", mainColorHeatmap] })
+let m4 = new HeatMap("#v_1", { color: [WHITE, mainColorHeatmap] })
 s4.registerLinks([b4, e4, m4])
 b4.registerLinks([e4, s4, m4])
 m4.registerLinks([s4, b4, e4])
 
 let s3 = new ScatterPlot("#d_2", {})
-let b3 = new BarChart("#d_3", { color: ["#ffffff", mainColorMeanBarChart] })
+let b3 = new BarChart("#d_3", { color: [WHITE, mainColorMeanBarChart] })
 let e3 = new Explanation("#d_4", [m4], false, false, true)
-let m3 = new HeatMap("#d_1", { color: ["#ffffff", mainColorHeatmap] })
+let m3 = new HeatMap("#d_1", { color: [WHITE, mainColorHeatmap] })
 
 s3.registerLinks([b3,e3,m3])
 b3.registerLinks([e3,s3,m3])
 m3.registerLinks([s3,b3,e3])
 
 let s2 = new ScatterPlot("#r_2",{})
-let b2 = new BarChart("#r_3", {color:["#ffffff",mainColorMeanBarChart]})
-
-let e2 = new Explanation("#r_4",[m3],true, true, false)
-let m2 = new HeatMap("#r_1",{color:["#ffffff",mainColorHeatmap]})
+let b2 = new BarChart("#r_3", {color:[WHITE,mainColorMeanBarChart]})
+let e2 = new Explanation("#r_4",[m3], true, true, false)
+let m2 = new HeatMap("#r_1",{color:[WHITE,mainColorHeatmap]})
 
 s2.registerLinks([b2,e2,m2])
 b2.registerLinks([e2,s2,m2])
 m2.registerLinks([s2,b2,e2])
 
 let s1 = new ScatterPlot("#c_2", {})
-let b1 = new BarChart("#c_3", { color: ["#ffffff", mainColorMeanBarChart] })
+let b1 = new BarChart("#c_3", { color: [WHITE, mainColorMeanBarChart] })
 
 let e1 = new Explanation("#c_4", [m2], true, false, true)
-let m1 = new HeatMap("#c_1", { color: ["#ffffff", mainColorHeatmap] })
-let sate1 = new CountrySatelliteHeatMap("#r_6",{color:["#ffffff",mainColorHeatmapSatellite]})
+let m1 = new HeatMap("#c_1", { color: [WHITE, mainColorHeatmap] })
+let sate1 = new CountrySatelliteHeatMap("#r_6",{color:[WHITE,mainColorHeatmapSatellite]})
 
 s1.registerLinks([b1, e1, m1])
 b1.registerLinks([e1, s1, m1])
@@ -200,11 +197,11 @@ let RegionSate = []
 let DistrictSate = []
 
 let schemaSate = {
-    hiearchy: [first_level_name, second_level_name, third_level_name, fourth_level_name],
-    hierchy_values: [],
+    hierarchy: [first_level_name, second_level_name, third_level_name, fourth_level_name],
+    hierarchy_values: [],
     categorical: [first_level_name, 'year'],
     numerical: ['drought_rank'],
-    aggragation: ['mean', 'std', 'count'],
+    aggregation: ['mean', 'std', 'count'],
     category: 'year'
 }
 
@@ -246,11 +243,11 @@ d3.select("#DistrictSate").on("change", function() {
 
 let schemaInitial = {
     filename: filename,
-    hiearchy: [first_level_name, second_level_name, third_level_name, fourth_level_name],
-    hierchy_values: [],
+    hierarchy: [first_level_name, second_level_name, third_level_name, fourth_level_name],
+    hierarchy_values: [],
     categorical: [first_level_name, 'year'],
     numerical: ['rank'],
-    aggragation: ['mean', 'std', 'count'],
+    aggregation: ['mean', 'std', 'count'],
     category: 'year'
 }
 
@@ -288,8 +285,6 @@ function range(start, stop, count) {
     return result;
 };
 
-
-
 // For element overlap
 d3.selection.prototype.moveToFront = function () {
     return this.each(function () {
@@ -305,7 +300,6 @@ d3.selection.prototype.moveToBack = function () {
         }
     });
 };
-
 
 // from data, return the level
 // which is assumed to be the first key
@@ -347,7 +341,6 @@ function hideComp(level) {
 function showComp(level) {
     d3.select("#" + level + "CompBox").style("display", "block").style("overflow", "visible")
 }
-
 
 function submitRec(sidvalue) {
     console.log("submit")
@@ -412,8 +405,6 @@ function submitRec(sidvalue) {
 }
 
 function SendRec(schema) {
-    var x, text;
-    // Get the value of the input field with id="numb"
     const data = {
         'data': schema
     };
@@ -436,8 +427,6 @@ function SendRec(schema) {
 }
 
 function SendSub(schema) {
-    var x, text;
-    // Get the value of the input field with id="numb"
     const data = {
         'geo': user_info,
         'time': Date().toLocaleString(),
@@ -462,8 +451,6 @@ function SendSub(schema) {
 }
 
 function SendLoad(result = "") {
-    var x, text;
-    // Get the value of the input field with id="numb"
     const data = {
         'geo': user_info,
         'time': Date().toLocaleString(),

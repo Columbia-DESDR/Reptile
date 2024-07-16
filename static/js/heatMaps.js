@@ -15,11 +15,11 @@ class Visualization {
     highlight() {
 
     }
-    propogate(schema) {
+    propagate(schema) {
         // highlight other vis linked
         this.links.forEach(vis => vis.highlight(schema, this.explainable));
     }
-    propogateClear() {
+    propagateClear() {
         // highlight other vis linked
         this.links.forEach(vis => vis.clear());
     }
@@ -36,7 +36,7 @@ class Visualization {
 class HeatMap extends Visualization {
     // plot HeatMap given the schema
     plot(schema) {
-        this.propogateClear()
+        this.propagateClear()
         this.schema = schema
         this.process(LocalData.getData(schema.categorical[0]))
     }
@@ -63,7 +63,7 @@ class HeatMap extends Visualization {
             encoding: {
                 x: { range: x_column, field: this.schema.categorical[0] },
                 y: { range: y_column, field: this.schema.categorical[1] },
-                rect: { color: Color, field: this.schema.aggragation[0] }
+                rect: { color: Color, field: this.schema.aggregation[0] }
             },
             legend: {
                 size: size,
@@ -174,7 +174,7 @@ class HeatMap extends Visualization {
             .on("mouseout", function () { return tooltipdiv.style("opacity", 0); })
             .on("click", function (d) {
                 callerClass.highlight(d, callerClass.explainable)
-                callerClass.propogate(d)
+                callerClass.propagate(d)
             })
     }
     highlight(schema) {
@@ -386,7 +386,7 @@ class ScatterPlot extends Visualization {
             .on("mouseout", function () { return tooltipdiv.style("opacity", 0); })
             .on("click", function (d) {
                 callerClass.highlight(d)
-                callerClass.propogate(d)
+                callerClass.propagate(d)
             })
 
         let dot = s.selectAll(".dot").remove()
@@ -406,7 +406,7 @@ class ScatterPlot extends Visualization {
             .on("mouseout", function () { return tooltipdiv.style("opacity", 0); })
             .on("click", function (d) {
                 callerClass.highlight(d)
-                callerClass.propogate(d)
+                callerClass.propagate(d)
             })
     }
     // line and dot are identified by year
@@ -456,7 +456,7 @@ class BarChart extends Visualization {
             data: data,
             encoding: {
                 y: { range: y_column, field: this.schema.categorical[1] },
-                rect: { color: Color, field: this.schema.aggragation[0] }
+                rect: { color: Color, field: this.schema.aggregation[0] }
             },
             tooltip: {
                 mouseover: heatmap_tooptip_mouseover
@@ -541,7 +541,7 @@ class BarChart extends Visualization {
             .on("mouseout", function () { return tooltipdiv.style("opacity", 0); })
             .on("click", function (d) {
                 callerClass.highlight(d)
-                callerClass.propogate(d)
+                callerClass.propagate(d)
             })
     }
     // bar are identified by year
