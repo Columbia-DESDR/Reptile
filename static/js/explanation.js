@@ -1,29 +1,29 @@
 
 class Explanation {
-    constructor(svg_id, links, allowComplaint, allowsurvey, allowdrillDown) {
+    constructor(svg_id, links, allowComplaint, allowSurvey, allowDrillDown) {
         this.svg = d3.select(svg_id)
         this.links = links
         this.allowComplaint = allowComplaint
-        this.allowsurvey = allowsurvey
-        this.allowdrillDown = allowdrillDown
+        this.allowSurvey = allowSurvey
+        this.allowDrillDown = allowDrillDown
     }
-    highlight(schema, explanable) {
+    highlight(schema, explainable) {
         this.clear()
-        this.addDetail(schema, explanable)
+        this.addDetail(schema, explainable)
     }
     clear() {
         this.svg.selectAll("div").remove()
         this.svg.selectAll("select").remove()
         this.svg.selectAll("input").remove()
     }
-    addDetail(data, explanable) {
+    addDetail(data, explainable) {
         console.log(data)
         let agg = ['mean', 'std', 'count']
         let s = this.svg
 
         let callerClass = this;
 
-        if (this.allowsurvey) {
+        if (this.allowSurvey) {
             let shelf_group = s.append("div")
                 .text("Please fill in your name and click on \"submit\" after filling in the form.")
                 .classed("note", true)
@@ -200,7 +200,7 @@ class Explanation {
                 .text("Submit")
 
         }
-        if (this.allowdrillDown) {
+        if (this.allowDrillDown) {
             // can also use data enter
             // however some logics are hard to write like staggering shelf and content
             Object.entries(data).forEach(function (attribute) {
@@ -386,6 +386,6 @@ class Explanation {
         let d = this.links[0].data(data)
         console.log(d)
         this.links[0].highlight(d)
-        this.links[0].propogate(d)
+        this.links[0].propagate(d)
     }
 }
