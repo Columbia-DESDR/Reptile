@@ -1,8 +1,8 @@
 const satellite_data = FLASK_VARIABLES.satellite_data
 
 let satelliteSourceNameToFile = {}
-satellite_data.forEach((foo) => {
-    satelliteSourceNameToFile[foo.NAME] = foo.PATH;
+satellite_data.forEach((satelliteSource) => {
+    satelliteSourceNameToFile[satelliteSource.NAME] = satelliteSource.PATH;
 })
 
 class Visualization {

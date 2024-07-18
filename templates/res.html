@@ -79,18 +79,20 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        {% if satellite_data %}
                                         <div class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
-                                                <h2 class="subtitle-name">Heatmap (satellite)</h2>
-                                                <p class="subtitle-desc">Mean value at province level from Satellite data</p>
-                                                <div class="subtitle-select-align">
-                                                    <select id="CountrySate" class="subtitle-select"></select>
-                                                </div>
+                                            <h2 class="subtitle-name">Heatmap (satellite)</h2>
+                                            <p class="subtitle-desc">Mean value at province level from Satellite data</p>
+                                            <div class="subtitle-select-align">
+                                                <select id="CountrySate" class="subtitle-select"></select>
+                                            </div>
                                             <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
                                                 <div class="vega" style="position: relative;">
                                                     <svg id = "r_6" width="300" height="500"></svg>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div>                                        
+                                        {% endif %}
                                         <div
                                             class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
                                             <h2 class="subtitle-name">IQR of mean for </h2>

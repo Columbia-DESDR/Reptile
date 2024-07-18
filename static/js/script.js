@@ -183,12 +183,18 @@ let s1 = new ScatterPlot("#c_2", {})
 let b1 = new BarChart("#c_3", { color: [WHITE, mainColorMeanBarChart] })
 let e1 = new Explanation("#c_4", [m2], true, false, true)
 let m1 = new HeatMap("#c_1", { color: [WHITE, mainColorHeatmap] })
-let sate1 = new CountrySatelliteHeatMap("#r_6",{color:[WHITE, mainColorHeatmapSatellite]})
+
+
 
 s1.registerLinks([b1, e1, m1])
 b1.registerLinks([e1, s1, m1])
 m1.registerLinks([s1, b1, e1])
-sate1.registerLinks([])
+
+let sate1 = null;
+if (satellite_data.length > 0) {
+    sate1 = new CountrySatelliteHeatMap("#r_6", {color:[WHITE, mainColorHeatmapSatellite]})
+    sate1.registerLinks([])
+}
 
 const CountrySate = satellite_data.map(f => f['NAME'])
 
