@@ -1,3 +1,13 @@
+let season_a = FLASK_VARIABLES.season_a
+let season_b = FLASK_VARIABLES.season_b
+let season_c = FLASK_VARIABLES.season_c
+
+let SateToFile ={
+    season_a: season_a,
+    season_b: season_b,
+    season_c: season_c
+}
+
 class Visualization {
     // option for vis
     // and link to other vis

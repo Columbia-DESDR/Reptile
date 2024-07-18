@@ -3,7 +3,8 @@
     "DATA_SOURCES": {
         "FILENAME": "./db/DRC_badyears_forzach.csv",
         "SEASON_A": "./db/season_a.csv",
-        "SEASON_B": "./db/season_b.csv"
+        "SEASON_B": "./db/season_b.csv",
+        "SEASON_C": "./db/test/season_c.csv"
     },
     "DATA_LEVELS": {
         "FIRST_LEVEL_NAME": "province",

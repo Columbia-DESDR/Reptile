@@ -13,7 +13,7 @@ const WHITE = "#ffffff"
 // url to this page (and infer server address)
 const url = window.location.origin + '/';
 
-// margin.right_short is for no lengend
+// margin.right_short is for no legend
 let margin = { top: 10, right: 100, bottom: 100, left: 60, right_short: 20 },
     height = 600 - margin.top - margin.bottom;
 
@@ -156,9 +156,9 @@ b3.registerLinks([e3,s3,m3])
 m3.registerLinks([s3,b3,e3])
 
 let s2 = new ScatterPlot("#r_2",{})
-let b2 = new BarChart("#r_3", {color:[WHITE,mainColorMeanBarChart]})
+let b2 = new BarChart("#r_3", {color:[WHITE, mainColorMeanBarChart]})
 let e2 = new Explanation("#r_4",[m3], true, true, false)
-let m2 = new HeatMap("#r_1",{color:[WHITE,mainColorHeatmap]})
+let m2 = new HeatMap("#r_1",{color:[WHITE, mainColorHeatmap]})
 
 s2.registerLinks([b2,e2,m2])
 b2.registerLinks([e2,s2,m2])
@@ -166,18 +166,15 @@ m2.registerLinks([s2,b2,e2])
 
 let s1 = new ScatterPlot("#c_2", {})
 let b1 = new BarChart("#c_3", { color: [WHITE, mainColorMeanBarChart] })
-
 let e1 = new Explanation("#c_4", [m2], true, false, true)
 let m1 = new HeatMap("#c_1", { color: [WHITE, mainColorHeatmap] })
-let sate1 = new CountrySatelliteHeatMap("#r_6",{color:[WHITE,mainColorHeatmapSatellite]})
+let sate1 = new CountrySatelliteHeatMap("#r_6",{color:[WHITE, mainColorHeatmapSatellite]})
 
 s1.registerLinks([b1, e1, m1])
 b1.registerLinks([e1, s1, m1])
 m1.registerLinks([s1, b1, e1])
 sate1.registerLinks([])
 
-let season_a = FLASK_VARIABLES.season_a
-let season_b = FLASK_VARIABLES.season_b
 let filename = FLASK_VARIABLES.filename
 let first_level_name = FLASK_VARIABLES.first_level_name
 let second_level_name = FLASK_VARIABLES.second_level_name
@@ -187,12 +184,7 @@ let time_name = FLASK_VARIABLES.time_name
 let numerical_name = FLASK_VARIABLES.numerical_name
 let comment_name = FLASK_VARIABLES.comment_name
 
-let SateToFile ={
-    season_a: season_a,
-    season_b: season_b,
-}
-
-let CountrySate = ["season_a", "season_b"]
+let CountrySate = ["season_a", "season_b", "season_c"]
 let RegionSate = []
 let DistrictSate = []
 
@@ -342,11 +334,11 @@ function showComp(level) {
     d3.select("#" + level + "CompBox").style("display", "block").style("overflow", "visible")
 }
 
-function submitRec(sidvalue) {
+function submitRec(sidValue) {
     console.log("submit")
 
     result = {
-        "sid": sidvalue,
+        "sid": sidValue,
         "1990feedback": d3.select("#feedback1990").property("value"),
         "1992feedback": d3.select("#feedback1992").property("value"),
         "1993feedback": d3.select("#feedback1993").property("value"),

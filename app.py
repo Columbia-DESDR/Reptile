@@ -35,7 +35,8 @@ def com():
                            start=start,
                            length=length,
                            season_a=data_sources['SEASON_A'],
-                           season_b=data_sources['SEASON_B'])
+                           season_b=data_sources['SEASON_B'],
+                           season_c=data_sources['SEASON_C'])
 
 
 # A route to return all of the available entries in our catalog.
