@@ -4,15 +4,15 @@
         "FILENAME": "./db/DRC_badyears_forzach.csv",
         "SATELLITE_DATA": [
             {
-                "NAME": "source a",
+                "NAME": "source_a",
                 "PATH": "./db/season_a.csv"
             },
             {
-                "NAME": "source b",
+                "NAME": "source_b",
                 "PATH": "./db/season_b.csv"
             },
             {
-                "NAME": "source c",
+                "NAME": "source_c",
                 "PATH": "./db/test/season_c.csv"
             }
         ]

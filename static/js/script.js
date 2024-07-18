@@ -1,14 +1,29 @@
 console.log("FLASK VARIABLES", FLASK_VARIABLES);
 
-const YEAR_START = FLASK_VARIABLES.start
-const YEAR_LENGTH = FLASK_VARIABLES.length
+// ############
+// ## COLORS ##
+// ############
 
-// Color
+const WHITE = "#ffffff"
 const mainColorMeanBarChart = '#079A0D'
 const mainColorHeatmap = '#079A0D'
 const mainColorHeatmapSatellite = '#077F9A'
 
-const WHITE = "#ffffff"
+// #####################
+// ## FLASK VARIABLES ##
+// #####################
+
+const filename = FLASK_VARIABLES.filename
+const first_level_name = FLASK_VARIABLES.first_level_name
+const second_level_name = FLASK_VARIABLES.second_level_name
+const third_level_name = FLASK_VARIABLES.third_level_name
+const fourth_level_name = FLASK_VARIABLES.fourth_level_name
+const time_name = FLASK_VARIABLES.time_name
+const numerical_name = FLASK_VARIABLES.numerical_name
+const comment_name = FLASK_VARIABLES.comment_name
+
+const YEAR_START = FLASK_VARIABLES.start
+const YEAR_LENGTH = FLASK_VARIABLES.length
 
 // url to this page (and infer server address)
 const url = window.location.origin + '/';
@@ -175,20 +190,12 @@ b1.registerLinks([e1, s1, m1])
 m1.registerLinks([s1, b1, e1])
 sate1.registerLinks([])
 
-let filename = FLASK_VARIABLES.filename
-let first_level_name = FLASK_VARIABLES.first_level_name
-let second_level_name = FLASK_VARIABLES.second_level_name
-let third_level_name = FLASK_VARIABLES.third_level_name
-let fourth_level_name = FLASK_VARIABLES.fourth_level_name
-let time_name = FLASK_VARIABLES.time_name
-let numerical_name = FLASK_VARIABLES.numerical_name
-let comment_name = FLASK_VARIABLES.comment_name
+const CountrySate = satellite_data.map(f => f['NAME'])
 
-let CountrySate = ["season_a", "season_b", "season_c"]
-let RegionSate = []
-let DistrictSate = []
+const RegionSate = []
+const DistrictSate = []
 
-let schemaSate = {
+const schemaSate = {
     hierarchy: [first_level_name, second_level_name, third_level_name, fourth_level_name],
     hierarchy_values: [],
     categorical: [first_level_name, 'year'],
