@@ -218,10 +218,6 @@ d3.select("#CountrySate")
     .text(function (d) { return d; })
     .attr("value", function (d) { return d; })
 
-d3.select("#CountrySate").on("change", function() {
-    sate1.plot({ schema: schemaSate, level: "Country" })
-    })
-
 d3.select("#RegionSate")
     .selectAll('option')
     .data(RegionSate)
@@ -229,10 +225,6 @@ d3.select("#RegionSate")
     .append('option')
     .text(function (d) { return d; })
     .attr("value", function (d) { return d; }) 
-    
-d3.select("#RegionSate").on("change", function() {
-    sate2.plot()
-    })
 
 d3.select("#DistrictSate")
     .selectAll('option')
@@ -241,10 +233,6 @@ d3.select("#DistrictSate")
     .append('option')
     .text(function (d) { return d; })
     .attr("value", function (d) { return d; }) 
-
-d3.select("#DistrictSate").on("change", function() {
-    sate3.plot()
-    })
 
 let schemaInitial = {
     filename: filename,
@@ -256,15 +244,18 @@ let schemaInitial = {
     category: 'year'
 }
 
-
-
 GetHeatMap(schemaInitial).then(d => {
     LocalData.putData(schemaInitial.categorical[0], d)
     LocalData.putSchema(schemaInitial.categorical[0], schemaInitial)
     m1.plot(schemaInitial)
 })
 
-sate1.plot({ schema: schemaSate, level: "Country" })
+if (sate1) {
+    d3.select("#CountrySate").on("change", function() {
+        sate1.plot({ schema: schemaSate, level: "Country" })
+        })
+    sate1.plot({ schema: schemaSate, level: "Country" })
+}
 
 function range(start, stop, count) {
     step = (stop - start) / count
