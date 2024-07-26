@@ -34,8 +34,7 @@ def com():
                            comment_name=display['COMMENT_NAME'],
                            start=start,
                            length=length,
-                           season_a=data_sources['SEASON_A'],
-                           season_b=data_sources['SEASON_B'])
+                           satellite_data=data_sources['SATELLITE_DATA'])
 
 
 # A route to return all of the available entries in our catalog.
@@ -179,7 +178,7 @@ def api_heatmapdata():
 
     print(request.json)
 
-    filename = request.json['filename']
+    filename = request.json['filename'] #TODO
     hierarchy = request.json['hierarchy']
     hierarchy_values = request.json['hierarchy_values']
     categorical = request.json['categorical']

@@ -1,9 +1,21 @@
 {
     "DEBUG": true,
     "DATA_SOURCES": {
-        "FILENAME": "./db/DRC_badyears_forzach.csv",
-        "SEASON_A": "./db/season_a.csv",
-        "SEASON_B": "./db/season_b.csv"
+        "FILENAME": "./data/test/DRC_badyears_forzach.csv",
+        "SATELLITE_DATA": [
+            {
+                "NAME": "source_a",
+                "PATH": "./data/test/season_a.csv"
+            },
+            {
+                "NAME": "source_b",
+                "PATH": "./data/test/season_b.csv"
+            },
+            {
+                "NAME": "source_c",
+                "PATH": "./data/test/season_c.csv"
+            }
+        ]
     },
     "DATA_LEVELS": {
         "FIRST_LEVEL_NAME": "province",

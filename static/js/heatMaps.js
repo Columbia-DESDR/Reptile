@@ -1,3 +1,10 @@
+const satellite_data = FLASK_VARIABLES.satellite_data
+
+let satelliteSourceNameToFile = {}
+satellite_data.forEach((satelliteSource) => {
+    satelliteSourceNameToFile[satelliteSource.NAME] = satelliteSource.PATH;
+})
+
 class Visualization {
     // option for vis
     // and link to other vis
@@ -215,7 +222,7 @@ class CountrySatelliteHeatMap extends HeatMap {
         }
         let sate = d3.select("#" + level +"Sate").property("value")
 
-        this.schema.filename = SateToFile[sate]
+        this.schema.filename = satelliteSourceNameToFile[sate]
         console.log(this.schema)
         GetHeatMap(this.schema).then(d=>{
             // filter out 
@@ -243,7 +250,7 @@ class RegionSatelliteHeatMap extends HeatMap {
         let level = "Region"
         let sate = d3.select("#" + level +"Sate").property("value")
 
-        this.schema.filename = SateToFile[sate]
+        this.schema.filename = satelliteSourceNameToFile[sate]
         console.log(this.schema)
         GetHeatMap(this.schema).then(d=>{
             // filter out 
