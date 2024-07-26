@@ -17,6 +17,10 @@ def com():
     data_sources = app.config['DATA_SOURCES']
     data_levels = app.config['DATA_LEVELS']
     display = app.config['DISPLAY']
+    colors = app.config['COLORS']
+
+    color_farmers = colors['FARMERS'] if colors['FARMERS'] else '#079A0D'
+    color_satellite = colors['SATELLITE'] if colors['SATELLITE'] else '#077F9A'
 
     start = app.config['TIMESPAN']['START']
     end = app.config['TIMESPAN']['END']
@@ -34,7 +38,9 @@ def com():
                            comment_name=display['COMMENT_NAME'],
                            start=start,
                            length=length,
-                           satellite_data=data_sources['SATELLITE_DATA'])
+                           satellite_data=data_sources['SATELLITE_DATA'],
+                           color_farmers=color_farmers,
+                           color_satellite=color_satellite)
 
 
 # A route to return all of the available entries in our catalog.

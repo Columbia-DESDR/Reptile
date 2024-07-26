@@ -32,5 +32,9 @@
         "TIME_NAME": "year",
         "NUMERICAL_NAME": "rank",
         "COMMENT_NAME": "comments"
+    },
+    "COLORS": {
+        "FARMERS": "#9F2B68",
+        "SATELLITE": ""
     }
 }
