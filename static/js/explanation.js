@@ -1,4 +1,3 @@
-
 class Explanation {
     constructor(svg_id, links, allowComplaint, allowSurvey, allowDrillDown) {
         this.svg = d3.select(svg_id)
@@ -235,7 +234,6 @@ class Explanation {
                 .append("span")
                 .text("Drill down")
         }
-
     }
 
     drillDown(nextLevelData) {
