@@ -5,11 +5,12 @@ import readcsv
 import json
 import pandas as pd
 from io import StringIO
+from config import Config
 
 
 df = None
 app = flask.Flask(__name__, static_url_path='')
-app.config["DEBUG"] = True
+# app.config["DEBUG"] = True
 
 # config
 # filename = "./db/heatmap_data_lineage.csv"
@@ -24,7 +25,7 @@ app.config["DEBUG"] = True
 
 filename = "./db/DRC_badyears_forzach.csv"
 first_level_name = "province"
-second_level_name = "sector"
+second_level_name = "secteur"
 third_level_name = "village"
 fourth_level_name = "survey_id"
 time_name = "year"
@@ -401,13 +402,16 @@ def api_sol():
 @app.route('/api/rec', methods=['POST'])
 def api_rec():
     rec = request.json
-
-    print(rec)
-    db.insert_data(rec['data'])
-
-    data = "good"
-    js = json.dumps(data)
-    resp = Response(js, status=200, mimetype='application/json')
+    if 'data' in rec and 'password' in rec['data'] and rec['data']['password'] == Config.PASSWORD:
+        print(rec)
+        db.insert_data(rec['data'])
+        data = "good"
+        js = json.dumps(data)
+        resp = Response(js, status=200, mimetype='application/json')
+    else:
+        data = "wrong password"
+        js = json.dumps(data)
+        resp = Response(js, status=401, mimetype='application/json')
     return resp
 
 
@@ -486,6 +490,5 @@ def after_request(response):
     return response
 
 
-# if __name__ == "__main__":
-#     app.run()
-app.run()
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
