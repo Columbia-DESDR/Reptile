@@ -23,3 +23,51 @@ Before you begin, ensure you have met the following requirements:
 | :---------------- | :------: | :------: | ----: |
 | DRC               |   TODO   | testing | http://ec2-18-117-152-17.us-east-2.compute.amazonaws.com/ |
 | Nigeria           |   TODO  | master | http://ec2-18-190-217-53.us-east-2.compute.amazonaws.com:8000/ |
+
+## Configuration
+
+Configuration for a new instance is doing via a config.json file. 
+En example config file:
+
+```json
+{
+    "DEBUG": true,
+    "DATA_SOURCES": {
+        "FILENAME": "./data/test/DRC_badyears_forzach.csv",
+        "SATELLITE_DATA": [
+            {
+                "NAME": "source_a",
+                "PATH": "./data/test/season_a.csv"
+            },
+            {
+                "NAME": "source_b",
+                "PATH": "./data/test/season_b.csv"
+            },
+            {
+                "NAME": "source_c",
+                "PATH": "./data/test/season_c.csv"
+            }
+        ]
+    },
+    "DATA_LEVELS": {
+        "FIRST_LEVEL_NAME": "province",
+        "SECOND_LEVEL_NAME": "sector",
+        "THIRD_LEVEL_NAME": "village",
+        "FOURTH_LEVEL_NAME": "survey_id"
+    },
+    "TIMESPAN": {
+        "START": 1990,
+        "END": 2023
+    },
+    "DISPLAY": {
+        "INSTANCE_TITLE": "Africa - Democratic Republic of the Congo",
+        "TIME_NAME": "year",
+        "NUMERICAL_NAME": "rank",
+        "COMMENT_NAME": "comments"
+    },
+    "COLORS": {
+        "FARMERS": "#9F2B68",
+        "SATELLITE": ""
+    }
+}
+```
