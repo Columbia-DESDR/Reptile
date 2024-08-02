@@ -383,6 +383,7 @@ function submitRec(sidValue) {
         "q4": d3.select("#q4").property("checked"),
         "name": d3.select("#worstname").property("value"),
         "comment": d3.select("#worstcomment").property("value"),
+        "password": d3.select("#password").property("value")
     }
 
     if (result["name"] == "your name") {
@@ -395,7 +396,7 @@ function submitRec(sidValue) {
         return
     }
 
-    SendRec(result).then(() => {
+    SendRec(result).then((response) => {
         alert("We have received your submission!")
     })
 }
@@ -414,9 +415,11 @@ function SendRec(schema) {
         .then(function (response) {
             if (response.ok) {
                 return response.json();
-            } else {
-                throw new Error("Could not reach the API: " + response.statusText);
+            } 
+            else if (response.status == 401) {
+                alert('Incorrect password!')
             }
+            throw new Error("Could not reach the API: " + response.statusText);
         }).then(function (data) {
             return data
         })
