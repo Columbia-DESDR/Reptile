@@ -378,12 +378,19 @@ def api_sol():
 def api_rec():
     rec = request.json
 
-    print(rec)
-    db.insert_data(rec['data'])
+    password = app.config['PASSWORD'] if 'PASSWORD' in app.config else None
 
-    data = "good"
-    js = json.dumps(data)
-    resp = Response(js, status=200, mimetype='application/json')
+    if not password or ('data' in rec and 'password' in rec['data'] and rec['data']['password'] == password):
+        print(rec)
+        db.insert_data(rec['data'])
+        data = "good"
+        js = json.dumps(data)
+        resp = Response(js, status=200, mimetype='application/json')
+    else:
+        data = "wrong password"
+        js = json.dumps(data)
+        resp = Response(js, status=401, mimetype='application/json')
+
     return resp
 
 
