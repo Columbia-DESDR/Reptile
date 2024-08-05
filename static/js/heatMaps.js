@@ -289,10 +289,6 @@ class ScatterPlot extends Visualization {
         // generate all the years (hard coded)
         let y_column = Array.from({ length: YEAR_LENGTH }, (x, i) => i + YEAR_START)
 
-        //for the legend
-        let key = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-        let size = 15
-
         let spec = {
             data: data,
             encoding: {
@@ -449,10 +445,6 @@ class BarChart extends Visualization {
     process(data) {
         // generate all the years (hard coded)
         let y_column = Array.from({ length: YEAR_LENGTH }, (x, i) => i + YEAR_START)
-
-        //for the legend
-        let key = [1, 2, 3, 4, 5, 6, 7, 8]
-        let size = 15
 
         // generate color according to option
         let Color = d3.scaleLinear()
