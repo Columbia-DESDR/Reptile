@@ -1,20 +1,22 @@
 class Explanation {
-    constructor(svg_id, links, allowComplaint, allowSurvey, allowDrillDown) {
+    constructor(svg_id, links, allowSurvey, allowDrillDown) {
         this.svg = d3.select(svg_id)
         this.links = links
-        this.allowComplaint = allowComplaint
         this.allowSurvey = allowSurvey
         this.allowDrillDown = allowDrillDown
     }
+    
     highlight(schema, explainable) {
         this.clear()
         this.addDetail(schema, explainable)
     }
+
     clear() {
         this.svg.selectAll("div").remove()
         this.svg.selectAll("select").remove()
         this.svg.selectAll("input").remove()
     }
+
     addDetail(data, explainable) {
         console.log(data)
         let agg = ['mean', 'std', 'count']
@@ -32,7 +34,6 @@ class Explanation {
             level_data = level_data.filter(sidData => sidData[level_name] == data[level_name])
             
             let worstMap = new Map();
-            let causeMap = new Map()
             
             Object.entries(level_data).forEach(function (sidD) {
                 // compue the sum based on mean * count
@@ -335,8 +336,8 @@ class Explanation {
                     callerClass.writeExplain(d, data, att)
                 })
         })
-
     }
+
     writeExplain(data, dataHigher, att) {
         console.log(data)
         let level = getLevel(data)
