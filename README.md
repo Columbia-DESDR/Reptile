@@ -68,6 +68,7 @@ En example config file:
     "COLORS": {
         "FARMERS": "#9F2B68",
         "SATELLITE": ""
-    }
+    },
+    "PASSWORD": "my_password"
 }
 ```
