@@ -6,9 +6,9 @@ class Explanation {
         this.allowDrillDown = allowDrillDown
     }
     
-    highlight(schema, explainable) {
+    highlight(schema) {
         this.clear()
-        this.addDetail(schema, explainable)
+        this.addDetail(schema)
     }
 
     clear() {
@@ -17,7 +17,7 @@ class Explanation {
         this.svg.selectAll("input").remove()
     }
 
-    addDetail(data, explainable) {
+    addDetail(data) {
         console.log(data)
         let agg = ['mean', 'std', 'count']
         let s = this.svg
