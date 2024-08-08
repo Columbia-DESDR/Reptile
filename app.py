@@ -27,6 +27,8 @@ def com():
     end = app.config['TIMESPAN']['END']
     length = end - start + 1
 
+    print('app config', app.config)
+
     return render_template('res.html',
                            instance_title=display['INSTANCE_TITLE'],
                            filename=data_sources['FILENAME'],
