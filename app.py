@@ -15,9 +15,10 @@ app.config.from_file("config.json", load=json.load)
 @app.route('/', methods=['GET'])
 def com():
     data_sources = app.config['DATA_SOURCES']
-    data_levels = app.config['DATA_LEVELS']
     display = app.config['DISPLAY']
     colors = app.config['COLORS']
+
+    hierarchy = app.config['HIERARCHY']
 
     color_farmers = colors['FARMERS'] if colors['FARMERS'] else '#079A0D'
     color_satellite = colors['SATELLITE'] if colors['SATELLITE'] else '#077F9A'
@@ -29,10 +30,11 @@ def com():
     return render_template('res.html',
                            instance_title=display['INSTANCE_TITLE'],
                            filename=data_sources['FILENAME'],
-                           first_level_name=data_levels['FIRST_LEVEL_NAME'],
-                           second_level_name=data_levels['SECOND_LEVEL_NAME'],
-                           third_level_name=data_levels['THIRD_LEVEL_NAME'],
-                           fourth_level_name=data_levels['FOURTH_LEVEL_NAME'],
+                           hierarchy=hierarchy,
+                           first_level_name = hierarchy[0],
+                           second_level_name = hierarchy[1],
+                           third_level_name = hierarchy[2],
+                           fourth_level_name = hierarchy[3],
                            time_name=display['TIME_NAME'],
                            numerical_name=display['NUMERICAL_NAME'],
                            comment_name=display['COMMENT_NAME'],
