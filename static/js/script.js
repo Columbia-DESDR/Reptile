@@ -22,11 +22,6 @@ const YEAR_LENGTH = FLASK_VARIABLES.length
 const colorFarmers = FLASK_VARIABLES.color_farmers
 const colorSatellite = FLASK_VARIABLES.color_satellite
 
-const first_level_name = hierarchy[0]
-const second_level_name = hierarchy[1]
-const third_level_name = hierarchy[2]
-const fourth_level_name = hierarchy[3]
-
 // url to this page (and infer server address)
 const url = window.location.origin + '/';
 
@@ -157,14 +152,13 @@ function objToStr(d) {
 
 //const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
 const alphabet = ['c', 'r', 'd', 'v']
-const levels = ["province", "sector", "village", "survey_id"]
 const heatMaps = []
 const feedbackLevel = 'sector';
 
 let heatMapUnderneath = null;
 let isLast = true;
 
-levels.toReversed().forEach((level, idx) => {
+hierarchy.toReversed().forEach((level, idx) => {
     console.log('level', level, idx);
 
     const thisLetter = alphabet.toReversed()[idx];
@@ -302,10 +296,9 @@ function getLevel(schema) {
     return Object.keys(schema)[0]
 }
 
-function nextLevel(curLevel) {
-    if (curLevel === first_level_name) return second_level_name
-    else if (curLevel === second_level_name) return third_level_name
-    else if (curLevel === third_level_name) return fourth_level_name
+function nextLevel(currLevel) {
+    const currLevelIndex = hierarchy.indexOf(currLevel)
+    return hierarchy[currLevelIndex + 1]
 }
 
 function isFloat(n) {
@@ -313,12 +306,8 @@ function isFloat(n) {
 }
 
 function hideBelow(level) {
-    switch (level) {
-        case first_level_name:
-            hideLevel(second_level_name)
-        case second_level_name:
-            hideLevel(third_level_name)
-    }
+    const levelIndex = hierarchy.indexOf(level)
+    hideLevel(hierarchy[levelIndex + 1])
 }
 
 function hideLevel(level) {
