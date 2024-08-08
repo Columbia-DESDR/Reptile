@@ -31,6 +31,7 @@ def com():
                            instance_title=display['INSTANCE_TITLE'],
                            filename=data_sources['FILENAME'],
                            hierarchy=hierarchy,
+                           feedback_level=app.config['FEEDBACK_LEVEL'],
                            first_level_name = hierarchy[0],
                            second_level_name = hierarchy[1],
                            third_level_name = hierarchy[2],

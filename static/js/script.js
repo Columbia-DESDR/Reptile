@@ -12,6 +12,8 @@ const WHITE = "#ffffff"
 
 const filename = FLASK_VARIABLES.filename
 const hierarchy = FLASK_VARIABLES.hierarchy
+const feedback_level = FLASK_VARIABLES.feedback_level
+
 const time_name = FLASK_VARIABLES.time_name
 const numerical_name = FLASK_VARIABLES.numerical_name
 const comment_name = FLASK_VARIABLES.comment_name
@@ -153,7 +155,6 @@ function objToStr(d) {
 //const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
 const alphabet = ['c', 'r', 'd', 'v']
 const heatMaps = []
-const feedbackLevel = 'sector';
 
 let heatMapUnderneath = null;
 let isLast = true;
@@ -163,7 +164,7 @@ hierarchy.toReversed().forEach((level, idx) => {
 
     const thisLetter = alphabet.toReversed()[idx];
 
-    const isFeedbackLevel = feedbackLevel == level;
+    const isFeedbackLevel = feedback_level == level;
 
     const links = heatMapUnderneath ? [heatMapUnderneath] : [];
 
