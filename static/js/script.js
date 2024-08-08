@@ -186,10 +186,10 @@ levels.toReversed().forEach((level, idx) => {
     isLast = false;
 })
 
-let sate1 = null;
+let satelliteHeatMap = null;
 if (satellite_data.length > 0) {
-    sate1 = new CountrySatelliteHeatMap("#r_6", {color:[WHITE, colorSatellite]})
-    sate1.registerLinks([])
+    satelliteHeatMap = new CountrySatelliteHeatMap("#svg-satellite", {color:[WHITE, colorSatellite]})
+    satelliteHeatMap.registerLinks([])
 }
 
 const CountrySate = satellite_data.map(f => f['NAME'])
@@ -247,11 +247,11 @@ GetHeatMap(schemaInitial).then(d => {
     m1.plot(schemaInitial)
 })
 
-if (sate1) {
+if (satelliteHeatMap) {
     d3.select("#CountrySate").on("change", function() {
-        sate1.plot({ schema: schemaSate, level: "Country" })
+        satelliteHeatMap.plot({ schema: schemaSate, level: "Country" })
         })
-    sate1.plot({ schema: schemaSate, level: "Country" })
+    satelliteHeatMap.plot({ schema: schemaSate, level: "Country" })
 }
 
 function range(start, stop, count) {
