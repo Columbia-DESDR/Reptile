@@ -166,11 +166,11 @@ hierarchy.toReversed().forEach((level, idx) => {
 
     const isFeedbackLevel = feedback_level == level;
 
-    const links = heatMapUnderneath ? [heatMapUnderneath] : [];
+    const explanationLinks = heatMapUnderneath ? [heatMapUnderneath] : [];
 
     const scatterPlot = new ScatterPlot(`#${thisLetter}_2`, {})
     const barChart = new BarChart(`#${thisLetter}_3`, {color: [WHITE, colorFarmers]})
-    const explanation = new Explanation(`#${thisLetter}_4`, links, isFeedbackLevel, !isLast)
+    const explanation = new Explanation(`#${thisLetter}_4`, explanationLinks, isFeedbackLevel, !isLast)
     const heatMap = new HeatMap(`#${thisLetter}_1`, {color: [WHITE, colorFarmers]})
     
     scatterPlot.registerLinks([barChart, explanation, heatMap])
