@@ -11,10 +11,7 @@ const WHITE = "#ffffff"
 // #####################
 
 const filename = FLASK_VARIABLES.filename
-const first_level_name = FLASK_VARIABLES.first_level_name
-const second_level_name = FLASK_VARIABLES.second_level_name
-const third_level_name = FLASK_VARIABLES.third_level_name
-const fourth_level_name = FLASK_VARIABLES.fourth_level_name
+const hierarchy = FLASK_VARIABLES.hierarchy
 const time_name = FLASK_VARIABLES.time_name
 const numerical_name = FLASK_VARIABLES.numerical_name
 const comment_name = FLASK_VARIABLES.comment_name
@@ -24,6 +21,11 @@ const YEAR_LENGTH = FLASK_VARIABLES.length
 
 const colorFarmers = FLASK_VARIABLES.color_farmers
 const colorSatellite = FLASK_VARIABLES.color_satellite
+
+const first_level_name = hierarchy[0]
+const second_level_name = hierarchy[1]
+const third_level_name = hierarchy[2]
+const fourth_level_name = hierarchy[3]
 
 // url to this page (and infer server address)
 const url = window.location.origin + '/';
@@ -198,9 +200,9 @@ const RegionSate = []
 const DistrictSate = []
 
 const schemaSate = {
-    hierarchy: [first_level_name, second_level_name, third_level_name, fourth_level_name],
+    hierarchy: hierarchy,
     hierarchy_values: [],
-    categorical: [first_level_name, 'year'],
+    categorical: [hierarchy[0], 'year'],
     numerical: ['drought_rank'],
     aggregation: ['mean', 'std', 'count'],
     category: 'year'
@@ -232,9 +234,9 @@ d3.select("#DistrictSate")
 
 let schemaInitial = {
     filename: filename,
-    hierarchy: [first_level_name, second_level_name, third_level_name, fourth_level_name],
+    hierarchy: hierarchy,
     hierarchy_values: [],
-    categorical: [first_level_name, 'year'],
+    categorical: [hierarchy[0], 'year'],
     numerical: ['rank'],
     aggregation: ['mean', 'std', 'count'],
     category: 'year'

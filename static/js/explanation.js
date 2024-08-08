@@ -28,7 +28,7 @@ class Explanation {
                 .text("Please fill in your name and click on \"submit\" after filling in the form.")
                 .classed("note", true)
 
-            let level_name = second_level_name
+            let level_name = hierarchy[1]
             let level_data = LocalData.getData(level_name)
             level_data = level_data.filter(sidData => sidData[level_name] == data[level_name])
             
@@ -222,7 +222,7 @@ class Explanation {
         }
 
         // drill down to next level
-        if (Object.entries(data)[0][0] != fourth_level_name) {
+        if (Object.entries(data)[0][0] != hierarchy[3]) {
             s.append("div")
                 .classed('shelf-group', true)
                 .append("div")
@@ -246,7 +246,7 @@ class Explanation {
         console.log(nextSchema)
         
         // get comment if it's the last level
-        if (nextLevel(nextLevelData[0]) == fourth_level_name) {
+        if (nextLevel(nextLevelData[0]) == hierarchy[3]) {
             nextSchema.categorical.push(comment_name)
         }
 
