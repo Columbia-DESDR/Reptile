@@ -153,41 +153,38 @@ function objToStr(d) {
     return str
 }
 
-let s4 = new ScatterPlot("#v_2", {})
-let b4 = new BarChart("#v_3", {color: [WHITE, colorFarmers]})
-let e4 = new Explanation("#v_4", [], true, false)
-let m4 = new HeatMap("#v_1", {color: [WHITE, colorFarmers]})
+//const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+const alphabet = ['c', 'r', 'd', 'v']
+const levels = ["province", "sector", "village", "survey_id"]
+const heatMaps = []
+const feedbackLevel = 'sector';
 
-s4.registerLinks([b4, e4, m4])
-b4.registerLinks([e4, s4, m4])
-m4.registerLinks([s4, b4, e4])
+let heatMapUnderneath = null;
+let isLast = true;
 
-let s3 = new ScatterPlot("#d_2", {})
-let b3 = new BarChart("#d_3", { color: [WHITE, colorFarmers] })
-let e3 = new Explanation("#d_4", [m4], false, true)
-let m3 = new HeatMap("#d_1", {color: [WHITE, colorFarmers]})
+levels.toReversed().forEach((level, idx) => {
+    console.log('level', level, idx);
 
-s3.registerLinks([b3,e3,m3])
-b3.registerLinks([e3,s3,m3])
-m3.registerLinks([s3,b3,e3])
+    const thisLetter = alphabet.toReversed()[idx];
 
-let s2 = new ScatterPlot("#r_2",{})
-let b2 = new BarChart("#r_3", {color:[WHITE, colorFarmers]})
-let e2 = new Explanation("#r_4",[m3], true, false)
-let m2 = new HeatMap("#r_1", {color:[WHITE, colorFarmers]})
+    const isFeedbackLevel = feedbackLevel == level;
 
-s2.registerLinks([b2,e2,m2])
-b2.registerLinks([e2,s2,m2])
-m2.registerLinks([s2,b2,e2])
+    const links = heatMapUnderneath ? [heatMapUnderneath] : [];
 
-let s1 = new ScatterPlot("#c_2", {})
-let b1 = new BarChart("#c_3", { color: [WHITE, colorFarmers] })
-let e1 = new Explanation("#c_4", [m2], false, true)
-let m1 = new HeatMap("#c_1", {color: [WHITE, colorFarmers]})
+    const scatterPlot = new ScatterPlot(`#${thisLetter}_2`, {})
+    const barChart = new BarChart(`#${thisLetter}_3`, {color: [WHITE, colorFarmers]})
+    const explanation = new Explanation(`#${thisLetter}_4`, links, isFeedbackLevel, !isLast)
+    const heatMap = new HeatMap(`#${thisLetter}_1`, {color: [WHITE, colorFarmers]})
+    
+    scatterPlot.registerLinks([barChart, explanation, heatMap])
+    barChart.registerLinks([explanation, scatterPlot, heatMap])
+    heatMap.registerLinks([scatterPlot, barChart, explanation])
+    
+    heatMaps.unshift(heatMap)
 
-s1.registerLinks([b1, e1, m1])
-b1.registerLinks([e1, s1, m1])
-m1.registerLinks([s1, b1, e1])
+    heatMapUnderneath = heatMap;
+    isLast = false;
+})
 
 let sate1 = null;
 if (satellite_data.length > 0) {
@@ -246,6 +243,7 @@ let schemaInitial = {
 GetHeatMap(schemaInitial).then(d => {
     LocalData.putData(schemaInitial.categorical[0], d)
     LocalData.putSchema(schemaInitial.categorical[0], schemaInitial)
+    const m1 = heatMaps[0]
     m1.plot(schemaInitial)
 })
 

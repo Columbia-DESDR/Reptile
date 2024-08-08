@@ -19,7 +19,6 @@ class Explanation {
 
     addDetail(data) {
         console.log(data)
-        let agg = ['mean', 'std', 'count']
         let s = this.svg
 
         let callerClass = this;
