@@ -11,10 +11,9 @@ const WHITE = "#ffffff"
 // #####################
 
 const filename = FLASK_VARIABLES.filename
-const first_level_name = FLASK_VARIABLES.first_level_name
-const second_level_name = FLASK_VARIABLES.second_level_name
-const third_level_name = FLASK_VARIABLES.third_level_name
-const fourth_level_name = FLASK_VARIABLES.fourth_level_name
+const hierarchy = FLASK_VARIABLES.hierarchy
+const feedback_level = FLASK_VARIABLES.feedback_level
+
 const time_name = FLASK_VARIABLES.time_name
 const numerical_name = FLASK_VARIABLES.numerical_name
 const comment_name = FLASK_VARIABLES.comment_name
@@ -153,46 +152,41 @@ function objToStr(d) {
     return str
 }
 
-let s4 = new ScatterPlot("#v_2", {})
-let b4 = new BarChart("#v_3", {color: [WHITE, colorFarmers]})
-let e4 = new Explanation("#v_4", [], true, false)
-let m4 = new HeatMap("#v_1", {color: [WHITE, colorFarmers]})
+//const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+const alphabet = ['c', 'r', 'd', 'v']
+const heatMaps = []
 
-s4.registerLinks([b4, e4, m4])
-b4.registerLinks([e4, s4, m4])
-m4.registerLinks([s4, b4, e4])
+let heatMapUnderneath = null;
+let isLast = true;
 
-let s3 = new ScatterPlot("#d_2", {})
-let b3 = new BarChart("#d_3", { color: [WHITE, colorFarmers] })
-let e3 = new Explanation("#d_4", [m4], false, true)
-let m3 = new HeatMap("#d_1", {color: [WHITE, colorFarmers]})
+hierarchy.toReversed().forEach((level, idx) => {
+    console.log('level', level, idx);
 
-s3.registerLinks([b3,e3,m3])
-b3.registerLinks([e3,s3,m3])
-m3.registerLinks([s3,b3,e3])
+    const thisLetter = alphabet.toReversed()[idx];
 
-let s2 = new ScatterPlot("#r_2",{})
-let b2 = new BarChart("#r_3", {color:[WHITE, colorFarmers]})
-let e2 = new Explanation("#r_4",[m3], true, false)
-let m2 = new HeatMap("#r_1", {color:[WHITE, colorFarmers]})
+    const isFeedbackLevel = feedback_level == level;
 
-s2.registerLinks([b2,e2,m2])
-b2.registerLinks([e2,s2,m2])
-m2.registerLinks([s2,b2,e2])
+    const explanationLinks = heatMapUnderneath ? [heatMapUnderneath] : [];
 
-let s1 = new ScatterPlot("#c_2", {})
-let b1 = new BarChart("#c_3", { color: [WHITE, colorFarmers] })
-let e1 = new Explanation("#c_4", [m2], false, true)
-let m1 = new HeatMap("#c_1", {color: [WHITE, colorFarmers]})
+    const scatterPlot = new ScatterPlot(`#${thisLetter}_2`, {})
+    const barChart = new BarChart(`#${thisLetter}_3`, {color: [WHITE, colorFarmers]})
+    const explanation = new Explanation(`#${thisLetter}_4`, explanationLinks, isFeedbackLevel, !isLast)
+    const heatMap = new HeatMap(`#${thisLetter}_1`, {color: [WHITE, colorFarmers]})
+    
+    scatterPlot.registerLinks([barChart, explanation, heatMap])
+    barChart.registerLinks([explanation, scatterPlot, heatMap])
+    heatMap.registerLinks([scatterPlot, barChart, explanation])
+    
+    heatMaps.unshift(heatMap)
 
-s1.registerLinks([b1, e1, m1])
-b1.registerLinks([e1, s1, m1])
-m1.registerLinks([s1, b1, e1])
+    heatMapUnderneath = heatMap;
+    isLast = false;
+})
 
-let sate1 = null;
+let satelliteHeatMap = null;
 if (satellite_data.length > 0) {
-    sate1 = new CountrySatelliteHeatMap("#r_6", {color:[WHITE, colorSatellite]})
-    sate1.registerLinks([])
+    satelliteHeatMap = new CountrySatelliteHeatMap("#svg-satellite", {color:[WHITE, colorSatellite]})
+    satelliteHeatMap.registerLinks([])
 }
 
 const CountrySate = satellite_data.map(f => f['NAME'])
@@ -201,9 +195,9 @@ const RegionSate = []
 const DistrictSate = []
 
 const schemaSate = {
-    hierarchy: [first_level_name, second_level_name, third_level_name, fourth_level_name],
+    hierarchy: hierarchy,
     hierarchy_values: [],
-    categorical: [first_level_name, 'year'],
+    categorical: [hierarchy[0], 'year'],
     numerical: ['drought_rank'],
     aggregation: ['mean', 'std', 'count'],
     category: 'year'
@@ -235,9 +229,9 @@ d3.select("#DistrictSate")
 
 let schemaInitial = {
     filename: filename,
-    hierarchy: [first_level_name, second_level_name, third_level_name, fourth_level_name],
+    hierarchy: hierarchy,
     hierarchy_values: [],
-    categorical: [first_level_name, 'year'],
+    categorical: [hierarchy[0], 'year'],
     numerical: ['rank'],
     aggregation: ['mean', 'std', 'count'],
     category: 'year'
@@ -246,14 +240,15 @@ let schemaInitial = {
 GetHeatMap(schemaInitial).then(d => {
     LocalData.putData(schemaInitial.categorical[0], d)
     LocalData.putSchema(schemaInitial.categorical[0], schemaInitial)
+    const m1 = heatMaps[0]
     m1.plot(schemaInitial)
 })
 
-if (sate1) {
+if (satelliteHeatMap) {
     d3.select("#CountrySate").on("change", function() {
-        sate1.plot({ schema: schemaSate, level: "Country" })
+        satelliteHeatMap.plot({ schema: schemaSate, level: "Country" })
         })
-    sate1.plot({ schema: schemaSate, level: "Country" })
+    satelliteHeatMap.plot({ schema: schemaSate, level: "Country" })
 }
 
 function range(start, stop, count) {
@@ -302,10 +297,9 @@ function getLevel(schema) {
     return Object.keys(schema)[0]
 }
 
-function nextLevel(curLevel) {
-    if (curLevel === first_level_name) return second_level_name
-    else if (curLevel === second_level_name) return third_level_name
-    else if (curLevel === third_level_name) return fourth_level_name
+function nextLevel(currLevel) {
+    const currLevelIndex = hierarchy.indexOf(currLevel)
+    return hierarchy[currLevelIndex + 1]
 }
 
 function isFloat(n) {
@@ -313,12 +307,8 @@ function isFloat(n) {
 }
 
 function hideBelow(level) {
-    switch (level) {
-        case first_level_name:
-            hideLevel(second_level_name)
-        case second_level_name:
-            hideLevel(third_level_name)
-    }
+    const levelIndex = hierarchy.indexOf(level)
+    hideLevel(hierarchy[levelIndex + 1])
 }
 
 function hideLevel(level) {
