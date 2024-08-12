@@ -49,12 +49,8 @@ En example config file:
             }
         ]
     },
-    "DATA_LEVELS": {
-        "FIRST_LEVEL_NAME": "province",
-        "SECOND_LEVEL_NAME": "sector",
-        "THIRD_LEVEL_NAME": "village",
-        "FOURTH_LEVEL_NAME": "survey_id"
-    },
+    "HIERARCHY": ["province", "sector", "village", "survey_id"],
+    "FEEDBACK_LEVEL": "sector",
     "TIMESPAN": {
         "START": 1990,
         "END": 2023
@@ -69,7 +65,7 @@ En example config file:
         "FARMERS": "#9F2B68",
         "SATELLITE": ""
     },
-    "PASSWORD": "my_password"
+    "PASSWORD": "foobar"
 }
 ```
 
