@@ -31,7 +31,7 @@ Before you begin, ensure you have met the following requirements:
 ## Configuration
 
 Configuration for a new instance is doing via a config.json file. 
-En example config file:
+An example config file:
 
 ```json
 {
@@ -75,4 +75,5 @@ En example config file:
 
 # Glossary
 
-* CHIRPS: Climate Hazards Group InfraRed Precipitation with Station data (CHIRPS) is a 35+ year quasi-global rainfall data set. (https://www.chc.ucsb.edu/data/chirps)
+* **CHIRPS**
+    * Climate Hazards Group InfraRed Precipitation with Station data (CHIRPS) is a 35+ year quasi-global rainfall data set. (https://www.chc.ucsb.edu/data/chirps)
