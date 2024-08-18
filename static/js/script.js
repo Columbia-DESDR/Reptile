@@ -1,5 +1,11 @@
 console.log("FLASK VARIABLES", FLASK_VARIABLES);
 
+// url to this page (and infer server address)
+const url = window.location.origin + '/';
+
+// const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+const alphabet = ['c', 'r', 'd', 'v']
+
 // ############
 // ## COLORS ##
 // ############
@@ -24,11 +30,44 @@ const YEAR_LENGTH = FLASK_VARIABLES.length
 const colorFarmers = FLASK_VARIABLES.color_farmers
 const colorSatellite = FLASK_VARIABLES.color_satellite
 
-// url to this page (and infer server address)
-const url = window.location.origin + '/';
+// ################
+// ## LOCAL DATA ##
+// ################
 
-// const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
-const alphabet = ['c', 'r', 'd', 'v']
+class DataStorage {
+    constructor() {
+        this.data = {}
+        this.schema = {}
+        this.sate = {}
+    }
+    putData(level, data) {
+        this.data[level] = data
+    }
+    putSate(sate, data) {
+        this.sate[sate] = data
+    }
+    putSchema(level, data) {
+        this.schema[level] = data
+    }
+    getData(level) {
+        return this.data[level]
+    }
+    getSchema(level) {
+        return this.schema[level]
+    }
+    getData(level, field, value) {
+        return this.data[level].filter((d) => d[field] === value);
+    }
+    getSate(sate) {
+        return this.sate[sate]
+    }
+}
+
+let LocalData = new DataStorage()
+
+// ###############
+// ## RENDERING ##
+// ###############
 
 $(document).ready(function(){    
     $.get('levelTemplate.html', (response) => {
@@ -168,63 +207,6 @@ function GetData2(schema) {
         })
 }
 
-let tooltipdiv = d3.select("body").append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0)
-    .style("left", "20px")
-    .style("top", "44px");
-
-class DataStorage {
-    constructor() {
-        this.data = {}
-        this.schema = {}
-        this.sate = {}
-    }
-    putData(level, data) {
-        this.data[level] = data
-    }
-    putSate(sate, data) {
-        this.sate[sate] = data
-    }
-    putSchema(level, data) {
-        this.schema[level] = data
-    }
-    getData(level) {
-        return this.data[level]
-    }
-    getSchema(level) {
-        return this.schema[level]
-    }
-    getData(level, field, value) {
-        return this.data[level].filter((d) => d[field] === value);
-    }
-    getSate(sate) {
-        return this.sate[sate]
-    }
-}
-
-let LocalData = new DataStorage()
-
-
-function heatmap_tooptip_mouseover(d) {
-    tooltipdiv.style("opacity", .9);
-    return tooltipdiv.html(objToStr(d))
-}
-
-function objToStr(d) {
-    let str = ""
-    for (let [key, value] of Object.entries(d)) {
-        if (isFloat(value)) {
-            str += key + ": " + value.toFixed(2) + "<br/>";
-        } else {
-            str += key + ": " + value + "<br/>";
-        }
-    }
-    return str
-}
-
-
-
 const CountrySate = satellite_data.map(f => f['NAME'])
 
 const RegionSate = []
@@ -272,8 +254,6 @@ let schemaInitial = {
     aggregation: ['mean', 'std', 'count'],
     category: 'year'
 }
-
-
 
 function range(start, stop, count) {
     step = (stop - start) / count
@@ -349,139 +329,4 @@ function hideComp(level) {
 
 function showComp(level) {
     d3.select("#" + level + "CompBox").style("display", "block").style("overflow", "visible")
-}
-
-function submitRec(sidValue) {
-    console.log("submit")
-
-    result = {
-        "sid": sidValue,
-        "1990feedback": d3.select("#feedback1990").property("value"),
-        "1992feedback": d3.select("#feedback1992").property("value"),
-        "1993feedback": d3.select("#feedback1993").property("value"),
-        "1994feedback": d3.select("#feedback1994").property("value"),
-        "1995feedback": d3.select("#feedback1995").property("value"),
-        "1996feedback": d3.select("#feedback1996").property("value"),
-        "1997feedback": d3.select("#feedback1997").property("value"),
-        "1998feedback": d3.select("#feedback1998").property("value"),
-        "1999feedback": d3.select("#feedback1999").property("value"),
-        "2000feedback": d3.select("#feedback2000").property("value"),
-        "2001feedback": d3.select("#feedback2001").property("value"),
-        "2002feedback": d3.select("#feedback2002").property("value"),
-        "2003feedback": d3.select("#feedback2003").property("value"),
-        "2004feedback": d3.select("#feedback2004").property("value"),
-        "2005feedback": d3.select("#feedback2005").property("value"),
-        "2006feedback": d3.select("#feedback2006").property("value"),
-        "2007feedback": d3.select("#feedback2007").property("value"),
-        "2008feedback": d3.select("#feedback2008").property("value"),
-        "2009feedback": d3.select("#feedback2009").property("value"),
-        "2010feedback": d3.select("#feedback2010").property("value"),
-        "2011feedback": d3.select("#feedback2011").property("value"),
-        "2012feedback": d3.select("#feedback2012").property("value"),
-        "2013feedback": d3.select("#feedback2013").property("value"),
-        "2014feedback": d3.select("#feedback2014").property("value"),
-        "2015feedback": d3.select("#feedback2015").property("value"),
-        "2016feedback": d3.select("#feedback2016").property("value"),
-        "2017feedback": d3.select("#feedback2017").property("value"),
-        "2018feedback": d3.select("#feedback2018").property("value"),
-        "2019feedback": d3.select("#feedback2019").property("value"),
-        "2020feedback": d3.select("#feedback2020").property("value"),
-        "2021feedback": d3.select("#feedback2021").property("value"),
-        "2022feedback": d3.select("#feedback2022").property("value"),
-        "2023feedback": d3.select("#feedback2023").property("value"),
-
-        "q1": d3.select("#q1").property("value"),
-        "q2": d3.select("#q2").property("value"),
-        "q3": d3.select("#q3").property("value"),
-        "q4": d3.select("#q4").property("checked"),
-        "name": d3.select("#worstname").property("value"),
-        "comment": d3.select("#worstcomment").property("value"),
-        "password": d3.select("#password").property("value")
-    }
-
-    if (result["name"] == "your name") {
-        alert("Please enter your name!")
-        return
-    }
-
-    if (result["q4"] == false) {
-        alert("Please click on the checkbox to verify that \"I have reviewed the bad years reported for this village to the best of my knowledge and approve their use for index design.\"!")
-        return
-    }
-
-    SendRec(result).then((response) => {
-        alert("We have received your submission!")
-    })
-}
-
-function SendRec(schema) {
-    const data = {
-        'data': schema
-    };
-    const other_params = {
-        headers: { "content-type": "application/json; charset=UTF-8" },
-        body: JSON.stringify(data),
-        method: "POST",
-        mode: "cors"
-    };
-    return fetch(url + "api/rec", other_params)
-        .then(function (response) {
-            if (response.ok) {
-                return response.json();
-            } 
-            else if (response.status == 401) {
-                alert('Incorrect password!')
-            }
-            throw new Error("Could not reach the API: " + response.statusText);
-        }).then(function (data) {
-            return data
-        })
-}
-
-function SendSub(schema) {
-    const data = {
-        'geo': user_info,
-        'time': Date().toLocaleString(),
-        'other': result
-    };
-    const other_params = {
-        headers: { "content-type": "application/json; charset=UTF-8" },
-        body: JSON.stringify(data),
-        method: "POST",
-        mode: "cors"
-    };
-    return fetch(url + "api/sub", other_params)
-        .then(function (response) {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error("Could not reach the API: " + response.statusText);
-            }
-        }).then(function (data) {
-            return data
-        })
-}
-
-function SendLoad(result = "") {
-    const data = {
-        'geo': user_info,
-        'time': Date().toLocaleString(),
-        'other': result
-    };
-    const other_params = {
-        headers: { "content-type": "application/json; charset=UTF-8" },
-        body: JSON.stringify(data),
-        method: "POST",
-        mode: "cors"
-    };
-    return fetch(url + "api/load", other_params)
-        .then(function (response) {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error("Could not reach the API: " + response.statusText);
-            }
-        }).then(function (data) {
-            return data
-        })
 }

@@ -8,6 +8,29 @@ satellite_data.forEach((satelliteSource) => {
 const margin = { top: 10, right: 100, bottom: 100, left: 60, right_short: 20 };
 const height = 600 - margin.top - margin.bottom;
 
+let tooltipdiv = d3.select("body").append("div")
+                    .attr("class", "tooltip")
+                    .style("opacity", 0)
+                    .style("left", "20px")
+                    .style("top", "44px");
+
+function heatmap_tooptip_mouseover(d) {
+    tooltipdiv.style("opacity", .9);
+    return tooltipdiv.html(objToStr(d))
+}
+
+function objToStr(d) {
+    let str = ""
+    for (let [key, value] of Object.entries(d)) {
+        if (isFloat(value)) {
+            str += key + ": " + value.toFixed(2) + "<br/>";
+        } else {
+            str += key + ": " + value + "<br/>";
+        }
+    }
+    return str
+}
+
 class Visualization {
     // option for vis
     // and link to other vis
