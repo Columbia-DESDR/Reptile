@@ -1,7 +1,7 @@
 # Reptile
 Reptile is a software tool designed to enhance survey data quality by addressing and correcting data errors reported by users.
 
-# Guides:
+# Guides
 
 * [Datasets](./datasets/README.md)
 
