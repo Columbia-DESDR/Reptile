@@ -30,9 +30,7 @@ const url = window.location.origin + '/';
 // const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
 const alphabet = ['c', 'r', 'd', 'v']
 
-$(document).ready(function(){
-    const alphabet = ['c', 'r', 'd', 'v']
-    
+$(document).ready(function(){    
     $.get('levelTemplate.html', (response) => {
         hierarchy.forEach((level, idx) => {
             if (idx == 0) {
@@ -45,8 +43,6 @@ $(document).ready(function(){
                 letter: alphabet[idx],
                 is_last: idx == (hierarchy.length - 1)
             }
-
-            console.log('view', view);
 
             var output = Mustache.render(response, view);    
             $('#levels-container').append(output);    
@@ -63,8 +59,6 @@ const renderDataViews = () => {
     let isLast = true;
 
     hierarchy.toReversed().forEach((level, idx) => {
-        console.log('level', level, idx);
-
         const thisLetter = alphabet.toReversed()[idx];
 
         const isFeedbackLevel = feedback_level == level;
