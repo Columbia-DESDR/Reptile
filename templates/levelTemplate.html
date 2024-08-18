@@ -63,15 +63,17 @@
                   </div>
               </div>
 
-              <div
-                  class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
-                  <h2 class="subtitle-name">Detail on selected camp</h2>
-                  <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
-                      <div class="vega" style="position: relative;">
-                          <div id="{{letter}}_4" class="comp card"></div>
-                      </div>
-                  </div>
-              </div>
+              {{^is_last}}
+                <div
+                    class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
+                    <h2 class="subtitle-name">Detail on selected camp</h2>
+                    <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
+                        <div class="vega" style="position: relative;">
+                            <div id="{{letter}}_4" class="comp card"></div>
+                        </div>
+                    </div>
+                </div>              
+              {{/is_last}}
 
           </div>
       </div>

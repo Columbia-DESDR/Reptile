@@ -32,17 +32,20 @@ $(document).ready(function(){
         {
             this_level_name : "sector",
             above_level_name : "province",
-            letter: 'r'
+            letter: 'r',
+            is_last: false
         },
         {
             this_level_name : "village",
             above_level_name : "sector",
-            letter: 'd'
+            letter: 'd',
+            is_last: false
         },
         {
             this_level_name : "survey_id",
             above_level_name : "village",
-            letter: 'v'
+            letter: 'v',
+            is_last: true
         }
     ]
     
