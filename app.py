@@ -13,6 +13,8 @@ app.config.from_file("config.json", load=json.load)
 
 @app.route('/levelTemplate.html', methods=['GET'])
 def get_templates():
+    # TODO this is probably not necessary, and levelTemplate.html can just be imported directly from res.html
+    # but since I haven't figured out how to do so, this works for now
     return send_from_directory('templates', 'levelTemplate.html')
 
 @app.route('/', methods=['GET'])

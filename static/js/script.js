@@ -27,35 +27,27 @@ const colorSatellite = FLASK_VARIABLES.color_satellite
 // url to this page (and infer server address)
 const url = window.location.origin + '/';
 
+// const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+const alphabet = ['c', 'r', 'd', 'v']
+
 $(document).ready(function(){
-    const views = [
-        {
-            this_level_name : "sector",
-            above_level_name : "province",
-            letter: 'r',
-            is_last: false
-        },
-        {
-            this_level_name : "village",
-            above_level_name : "sector",
-            letter: 'd',
-            is_last: false
-        },
-        {
-            this_level_name : "survey_id",
-            above_level_name : "village",
-            letter: 'v',
-            is_last: true
-        }
-    ]
+    const alphabet = ['c', 'r', 'd', 'v']
     
     $.get('levelTemplate.html', (response) => {
-        console.log('response', response);
-    
-        // const foo = $(response);
-        // console.log('foo', foo);
-    
-        views.forEach((view) => {
+        hierarchy.forEach((level, idx) => {
+            if (idx == 0) {
+                return
+            }
+
+            const view = {
+                this_level_name: level,
+                above_level_name: hierarchy[idx-1],
+                letter: alphabet[idx],
+                is_last: idx == (hierarchy.length - 1)
+            }
+
+            console.log('view', view);
+
             var output = Mustache.render(response, view);    
             $('#levels-container').append(output);    
         })
@@ -65,8 +57,6 @@ $(document).ready(function(){
 });
 
 const renderDataViews = () => {
-    //const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
-    const alphabet = ['c', 'r', 'd', 'v']
     const heatMaps = []
 
     let heatMapUnderneath = null;
