@@ -31,6 +31,29 @@ const url = window.location.origin + '/';
 let margin = { top: 10, right: 100, bottom: 100, left: 60, right_short: 20 },
     height = 600 - margin.top - margin.bottom;
 
+// ADD ELEMENTS
+
+$(document).ready(function(){
+    var view = {
+      first_level_name : "FOOBAR",
+      second_level_name : "BARFOO"
+    };
+
+    $.get('templates.html', (response) => {
+        console.log('response', response);
+
+        // const foo = $(response);
+        // console.log('foo', foo);
+
+        var output = Mustache.render(response, view);
+
+        console.log('output', output);
+    
+        $('#levels-container').append(output);    
+    })
+});
+
+
 function GetHeatMap(schema) {
     const data = {
         'filename': schema.filename,

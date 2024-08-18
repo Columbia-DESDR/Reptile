@@ -8,7 +8,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mainpage.css') }}">
+
+    <link rel="import" href="template.html" id="templates">
+
+    <script type="text/javascript" src="http://documentcloud.github.com/underscore/underscore-min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js" ></script>
 </head>
+
 
 <body>
     <div class="abs-100 ng-scope">
@@ -61,7 +67,7 @@
 
 
                 <div class="pane vis-pane">
-                    <div class="vis-pane-container abs-100 scroll-y">
+                    <div class="vis-pane-container abs-100 scroll-y" id="levels-container">
 
                         <!-- FIRST LEVEL -->
                         <div class="alternatives-pane card no-top-margin ng-scope">
@@ -348,6 +354,9 @@
                             </div>
                         </div>
                     </div>
+
+                    <p id="person"></p>
+                    <div id="templates" style="display: none;"></div>
                 </div>
             </div>
         </div>
@@ -373,3 +382,4 @@
  <script src="{{ url_for('static', filename='js/explanation.js') }}"></script>
  <script src="{{ url_for('static', filename='js/heatMaps.js') }}"></script>
  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+ <script src="{{ url_for('static', filename='templates.html') }}"></script>
