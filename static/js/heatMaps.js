@@ -5,6 +5,9 @@ satellite_data.forEach((satelliteSource) => {
     satelliteSourceNameToFile[satelliteSource.NAME] = satelliteSource.PATH;
 })
 
+const margin = { top: 10, right: 100, bottom: 100, left: 60, right_short: 20 };
+const height = 600 - margin.top - margin.bottom;
+
 class Visualization {
     // option for vis
     // and link to other vis

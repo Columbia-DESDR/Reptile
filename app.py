@@ -1,6 +1,6 @@
 import os
 import flask
-from flask import request, Response, json, render_template, send_file
+from flask import request, Response, json, render_template, send_file, send_from_directory
 import db
 import readcsv
 import json
@@ -11,6 +11,11 @@ from io import StringIO
 app = flask.Flask(__name__, static_url_path='')
 app.config.from_file("config.json", load=json.load)
 
+@app.route('/levelTemplate.html', methods=['GET'])
+def get_templates():
+    # TODO this is probably not necessary, and levelTemplate.html can just be imported directly from res.html
+    # but since I haven't figured out how to do so, this works for now
+    return send_from_directory('templates', 'levelTemplate.html')
 
 @app.route('/', methods=['GET'])
 def com():

@@ -27,9 +27,80 @@ const colorSatellite = FLASK_VARIABLES.color_satellite
 // url to this page (and infer server address)
 const url = window.location.origin + '/';
 
-// margin.right_short is for no legend
-let margin = { top: 10, right: 100, bottom: 100, left: 60, right_short: 20 },
-    height = 600 - margin.top - margin.bottom;
+// const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+const alphabet = ['c', 'r', 'd', 'v']
+
+$(document).ready(function(){    
+    $.get('levelTemplate.html', (response) => {
+        hierarchy.forEach((level, idx) => {
+            if (idx == 0) {
+                return
+            }
+
+            const view = {
+                this_level_name: level,
+                above_level_name: hierarchy[idx-1],
+                letter: alphabet[idx],
+                is_last: idx == (hierarchy.length - 1)
+            }
+
+            var output = Mustache.render(response, view);    
+            $('#levels-container').append(output);    
+        })
+    
+        renderDataViews();
+    })
+});
+
+const renderDataViews = () => {
+    const heatMaps = []
+
+    let heatMapUnderneath = null;
+    let isLast = true;
+
+    hierarchy.toReversed().forEach((level, idx) => {
+        const thisLetter = alphabet.toReversed()[idx];
+
+        const isFeedbackLevel = feedback_level == level;
+
+        const explanationLinks = heatMapUnderneath ? [heatMapUnderneath] : [];
+
+        const scatterPlot = new ScatterPlot(`#${thisLetter}_2`, {})
+        const barChart = new BarChart(`#${thisLetter}_3`, {color: [WHITE, colorFarmers]})
+        const explanation = new Explanation(`#${thisLetter}_4`, explanationLinks, isFeedbackLevel, !isLast)
+        const heatMap = new HeatMap(`#${thisLetter}_1`, {color: [WHITE, colorFarmers]})
+        
+        scatterPlot.registerLinks([barChart, explanation, heatMap])
+        barChart.registerLinks([explanation, scatterPlot, heatMap])
+        heatMap.registerLinks([scatterPlot, barChart, explanation])
+        
+        heatMaps.unshift(heatMap)
+
+        heatMapUnderneath = heatMap;
+        isLast = false;
+    })
+
+    let satelliteHeatMap = null;
+    if (satellite_data.length > 0) {
+        satelliteHeatMap = new CountrySatelliteHeatMap("#svg-satellite", {color:[WHITE, colorSatellite]})
+        satelliteHeatMap.registerLinks([])
+    }
+
+    GetHeatMap(schemaInitial).then(d => {
+        LocalData.putData(schemaInitial.categorical[0], d)
+        LocalData.putSchema(schemaInitial.categorical[0], schemaInitial)
+        const m1 = heatMaps[0]
+        m1.plot(schemaInitial)
+    })
+    
+    if (satelliteHeatMap) {
+        d3.select("#CountrySate").on("change", function() {
+            satelliteHeatMap.plot({ schema: schemaSate, level: "Country" })
+            })
+        satelliteHeatMap.plot({ schema: schemaSate, level: "Country" })
+    }
+}
+
 
 function GetHeatMap(schema) {
     const data = {
@@ -152,42 +223,7 @@ function objToStr(d) {
     return str
 }
 
-//const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
-const alphabet = ['c', 'r', 'd', 'v']
-const heatMaps = []
 
-let heatMapUnderneath = null;
-let isLast = true;
-
-hierarchy.toReversed().forEach((level, idx) => {
-    console.log('level', level, idx);
-
-    const thisLetter = alphabet.toReversed()[idx];
-
-    const isFeedbackLevel = feedback_level == level;
-
-    const explanationLinks = heatMapUnderneath ? [heatMapUnderneath] : [];
-
-    const scatterPlot = new ScatterPlot(`#${thisLetter}_2`, {})
-    const barChart = new BarChart(`#${thisLetter}_3`, {color: [WHITE, colorFarmers]})
-    const explanation = new Explanation(`#${thisLetter}_4`, explanationLinks, isFeedbackLevel, !isLast)
-    const heatMap = new HeatMap(`#${thisLetter}_1`, {color: [WHITE, colorFarmers]})
-    
-    scatterPlot.registerLinks([barChart, explanation, heatMap])
-    barChart.registerLinks([explanation, scatterPlot, heatMap])
-    heatMap.registerLinks([scatterPlot, barChart, explanation])
-    
-    heatMaps.unshift(heatMap)
-
-    heatMapUnderneath = heatMap;
-    isLast = false;
-})
-
-let satelliteHeatMap = null;
-if (satellite_data.length > 0) {
-    satelliteHeatMap = new CountrySatelliteHeatMap("#svg-satellite", {color:[WHITE, colorSatellite]})
-    satelliteHeatMap.registerLinks([])
-}
 
 const CountrySate = satellite_data.map(f => f['NAME'])
 
@@ -237,19 +273,7 @@ let schemaInitial = {
     category: 'year'
 }
 
-GetHeatMap(schemaInitial).then(d => {
-    LocalData.putData(schemaInitial.categorical[0], d)
-    LocalData.putSchema(schemaInitial.categorical[0], schemaInitial)
-    const m1 = heatMaps[0]
-    m1.plot(schemaInitial)
-})
 
-if (satelliteHeatMap) {
-    d3.select("#CountrySate").on("change", function() {
-        satelliteHeatMap.plot({ schema: schemaSate, level: "Country" })
-        })
-    satelliteHeatMap.plot({ schema: schemaSate, level: "Country" })
-}
 
 function range(start, stop, count) {
     step = (stop - start) / count

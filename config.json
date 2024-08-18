@@ -1,19 +1,19 @@
 {
     "DEBUG": true,
     "DATA_SOURCES": {
-        "FILENAME": "./data/test/DRC_badyears_forzach.csv",
+        "FILENAME": "./datasets/test/DRC_badyears_forzach.csv",
         "SATELLITE_DATA": [
             {
                 "NAME": "source_a",
-                "PATH": "./data/test/season_a.csv"
+                "PATH": "./datasets/test/season_a.csv"
             },
             {
                 "NAME": "source_b",
-                "PATH": "./data/test/season_b.csv"
+                "PATH": "./datasets/test/season_b.csv"
             },
             {
                 "NAME": "source_c",
-                "PATH": "./data/test/season_c.csv"
+                "PATH": "./datasets/test/season_c.csv"
             }
         ]
     },
