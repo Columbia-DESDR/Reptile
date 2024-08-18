@@ -31,7 +31,7 @@ Before you begin, ensure you have met the following requirements:
 ## Configuration
 
 Configuration for a new instance is doing via a config.json file. 
-En example config file:
+An example config file:
 
 ```json
 {
