@@ -75,4 +75,5 @@ En example config file:
 
 # Glossary
 
-* CHIRPS: Climate Hazards Group InfraRed Precipitation with Station data (CHIRPS) is a 35+ year quasi-global rainfall data set. (https://www.chc.ucsb.edu/data/chirps)
+* **CHIRPS**
+    * Climate Hazards Group InfraRed Precipitation with Station data (CHIRPS) is a 35+ year quasi-global rainfall data set. (https://www.chc.ucsb.edu/data/chirps)
