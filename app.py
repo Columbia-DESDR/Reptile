@@ -11,9 +11,9 @@ from io import StringIO
 app = flask.Flask(__name__, static_url_path='')
 app.config.from_file("config.json", load=json.load)
 
-@app.route('/templates.html', methods=['GET'])
+@app.route('/levelTemplate.html', methods=['GET'])
 def get_templates():
-    return send_from_directory('templates', 'templates.html')
+    return send_from_directory('templates', 'levelTemplate.html')
 
 @app.route('/', methods=['GET'])
 def com():
