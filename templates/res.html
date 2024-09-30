@@ -1,159 +1,220 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
+<meta charset="utf-8" />
 
 <head>
-    <title>Reptile</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mainpage.css') }}">
-    <script type="text/javascript" src="https://d3js.org/d3.v4.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script type="text/javascript" src="http://documentcloud.github.com/underscore/underscore-min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js" ></script>
+  <title>Reptile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+  />
+  <link
+    rel="stylesheet"
+    type="text/css"
+    href="{{ url_for('static',filename='styles/mainpage.css') }}"
+  />
+  <script type="text/javascript" src="https://d3js.org/d3.v4.js"></script>
+  <script
+    type="text/javascript"
+    src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="http://documentcloud.github.com/underscore/underscore-min.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"
+  ></script>
 </head>
 
 <body>
-    <div class="abs-100 ng-scope">
-        <div class="flex-root vflex full-width full-height ng-scope">
-            <div class="full-width no-shrink">
-                <div class="card top-card no-right-margin no-top-margin">
-                    <div class="navbar">
-                        <h1>Reptile - Farmer Feedback Portal</h1>
-                        <h2>{{instance_title}}</h2>
-                    </div>
-                </div>
-            </div>
-
-            <div class="hflex full-width main-panel grow-1">
-                <div class="pane data-pane noselect">
-                    <div class="card no-top-margin data-card abs-100 scroll-y" style="color: white;">
-
-                        <h2>Understanding Data</h2>
-                        <ol>
-                            <li>Data is <u>organized by location hierarchy:</u> {{first_level_name}},
-                                {{second_level_name}},
-                                {{third_level_name}}</li>
-                            <li>The <u>severity of conditions in each camp</u> is ranked from 1 (least severe) to 8 (most severe)</li>
-                        </ol>
-                        <br/>
-
-                        <h2>What I can do in the App</h2>
-                        <ol>
-                            <li>
-                                <u>Exploration:</u> 
-                                Click on any rectangle in the heatmap to see detailed information about that location, displayed through scatterplots, barcharts, and detail panels.
-                            </li>
-
-                            <li>
-                                <u>Drill Down:</u> 
-                                To explore data at a more detailed level for a selected location, click the "Drill Down" button found in the detail panel.
-                            </li>
-
-                            <li>
-                                <u>Reporting Issues:</u> 
-                                If you find an issue with the data, such as values being too high or too low, you can report this by clicking on the value in the detail panel. There are two complaint options available: "too small" or "too large".
-                            </li>
-                        </ol>
-
-                        <br/>
-
-                        <p style="text-align: center;">Contact Zachary Hyang (zh2408@columbia.edu)</p>
-                    </div>
-                </div>
-
-                <div class="pane vis-pane">
-                    <div class="vis-pane-container abs-100 scroll-y" id="levels-container">
-
-                        <!-- FIRST LEVEL -->
-                        <div class="alternatives-pane card no-top-margin ng-scope">
-                            <div class="alternatives-header">
-                                <h1 class="title-name">{{first_level_name}} Level</h1>
-                            </div>
-                            <div class="alternatives-content ng-scope">
-                                <div class="vl-plot-group-list-container ng-scope ng-isolate-scope">
-                                    <div class="vis-list-header"></div>
-                                    <div class="vis-list hflex flex-wrap">
-                                        <div class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
-                                            <h2 class="subtitle-name">Heatmap (farmers)</h2>
-                                            <p class="subtitle-desc">Mean value at province level by farmers</p>
-                                            <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
-                                                <div class="vega" style="position: relative;">
-                                                    <svg id="c_1" width="383" height="500"></svg>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {% if satellite_data %}
-                                        <div class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
-                                            <h2 class="subtitle-name">Heatmap (satellite)</h2>
-                                            <p class="subtitle-desc">Mean value at province level from Satellite data</p>
-                                            <div class="subtitle-select-align">
-                                                <select id="CountrySate" class="subtitle-select"></select>
-                                            </div>
-                                            <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
-                                                <div class="vega" style="position: relative;">
-                                                    <svg id = "svg-satellite" width="300" height="500"></svg>
-                                                </div>
-                                            </div>
-                                        </div>                                        
-                                        {% endif %}
-                                        <div
-                                            class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
-                                            <h2 class="subtitle-name">IQR of mean for </h2>
-                                                <p class="subtitle-desc">the Selected {{first_level_name}}</p>
-                                                <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
-                                                <div class="vega" style="position: relative;">
-                                                    <svg id="c_2" width="300" height="500"></svg>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div
-                                            class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
-                                            <h2 class="subtitle-name">Mean (color) and count of</h2>
-                                                <p class="subtitle-desc">the Selected {{first_level_name}}</p>
-                                                <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
-                                                <div class="vega" style="position: relative;">
-                                                    <svg id="c_3" width="300" height="500"></svg>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div
-                                            class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope">
-                                            <h2 class="subtitle-name">Detail on selected camp</h2>
-                                            <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
-                                                <div class="vega" style="position: relative;">
-                                                    <div id="c_4" class="comp card"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <div class="abs-100 ng-scope">
+    <div class="flex-root vflex full-width full-height ng-scope">
+      <div class="full-width no-shrink">
+        <div class="card top-card no-right-margin no-top-margin">
+          <div class="navbar">
+            <h1>Reptile - Farmer Feedback Portal</h1>
+            <h2>{{instance_title}}</h2>
+          </div>
         </div>
+      </div>
+
+      <div class="hflex full-width main-panel grow-1">
+        <div class="pane data-pane noselect">
+          <div
+            class="card no-top-margin data-card abs-100 scroll-y"
+            style="color: white"
+          >
+            <h2>Understanding Data</h2>
+            <ol>
+              <li>
+                Data is
+                <u>organized by location hierarchy:</u> {{first_level_name}},
+                {{hierarchy[1]}}, {{hierarchy[2]}}
+              </li>
+              <li>
+                The <u>severity of conditions in each camp</u> is ranked from 1
+                (least severe) to 8 (most severe)
+              </li>
+            </ol>
+            <br />
+
+            <h2>What I can do in the App</h2>
+            <ol>
+              <li>
+                <u>Exploration:</u>
+                Click on any rectangle in the heatmap to see detailed
+                information about that location, displayed through scatterplots,
+                barcharts, and detail panels.
+              </li>
+
+              <li>
+                <u>Drill Down:</u>
+                To explore data at a more detailed level for a selected
+                location, click the "Drill Down" button found in the detail
+                panel.
+              </li>
+
+              <li>
+                <u>Reporting Issues:</u>
+                If you find an issue with the data, such as values being too
+                high or too low, you can report this by clicking on the value in
+                the detail panel. There are two complaint options available:
+                "too small" or "too large".
+              </li>
+            </ol>
+
+            <br />
+
+            <p style="text-align: center">
+              Contact Zachary Hyang (zh2408@columbia.edu)
+            </p>
+          </div>
+        </div>
+
+        <div class="pane vis-pane">
+          <div
+            class="vis-pane-container abs-100 scroll-y"
+            id="levels-container"
+          >
+            <!-- FIRST LEVEL -->
+            <div class="alternatives-pane card no-top-margin ng-scope">
+              <div class="alternatives-header">
+                <h1 class="title-name">{{first_level_name}} Level</h1>
+              </div>
+              <div class="alternatives-content ng-scope">
+                <div
+                  class="vl-plot-group-list-container ng-scope ng-isolate-scope"
+                >
+                  <div class="vis-list-header"></div>
+                  <div class="vis-list hflex flex-wrap">
+                    <div
+                      class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope"
+                    >
+                      <h2 class="subtitle-name">Heatmap (farmers)</h2>
+                      <p class="subtitle-desc">
+                        Mean value at province level by farmers
+                      </p>
+                      <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
+                        <div class="vega" style="position: relative">
+                          <svg id="c_1" width="383" height="500"></svg>
+                        </div>
+                      </div>
+                    </div>
+                    {% if satellite_data %}
+                    <div
+                      class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope"
+                    >
+                      <h2 class="subtitle-name">Heatmap (satellite)</h2>
+                      <p class="subtitle-desc">
+                        Mean value at province level from Satellite data
+                      </p>
+                      <div class="subtitle-select-align">
+                        <select
+                          id="CountrySate"
+                          class="subtitle-select"
+                        ></select>
+                      </div>
+                      <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
+                        <div class="vega" style="position: relative">
+                          <svg
+                            id="svg-satellite"
+                            width="300"
+                            height="500"
+                          ></svg>
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                    <div
+                      class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope"
+                    >
+                      <h2 class="subtitle-name">IQR of mean for</h2>
+                      <p class="subtitle-desc">
+                        the Selected {{first_level_name}}
+                      </p>
+                      <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
+                        <div class="vega" style="position: relative">
+                          <svg id="c_2" width="300" height="500"></svg>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope"
+                    >
+                      <h2 class="subtitle-name">Mean (color) and count of</h2>
+                      <p class="subtitle-desc">
+                        the Selected {{first_level_name}}
+                      </p>
+                      <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
+                        <div class="vega" style="position: relative">
+                          <svg id="c_3" width="300" height="500"></svg>
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope"
+                    >
+                      <h2 class="subtitle-name">Detail on selected camp</h2>
+                      <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
+                        <div class="vega" style="position: relative">
+                          <div id="c_4" class="comp card"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </body>
 
 <script type="text/javascript">
-    FLASK_VARIABLES = {
-        start: {{start|tojson}},
-        length: {{length|tojson}},
-        filename: {{filename|tojson}},
-        hierarchy: {{hierarchy|tojson}},
-        feedback_level: {{feedback_level|tojson}},
-        time_name: {{time_name|tojson}},
-        numerical_name: {{numerical_name|tojson}},
-        comment_name: {{comment_name|tojson}},
-        satellite_data: {{satellite_data|tojson}},
-        color_farmers: {{color_farmers|tojson}},
-        color_satellite: {{color_satellite|tojson}}
-    };
- </script>
- <script src="{{ url_for('static', filename='js/explanation.js') }}"></script>
- <script src="{{ url_for('static', filename='js/heatMaps.js') }}"></script>
- <script src="{{ url_for('static', filename='js/script.js') }}"></script>
- <script src="{{ url_for('static', filename='templates.html') }}"></script>
+  FLASK_VARIABLES = {
+      start: {{start|tojson}},
+      length: {{length|tojson}},
+      filename: {{filename|tojson}},
+      hierarchy: {{hierarchy|tojson}},
+      feedback_level: {{feedback_level|tojson}},
+      time_name: {{time_name|tojson}},
+      numerical_name: {{numerical_name|tojson}},
+      comment_name: {{comment_name|tojson}},
+      satellite_data: {{satellite_data|tojson}},
+      color_farmers: {{color_farmers|tojson}},
+      color_satellite: {{color_satellite|tojson}}
+  };
+</script>
+<script src="{{ url_for('static', filename='js/explanation.js') }}"></script>
+<script src="{{ url_for('static', filename='js/heatMaps.js') }}"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="{{ url_for('static', filename='templates.html') }}"></script>
