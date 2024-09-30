@@ -42,7 +42,6 @@ def com():
                            first_level_name = hierarchy[0],
                            second_level_name = hierarchy[1],
                            third_level_name = hierarchy[2],
-                           fourth_level_name = hierarchy[3],
                            time_name=display['TIME_NAME'],
                            numerical_name=display['NUMERICAL_NAME'],
                            comment_name=display['COMMENT_NAME'],
