@@ -2,3 +2,4 @@ pandas
 duckdb
 flask
 pytest
+pytest-flask
