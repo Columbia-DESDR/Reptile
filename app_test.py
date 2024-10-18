@@ -7,4 +7,4 @@ def app():
 
 def test_get_templates(client):
     response = client.get("/levelTemplate.html")
-    assert response.status_code == 201
+    assert response.status_code == 200
