@@ -3,6 +3,10 @@ from jsonschema import validate
 schema = {
     "type": "object",
     "properties": {
+        "DATA_SOURCES": {
+            "type": "array",
+            "items": { "type": "string" },
+        },
         "FEEDBACK_LEVEL": {"type": "string"},
         "PASSWORD": {"type": "string"},
         "HIERARCHY": {
@@ -35,8 +39,7 @@ schema = {
             "required": ["FARMERS", "SATELLITE"],
         },
     },
-    "required": ["FEEDBACK_LEVEL", "PASSWORD", "HIERARCHY", "TIMESPAN", "DISPLAY", "COLORS"],
-    "additionalProperties": False
+    "required": ["FEEDBACK_LEVEL", "PASSWORD", "HIERARCHY", "TIMESPAN", "DISPLAY", "COLORS"]
 }
 
 def validate_config(config):
