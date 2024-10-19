@@ -1,3 +1,5 @@
+import pytest
+import jsonschema
 from validate_config import validate_config
 
 def get_mock_config():
@@ -45,4 +47,7 @@ def test_validate_mock_config():
 def test_validate_mock_config_with_no_password_throws_exception():
     mock_config = get_mock_config()
     mock_config['PASSWORD'] = None
-    validate_config(mock_config)
+
+    with pytest.raises(jsonschema.ValidationError) as e:  
+        validate_config(mock_config)
+        print(e)
