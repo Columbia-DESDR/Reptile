@@ -1,6 +1,8 @@
 import jsonschema.exceptions
 import pytest
 import jsonschema
+from jsonschema import ValidationError
+
 from validate_config import validate_config
 
 def get_mock_config():
@@ -49,9 +51,7 @@ def test_validate_mock_config_with_no_password_throws_exception():
     mock_config = get_mock_config()
     mock_config['PASSWORD'] = None
 
-    try:
+    with pytest.raises(ValidationError):
         validate_config(mock_config)
-    except jsonschema.ValidationError as e:
-        print(e)
-        assert e == 'foo'
+        assert ValidationError(message="'a list' is not of type 'array'")
 
