@@ -23,17 +23,20 @@ schema = {
                 "TIME_NAME": {"type": "string"},
                 "NUMERICAL_NAME": {"type": "string"},
                 "COMMENT_NAME": {"type": "string"},
-            }
+            },
+            "required": ["INSTANCE_TITLE", "TIME_NAME", "NUMERICAL_NAME", "COMMENT_NAME"],
         },
         "COLORS": {
             "type": "object",
             "properties": {
                 "FARMERS": {"type": "string"},
                 "SATELLITE": {"type": "string"}
-            }
+            },
+            "required": ["FARMERS", "SATELLITE"],
         },
     },
     "required": ["FEEDBACK_LEVEL", "PASSWORD", "HIERARCHY", "TIMESPAN", "DISPLAY", "COLORS"],
+    "additionalProperties": False
 }
 
 def validate_config(config):
