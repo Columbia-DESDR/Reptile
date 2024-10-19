@@ -1,8 +1,4 @@
-import jsonschema.exceptions
-import pytest
 import jsonschema
-from jsonschema import ValidationError
-
 from validate_config import validate_config
 
 def get_mock_config():
