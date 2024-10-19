@@ -4,8 +4,12 @@ schema = {
     "type": "object",
     "properties": {
         "DATA_SOURCES": {
-            "type": "array",
-            "items": { "type": "string" },
+            "type": "object",
+            "properties": {
+                "FILENAME": {"type": "string"},
+                "SATELLITE_DATA": {"type": "array"},
+            },
+            "required": ["FILENAME", "SATELLITE_DATA"]
         },
         "FEEDBACK_LEVEL": {"type": "string"},
         "PASSWORD": {"type": "string"},
@@ -18,7 +22,8 @@ schema = {
             "properties": {
                 "START": {"type": "number"},
                 "END": {"type": "number"},
-            }
+            },
+            "required": ["START", "END"],
         },
         "DISPLAY": {
             "type": "object",
