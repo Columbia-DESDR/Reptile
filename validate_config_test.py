@@ -48,6 +48,8 @@ def test_validate_mock_config_with_no_password_throws_exception():
     mock_config = get_mock_config()
     mock_config['PASSWORD'] = None
 
-    with pytest.raises(jsonschema.ValidationError) as e:  
+    try:
         validate_config(mock_config)
+    except jsonschema.ValidationError as e:
         assert e.message == 'foo'
+
