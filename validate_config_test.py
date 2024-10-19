@@ -53,5 +53,5 @@ def test_validate_mock_config_with_no_password_throws_exception():
         validate_config(mock_config)
     except jsonschema.exceptions.ValidationError as e:
         print(e)
-        assert e.message == 'foo'
+        assert e == 'foo'
 
