@@ -7,9 +7,13 @@ import json
 import pandas as pd
 from io import StringIO
 
+from config_validator import validate_config
+
 
 app = flask.Flask(__name__, static_url_path='')
 app.config.from_file("config.json", load=json.load)
+
+validate_config(app.config)
 
 @app.route('/levelTemplate.html', methods=['GET'])
 def get_templates():
