@@ -1,3 +1,5 @@
+import flask
+import json
 import jsonschema
 from validate_config import validate_config
 
@@ -42,3 +44,8 @@ def get_mock_config():
 def test_validate_mock_config():
     mock_config = get_mock_config()
     validate_config(mock_config)
+
+def test_validate_default_config():
+    app = flask.Flask(__name__, static_url_path='')
+    app.config.from_file("config.json", load=json.load)
+    validate_config(app.config)

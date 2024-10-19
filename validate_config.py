@@ -3,6 +3,24 @@ from jsonschema import validate
 schema = {
     "type": "object",
     "properties": {
+        "DATA_SOURCES": {
+            "type": "object",
+            "properties": {
+                "FILENAME": {"type": "string"},
+                "SATELLITE_DATA": {
+                    "type": "array",
+                    "items": { 
+                            "type": "object",
+                            "properties": {
+                                "NAME": {"type": "string"},
+                                "PATH": {"type": "string"},
+                            },
+                            "required": ["NAME", "PATH"]                    
+                    },
+                },
+            },
+            "required": ["FILENAME"]
+        },
         "FEEDBACK_LEVEL": {"type": "string"},
         "PASSWORD": {"type": "string"},
         "HIERARCHY": {
@@ -14,7 +32,8 @@ schema = {
             "properties": {
                 "START": {"type": "number"},
                 "END": {"type": "number"},
-            }
+            },
+            "required": ["START", "END"],
         },
         "DISPLAY": {
             "type": "object",
@@ -23,17 +42,19 @@ schema = {
                 "TIME_NAME": {"type": "string"},
                 "NUMERICAL_NAME": {"type": "string"},
                 "COMMENT_NAME": {"type": "string"},
-            }
+            },
+            "required": ["INSTANCE_TITLE", "TIME_NAME", "NUMERICAL_NAME", "COMMENT_NAME"],
         },
         "COLORS": {
             "type": "object",
             "properties": {
                 "FARMERS": {"type": "string"},
                 "SATELLITE": {"type": "string"}
-            }
+            },
+            "required": ["FARMERS", "SATELLITE"],
         },
     },
-    "required": ["FEEDBACK_LEVEL", "PASSWORD", "HIERARCHY", "TIMESPAN", "DISPLAY", "COLORS"],
+    "required": ["FEEDBACK_LEVEL", "PASSWORD", "HIERARCHY", "TIMESPAN", "DISPLAY", "COLORS"]
 }
 
 def validate_config(config):
