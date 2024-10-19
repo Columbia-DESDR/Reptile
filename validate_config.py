@@ -8,12 +8,15 @@ schema = {
             "properties": {
                 "FILENAME": {"type": "string"},
                 "SATELLITE_DATA": {
-                    "type": "object",
-                    "properties": {
-                        "NAME": {"type": "number"},
-                        "PATH": {"type": "number"},
+                    "type": "array",
+                    "items": { 
+                            "type": "object",
+                            "properties": {
+                                "NAME": {"type": "number"},
+                                "PATH": {"type": "number"},
+                            },
+                            "required": ["NAME", "PATH"]                    
                     },
-                    "required": ["NAME", "PATH"],
                 },
             },
             "required": ["FILENAME"]
