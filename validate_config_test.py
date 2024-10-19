@@ -1,3 +1,4 @@
+import jsonschema.exceptions
 import pytest
 import jsonschema
 from validate_config import validate_config
@@ -50,7 +51,7 @@ def test_validate_mock_config_with_no_password_throws_exception():
 
     try:
         validate_config(mock_config)
-    except jsonschema.ValidationError as e:
+    except jsonschema.exceptions.ValidationError as e:
         print(e)
         assert e.message == 'foo'
 
