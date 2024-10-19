@@ -3,3 +3,4 @@ duckdb
 flask
 pytest
 pytest-flask
+jsonschema
