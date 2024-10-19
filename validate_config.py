@@ -12,8 +12,8 @@ schema = {
                     "items": { 
                             "type": "object",
                             "properties": {
-                                "NAME": {"type": "number"},
-                                "PATH": {"type": "number"},
+                                "NAME": {"type": "string"},
+                                "PATH": {"type": "string"},
                             },
                             "required": ["NAME", "PATH"]                    
                     },
