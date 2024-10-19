@@ -7,9 +7,16 @@ schema = {
             "type": "object",
             "properties": {
                 "FILENAME": {"type": "string"},
-                "SATELLITE_DATA": {"type": "array"},
+                "SATELLITE_DATA": {
+                    "type": "object",
+                    "properties": {
+                        "NAME": {"type": "number"},
+                        "PATH": {"type": "number"},
+                    },
+                    "required": ["NAME", "PATH"],
+                },
             },
-            "required": ["FILENAME", "SATELLITE_DATA"]
+            "required": ["FILENAME"]
         },
         "FEEDBACK_LEVEL": {"type": "string"},
         "PASSWORD": {"type": "string"},
