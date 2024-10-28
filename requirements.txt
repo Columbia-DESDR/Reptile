@@ -1,6 +1,10 @@
 pandas
 duckdb
 flask
+<<<<<<< Updated upstream
 pytest
 pytest-flask
 jsonschema
+=======
+pytest
+>>>>>>> Stashed changes
