@@ -59,8 +59,8 @@
                 {{hierarchy[1]}}, {{hierarchy[2]}}
               </li>
               <li>
-                The <u>severity of conditions in each camp</u> is ranked from 1
-                (least severe) to 8 (most severe)
+                The <u>severity of conditions in each {{feedback_level}}</u> is
+                ranked from 1 (least severe) to 8 (most severe)
               </li>
             </ol>
             <br />
@@ -181,7 +181,9 @@
                     <div
                       class="wrapped-vl-plot-group card vl-plot-group vflex ng-scope ng-isolate-scope"
                     >
-                      <h2 class="subtitle-name">Detail on selected camp</h2>
+                      <h2 class="subtitle-name">
+                        Detail on selected {{feedback_level}}
+                      </h2>
                       <div class="flex-grow-1 vl-plot ng-isolate-scope scroll">
                         <div class="vega" style="position: relative">
                           <div id="c_4" class="comp card"></div>
