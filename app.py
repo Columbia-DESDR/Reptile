@@ -16,7 +16,7 @@ validate_config(app.config)
 
 
 @app.route('/levelTemplate.html', methods=['GET'])
-def get_templates():
+def get_level_template():
     # TODO this is probably not necessary, and levelTemplate.html can just be imported directly from res.html
     # but since I haven't figured out how to do so, this works for now
     return send_from_directory('templates', 'levelTemplate.html')
