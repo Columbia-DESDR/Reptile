@@ -1,5 +1,3 @@
-const satellite_data = FLASK_VARIABLES.satellite_data
-
 let satelliteSourceNameToFile = {}
 satellite_data.forEach((satelliteSource) => {
     satelliteSourceNameToFile[satelliteSource.NAME] = satelliteSource.PATH;
