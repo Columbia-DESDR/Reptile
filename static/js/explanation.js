@@ -1,4 +1,3 @@
-
 function submitRec(sidValue) {
     console.log("submit")
 
@@ -280,7 +279,7 @@ class Explanation {
 
             // ### DROPDOWN 1
             shelf_group = s.append("div")
-                .text("Were the bad years reported for this village similar to other neighboring villages in the woreda?")
+                .text(`Were the bad years reported for this ${feedback_level} similar to other neighboring ${feedback_level}s?`)
                 .classed('que-text', true)
             select = s.append("select")
                 .attr("id", "q1")
@@ -292,7 +291,7 @@ class Explanation {
 
             // ### DROPDOWN 2
             shelf_group = s.append("div")
-                .text("Do you have any reason to believe that some of the bad years reported for this village are erroneous? (e.g. some of the bad years reported were flood years)")
+                .text(`Do you have any reason to believe that some of the bad years reported for this ${feedback_level} are erroneous? (e.g. some of the bad years reported were flood years)`)
                 .classed('que-text', true)
             select = s.append("select")
                 .attr("id", "q2")
@@ -304,7 +303,7 @@ class Explanation {
 
             // ### DROPDOWN 3
             shelf_group = s.append("div")
-                .text("Did you submit improvements for this village?")
+                .text(`Did you submit improvements for this ${feedback_level}?`)
                 .classed('que-text', true)
             select = s.append("select")
                 .attr("id", "q3")
@@ -316,7 +315,7 @@ class Explanation {
 
             // ### CHECKBOX
             shelf_group = s.append("div")
-                .text("I have reviewed the bad years reported for this village to the best of my knowledge and approve their use for index design.")
+                .text(`I have reviewed the bad years reported for this ${feedback_level} to the best of my knowledge and approve their use for index design.`)
                 .classed('que-text', true)
             select = s.append("input")
                 .attr("type", "checkbox")
