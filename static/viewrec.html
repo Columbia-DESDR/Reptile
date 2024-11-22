@@ -6,77 +6,43 @@
     <title>Tree</title>
 
     <style>
+			.node circle {
+				fill: #fff;
+				stroke: steelblue;
+				stroke-width: 3px;
+			}
 
-	.node circle {
-	  fill: #fff;
-	  stroke: steelblue;
-	  stroke-width: 3px;
-	}
+			.node text { font: 12px sans-serif; }
 
-	.node text { font: 12px sans-serif; }
+			.link {
+				fill: none;
+				stroke: #ccc;
+				stroke-width: 2px;
+			}
 
-	.link {
-	  fill: none;
-	  stroke: #ccc;
-	  stroke-width: 2px;
-	}
+			div.tooltip {
+				position: absolute;
+				text-align: center;
+				max-width: 100px;
+				/* height: 48px; */
 
-	div.tooltip {
-		position: absolute;
-		text-align: center;
-		max-width: 100px;
-		/* height: 48px; */
-
-		padding: 2px;
-		font: 12px sans-serif;
-		background: lightsteelblue;
-		border: 0px;
-		border-radius: 8px;
-		pointer-events: none;
-	
-	}
-	
+				padding: 2px;
+				font: 12px sans-serif;
+				background: lightsteelblue;
+				border: 0px;
+				border-radius: 8px;
+				pointer-events: none;
+			
+			}
     </style>
 
   </head>
-
   <body>
 
-<!-- load the d3.js library -->	
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+	<!-- load the d3.js library -->	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
 	
 <script>
-
-// var treeData = [
-//   {
-//     "name": "Ethiopia",
-//     "children": [
-//       {
-//         "name": "Level 2: A",
-//         "children": [
-//           {
-//             "name": "Son of A",
-//           },
-//           {
-//             "name": "Daughter of A",
-// 		  }
-// 		  ,
-//           {
-//             "name": "Daughter of A",
-// 		  }
-// 		  ,
-//           {
-//             "name": "Daughter of A",
-//           }
-        
-//         ]
-//       },
-//       {
-//         "name": "Level 2: B",
-//       }
-//     ]
-//   }
-// ];
 
 // ************** Generate the tree diagram	 *****************
 var margin = {top: 40, right: 120, bottom: 20, left: 120},
@@ -297,7 +263,6 @@ GetSummary(filename1, ['region', 'district', 'village', 'sid'], 'year')
 
 		
 	})
-
 
 
 function GetSummary(filename, hierarchy, category) {
