@@ -16,3 +16,7 @@ def test_get_rec(client):
 def test_get_rec_2(client):
     response = client.get("/api/getrec2")
     assert response.status_code == 200
+
+def test_viewrec(client):
+    response = client.get("/api/viewrec")
+    assert response.status_code == 200
