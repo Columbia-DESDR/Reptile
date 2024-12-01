@@ -9,6 +9,7 @@ const numerical_name = FLASK_VARIABLES.numerical_name;
 const comment_name = FLASK_VARIABLES.comment_name;
 
 const YEAR_START = FLASK_VARIABLES.start;
+const YEAR_END = FLASK_VARIABLES.end;
 const YEAR_LENGTH = FLASK_VARIABLES.length;
 
 const colorFarmers = FLASK_VARIABLES.color_farmers;

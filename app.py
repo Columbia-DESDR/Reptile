@@ -48,6 +48,7 @@ def com():
                            numerical_name=display['NUMERICAL_NAME'],
                            comment_name=display['COMMENT_NAME'],
                            start=start,
+                           end=end,
                            length=length,
                            satellite_data=data_sources['SATELLITE_DATA'],
                            color_farmers=color_farmers,

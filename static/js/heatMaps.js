@@ -344,8 +344,7 @@ class ScatterPlot extends Visualization {
         let y = d3.scaleLinear()
             .range([height, 0])
             // hard code this part for year we need some padding
-            .domain([1989.5, 2023.5])
-        // .domain(spec.encoding.y.range)
+            .domain([YEAR_START - 0.5, YEAR_END + 0.5])
 
         s.select("#y_axis").remove()
         s.append("g")
@@ -368,7 +367,6 @@ class ScatterPlot extends Visualization {
         s.append("g")
             .attr("transform", "translate(0," + height + ")")
             .attr("id", "x_axis")
-            // .attr('transform', 'rotate(45 -10 10)')
             .call(d3.axisBottom(x))
             .selectAll("text")
             .style("text-anchor", "end")
