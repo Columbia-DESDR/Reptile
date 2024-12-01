@@ -15,12 +15,6 @@ app.config.from_file("config.json", load=json.load)
 validate_config(app.config)
 
 
-@app.route('/levelTemplate.html', methods=['GET'])
-def get_level_template():
-    # TODO this is probably not necessary, and levelTemplate.html can just be imported directly from res.html
-    # but since I haven't figured out how to do so, this works for now
-    return send_from_directory('templates', 'levelTemplate.html')
-
 @app.route('/', methods=['GET'])
 def com():
     data_sources = app.config['DATA_SOURCES']
@@ -53,6 +47,13 @@ def com():
                            satellite_data=data_sources['SATELLITE_DATA'],
                            color_farmers=color_farmers,
                            color_satellite=color_satellite)
+
+
+@app.route('/levelTemplate.html', methods=['GET'])
+def get_level_template():
+    # TODO this is probably not necessary, and levelTemplate.html can just be imported directly from res.html
+    # but since I haven't figured out how to do so, this works for now
+    return send_from_directory('templates', 'levelTemplate.html')
 
 
 # A route to return all of the available entries in our catalog.
@@ -464,6 +465,12 @@ def api_subzambia():
     js = json.dumps(data)
     resp = Response(js, status=200, mimetype='application/json')
     return resp
+
+
+@app.route('/viewrec', methods=['GET'])
+def view_rec():
+    return  app.send_static_file('viewrec.html')
+
 
 # just to get around Cors
 @app.after_request
